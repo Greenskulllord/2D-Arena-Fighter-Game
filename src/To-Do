@@ -1,0 +1,77 @@
+-------------------
+       TO DO
+-------------------
+
+### 1. Core Engine and Rendering Initialization
+* [ ] Set up the JavaFX `Application` class and override the `start()` method.
+* [ ] Initialize a `Stage`, `Scene`, `Pane`, and a `Canvas` with defined dimensions.
+* [ ] Retrieve the `GraphicsContext` from the `Canvas` for rendering.
+* [ ] Implement the `AnimationTimer` to serve as the main game loop.
+* [ ] Create the update-clear-draw sequence within the timer's `handle()` method.
+
+
+
+### 2. Entity Creation and Input Handling
+* [ ] Create a `Player` class encompassing properties for position (X, Y), dimensions (width, height), and movement speed.
+* [ ] Implement a `HashSet<KeyCode>` to track currently depressed keys.
+* [ ] Attach `setOnKeyPressed` and `setOnKeyReleased` event handlers to the `Scene` to manage the HashSet.
+* [ ] Update the Player's X and Y coordinates in the game loop based on the contents of the HashSet.
+
+
+
+
+### 3. State Management and Combo System
+* [ ] Define an `enum` representing player states (e.g., IDLE, MOVING, ATTACK_1, ATTACK_2).
+* [ ] Restrict movement logic so it only executes when the player is in the IDLE or MOVING state.
+* [ ] Implement a frame counter or timer that dictates how long an attack state lasts.
+* [ ] Create boolean flags to queue subsequent attacks if the user provides input during an active attack frame.
+* [ ] Manage the transitions between IDLE, ATTACK_1, and ATTACK_2 based on timers and queued input.
+
+
+
+
+### 4. Single Enemy Logic and Collision Detection
+* [ ] Create an `Enemy` class with position, dimensions, and health attributes.
+* [ ] Write a method to calculate if the player's attack area intersects with the enemy's area using AABB logic.
+* [ ] Deduct health from the enemy upon a successful intersection.
+* [ ] Implement a temporary invulnerability window for the enemy immediately following a hit to prevent rapid damage calculation.
+
+
+
+
+### 5. Enemy Spawning and Positional Reset
+* [ ] Monitor the enemy's health variable within the main game loop.
+* [ ] When health reaches zero or below, trigger a "death" condition.
+* [ ] Reset the enemy's health to maximum.
+* [ ] Generate randomized X and Y coordinates within the boundaries of the Canvas and update the enemy's position.
+
+
+
+
+### 6. Multiple Entity Management (Optional)
+* [ ] Replace the single `Enemy` instance with an `ArrayList<Enemy>`.
+* [ ] Iterate through the collection during the update and render phases of the game loop.
+* [ ] Apply collision detection and health monitoring to each enemy independently.
+
+
+
+
+### 7. Asset Integration: Static Graphics (Optional)
+* [ ] Import the JavaFX `Image` class.
+* [ ] Load image files into memory during the initialization phase.
+* [ ] Replace `GraphicsContext.fillRect()` calls with `GraphicsContext.drawImage()`.
+
+
+
+
+### 8. Asset Integration: Sprite Animation (Optional)
+* [ ] Load a sprite sheet containing multiple frames of animation.
+* [ ] Utilize `GraphicsContext.drawImage()` with source and destination parameters to render specific sections of the sprite sheet.
+* [ ] Link the currently displayed frame to the player's current State and a frame timer.
+
+
+
+### 9. Audio Integration (Optional)
+* [ ] Import the JavaFX `AudioClip` class.
+* [ ] Load audio files during initialization.
+* [ ] Trigger the `play()` method on specific events, such as entering an attack state or registering a collision.
