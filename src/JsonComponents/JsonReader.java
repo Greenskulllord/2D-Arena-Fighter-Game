@@ -1,4 +1,4 @@
-package Json_Components;
+package JsonComponents;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;

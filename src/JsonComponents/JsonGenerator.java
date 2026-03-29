@@ -1,4 +1,4 @@
-package Json_Components;
+package JsonComponents;
 import com.google.gson.*;
 
 import java.io.BufferedWriter;
