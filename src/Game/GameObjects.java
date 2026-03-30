@@ -1,4 +1,4 @@
-package GameComponents;
+package Game;
 
 import Engine.Components.CollisionComponent;
 import Engine.Core.Component;

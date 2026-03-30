@@ -50,6 +50,9 @@ public class InputComponent implements Component {
                 dirX -= 1;
             }
 
+            //-----------------------------------------------------------
+            //this is for fixing and normalizing the velocity for diagonals
+
             //get length
             double length = Math.sqrt(dirX * dirX + dirY * dirY);
 
@@ -58,6 +61,8 @@ public class InputComponent implements Component {
                 dirX /= length;
                 dirY /= length;
             }
+            //-----------------------------------------------------------
+
 
             //calculate if player speed is player sprints
             //the ? is another way to do if, then in java.

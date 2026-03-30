@@ -1,12 +1,13 @@
-package GameComponents;
+package Game.Objects;
 import Engine.Core.*;
 import Engine.Components.*;
+import Game.GameObjects;
 import KeyboardInput.InputControls;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
 
-public class Player implements GameObjects{
+public class Player implements GameObjects {
     double width = 50;
     double height = 50;
 

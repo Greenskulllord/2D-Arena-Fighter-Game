@@ -1,15 +1,16 @@
-package GameComponents;
+package Game.Objects;
 
 import Engine.Components.CollisionComponent;
 import Engine.Components.RenderComponent;
 import Engine.Components.TransformComponent;
 import Engine.Core.Component;
 import Engine.Core.Entity;
+import Game.GameObjects;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
 
-public class Wall implements GameObjects{
+public class Wall implements GameObjects {
     Entity wall = new Entity();
     Rectangle rectangle = new Rectangle(50, 50, Color.BLUE);
 

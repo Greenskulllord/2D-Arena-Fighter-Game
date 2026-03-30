@@ -18,8 +18,6 @@ public class InputControls {
     private KeyCode moveLeft= KeyCode.A;
     private final KeyCode sprint = KeyCode.SHIFT;
 
-
-
     public InputControls() {
 
     }

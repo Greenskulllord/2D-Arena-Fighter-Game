@@ -1,4 +1,4 @@
-package Engine.Core;
+package Engine.Math;
 
 public class DeltaTime {
     private long lastUpdate;

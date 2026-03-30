@@ -1,9 +1,9 @@
-package Engine;
+package Game;
 import Engine.Components.CollisionComponent;
 import Engine.Components.TransformComponent;
-import Engine.Core.DeltaTime;
-import GameComponents.Player;
-import GameComponents.Wall;
+import Engine.Math.DeltaTime;
+import Game.Objects.Player;
+import Game.Objects.Wall;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.scene.Group;
