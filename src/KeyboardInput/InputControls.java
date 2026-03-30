@@ -1,10 +1,12 @@
-package keyboardInput;
+package KeyboardInput;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import java.util.BitSet;
 
+
+//method to get keyboard input
 public class InputControls {
     //a bit set can hold a bunch of codes as booleans
     private BitSet keyboardBitSet = new BitSet();
@@ -16,30 +18,18 @@ public class InputControls {
     private KeyCode moveLeft= KeyCode.A;
     private final KeyCode sprint = KeyCode.SHIFT;
 
-    Scene scene;
 
-    public InputControls(Scene scene) {
-        this.scene = scene;
-        addListeners();
+
+    public InputControls() {
+
     }
 
-    //add listeners so program knows when a key is being press
-    public void addListeners() {
-        scene.addEventFilter(KeyEvent.KEY_PRESSED, keyPressedHandler);
-        scene.addEventFilter(KeyEvent.KEY_RELEASED, keyReleasedHandler);
-    }
 
-    //remove listeners so program doesn't when a key is being press
-    public void removeListeners() {
-        scene.removeEventFilter(KeyEvent.KEY_PRESSED, keyPressedHandler);
-        scene.removeEventFilter(KeyEvent.KEY_RELEASED, keyReleasedHandler);
-    }
 
     //handler for key pressed events
  private EventHandler<KeyEvent>  keyPressedHandler = new EventHandler<KeyEvent>() {
      @Override
      public void handle(KeyEvent keyEvent) {
-         System.out.println("Key Pressed: " + keyEvent.getCode());
          keyboardBitSet.set(keyEvent.getCode().ordinal(), true);
      }
  };
@@ -48,7 +38,6 @@ public class InputControls {
  private EventHandler<KeyEvent>  keyReleasedHandler = new EventHandler<KeyEvent>() {
      @Override
      public void handle(KeyEvent keyEvent) {
-         System.out.println("Key Pressed: " + keyEvent.getCode());
             keyboardBitSet.set(keyEvent.getCode().ordinal(), false);
      }
  };
