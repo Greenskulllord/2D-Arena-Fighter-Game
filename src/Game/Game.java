@@ -76,7 +76,6 @@ public class Game extends Application {
             CollisionComponent playerCol = player.getCollider();
             CollisionComponent wallCol = wall.getCollider();
 
-
              /*
             =========================
                  Collision Math

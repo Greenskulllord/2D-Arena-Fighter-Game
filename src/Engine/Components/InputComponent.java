@@ -72,6 +72,7 @@ public class InputComponent implements Component {
             //using the transform component, add the speed modifiers here to it
             transform.velocityY = dirY * currentSpeed;
             transform.velocityX = dirX * currentSpeed;
+
         }
     }
 }

@@ -1,7 +1,9 @@
 package Engine.Components;
 
 import Engine.Core.Component;
-import com.sun.javafx.webkit.theme.ScrollBarWidgetHelper;
+import Engine.Math.BoxCollision;
+
+import javax.swing.*;
 
 public class CollisionComponent implements Component {
     //call variables
@@ -10,7 +12,7 @@ public class CollisionComponent implements Component {
     double offsetX;
     double offsetY;
     TransformComponent transformComponent; //component for x and y
-
+    CollisionComponent test;
 
     public CollisionComponent(double Width, double Height,
                               double offsetX, double offsetY, TransformComponent transform) {
@@ -37,6 +39,7 @@ public class CollisionComponent implements Component {
 
     @Override
     public void update(double DeltaTime) {
+
 
     }
 
