@@ -2,6 +2,7 @@ package Game.Objects;
 import Engine.Core.*;
 import Engine.Components.*;
 import Game.GameObjects;
+import Initialization.EntityData;
 import KeyboardInput.InputControls;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
@@ -15,6 +16,7 @@ public class Player implements GameObjects {
 
     //make the player entity, this is a ghost object for now.
     Entity player = new Entity();
+    EntityData data = new EntityData();
 
     //the player itself, aka the image for the player.
     Rectangle rectangle = new Rectangle(width, height, Color.WHITE);
@@ -25,13 +27,15 @@ public class Player implements GameObjects {
     CollisionComponent collisionComponent = new CollisionComponent(width, height, 0, 0, playerPOS, "PLAYER");
 
     //make the constructor
-    public Player(InputControls Controls) {
+    public Player(InputControls Controls) throws FileNotFoundException {
         //building it like in factories now!! WHOO
         player.addComponent(playerPOS);
         player.addComponent(collisionComponent);
         player.addComponent(renderPlayer);
         player.addComponent(new InputComponent(player, Controls));
         ActiveEntities.fillActiveEntitiesList(player);
+        data.addToEntityLists("player_template.json", "player");
+
     }
 
      /*

@@ -40,6 +40,9 @@ public class Game extends Application {
     //call the collision system
     CollisionSystem collisionSystem = new CollisionSystem();
 
+    public Game() throws FileNotFoundException {
+    }
+
     //block of code to run engine
     @Override
     public void start(Stage stage) {
