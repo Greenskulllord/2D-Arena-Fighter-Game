@@ -4,6 +4,7 @@ import com.google.gson.*;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.Arrays;
 
 public class JsonGenerator {
 
@@ -37,45 +38,32 @@ public class JsonGenerator {
     =================================
     */
 
-    private JsonArray data () {
-        //number of node templates to generate
-        int nodeCount = 50;
-        int edgeCount = 5;
+    private Object data () {
+        //call the classes
+        JsonArray statsList = new JsonArray();
+        JsonObject template = new JsonObject();
+        JsonObject stats = new JsonObject();
+        JsonArray collideList = new JsonArray();
 
-        //make the array
-        JsonArray nodeList = new JsonArray();
+        //add stuff to array
+        collideList.add("PLAYER");
+        collideList.add("WALL");
 
-        for (int i = 1; i <= nodeCount; i++) {
+        //add properties to stats
+        stats.addProperty("width", 0);
+        stats.addProperty("height", 0);
+        stats.addProperty("health", 0);
+        stats.addProperty("collisionLayer", "layer");
+        stats.add("canCollideWith", collideList);
 
-            //objects
-            JsonObject node = new JsonObject();
+        //add stats to stats list
+        statsList.add(stats);
 
-            //give nodes properties
-            node.addProperty("node", "name " + i);
+        //add stats to entity list
+        template.add("Entity_Name", statsList);
 
-            //make the edgeList
-            JsonArray edgeList = new JsonArray();
-
-            //for loop here
-            for (int a = 1; a <= edgeCount; a++) {
-                JsonObject edge = new JsonObject();
-
-                //give edges properties
-                edge.addProperty("edgename", "name" + a);
-                edge.addProperty("weight", 0);
-                edge.addProperty("directions", "write here.");
-                edgeList.add(edge);
-
-                //add edge list to node
-                node.add("edges", edgeList);
-            }
-
-            //add node to node list
-            nodeList.add(node);
-        }
-
-        //send the data out
-        return nodeList;
+        //return the final list
+        return template;
     }
 
 }

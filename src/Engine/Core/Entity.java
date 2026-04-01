@@ -1,8 +1,11 @@
 package Engine.Core;
 import Engine.Components.*;
+
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 
+//these are my entities
 public class Entity {
     //make a list for the components
     public final List<Component> components = new ArrayList<>();
@@ -13,7 +16,7 @@ public class Entity {
     }
 
     //a method to update components every 60 frames
-    public void update(double DeltaTime) {
+    public void update(double DeltaTime) throws FileNotFoundException {
         for (Component component : components) {
             component.update(DeltaTime);
         }

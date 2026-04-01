@@ -1,6 +1,9 @@
 package Game;
 import Engine.Components.CollisionComponent;
 import Engine.Components.TransformComponent;
+import Engine.Core.ActiveEntities;
+import Engine.Core.CollisionSystem;
+import Engine.Core.Entity;
 import Engine.Math.DeltaTime;
 import Game.Objects.Player;
 import Game.Objects.Wall;
@@ -14,7 +17,13 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import KeyboardInput.InputControls;
 
+import java.io.FileNotFoundException;
+import java.util.ArrayList;
+import java.util.List;
+
 public class Game extends Application {
+
+
     //set width and height for screen
     private final int WIDTH = 600;
     private final int HEIGHT = 400;
@@ -28,7 +37,8 @@ public class Game extends Application {
     Player player = new Player(controls);
     Wall wall = new Wall();
 
-
+    //call the collision system
+    CollisionSystem collisionSystem = new CollisionSystem();
 
     //block of code to run engine
     @Override
@@ -58,51 +68,23 @@ public class Game extends Application {
         @Override
         public void handle(long l) {
             //get deltaTime via helper method
-            double time = deltaTime.getDeltaTime(l);
+            double deltatime = deltaTime.getDeltaTime(l);
 
-            //get player x and y
-            TransformComponent pTransform = player.getComponent(TransformComponent.class);
-
-            //get old X and Y
-            double oldX = pTransform.x;
-            double oldY = pTransform.y;
-
-
-            //update all objects
-            player.update(time); //update player
-            wall.update(time);
-
-            //get collision boxes
-            CollisionComponent playerCol = player.getCollider();
-            CollisionComponent wallCol = wall.getCollider();
-
-             /*
-            =========================
-                 Collision Math
-            =========================
-            */
-            if (playerCol != null && wallCol != null) {
-                //check if player is in wall on x and revert
-                if (playerCol.checkCollision(wallCol)) {
-                    //save future position
-                    double newX = pTransform.x;
-
-                    //make player X, the x before hitting wall
-                    pTransform.x = oldX;
-
-                    //check if player is in wall on y and revert
-                    if (playerCol.checkCollision(wallCol)) {
-                        //make player Y, the y before hitting wall
-                        pTransform.x = newX;
-                        pTransform.y = oldY;
-
-                        //if player is in a corner
-                        if (playerCol.checkCollision(wallCol)) {
-                            pTransform.x = oldX;
-                        }
-                    }
+            //get entities from master list
+            for (Entity entity : ActiveEntities.getActiveEntities()) {
+                try {
+                    entity.update(deltatime);
+                } catch (FileNotFoundException e) {
+                    throw new RuntimeException(e);
                 }
             }
+
+            try {
+                collisionSystem.update(deltatime);
+            } catch (FileNotFoundException e) {
+                throw new RuntimeException(e);
+            }
+
         }
     };
 

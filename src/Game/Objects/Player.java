@@ -7,6 +7,8 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
 
+import java.io.FileNotFoundException;
+
 public class Player implements GameObjects {
     double width = 50;
     double height = 50;
@@ -20,7 +22,7 @@ public class Player implements GameObjects {
     //call the components
     TransformComponent playerPOS = new TransformComponent(50, 50);
     RenderComponent renderPlayer = new RenderComponent(rectangle, playerPOS);
-    CollisionComponent collisionComponent = new CollisionComponent(width, height, 0, 0, playerPOS);
+    CollisionComponent collisionComponent = new CollisionComponent(width, height, 0, 0, playerPOS, "PLAYER");
 
     //make the constructor
     public Player(InputControls Controls) {
@@ -29,7 +31,7 @@ public class Player implements GameObjects {
         player.addComponent(collisionComponent);
         player.addComponent(renderPlayer);
         player.addComponent(new InputComponent(player, Controls));
-
+        ActiveEntities.fillActiveEntitiesList(player);
     }
 
      /*
@@ -38,7 +40,7 @@ public class Player implements GameObjects {
     =========================
      */
 
-    public void update(double DeltaTime) {
+    public void update(double DeltaTime) throws FileNotFoundException {
         player.update(DeltaTime);
     }
 

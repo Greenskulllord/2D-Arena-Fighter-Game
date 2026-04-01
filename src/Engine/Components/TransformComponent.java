@@ -1,6 +1,7 @@
 package Engine.Components;
 import Engine.Core.Component;
 
+//this is a component that gets added to entities with x and y locations
 public class TransformComponent implements Component {
 
     //declare the variable
@@ -19,8 +20,5 @@ public class TransformComponent implements Component {
     @Override
     public void update(double DeltaTime) {
 
-         //move the object, update on DeltaTime
-        x += velocityX * DeltaTime;
-        y += velocityY * DeltaTime;
     }
 }

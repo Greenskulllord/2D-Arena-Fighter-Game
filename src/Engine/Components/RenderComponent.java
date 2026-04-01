@@ -2,6 +2,7 @@ package Engine.Components;
 import Engine.Core.Component;
 import javafx.scene.Node;
 
+//this is a component that handles sprite rendering
 public class RenderComponent implements Component {
     Node node;
     TransformComponent transformComponent;

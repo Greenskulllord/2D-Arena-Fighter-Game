@@ -4,6 +4,7 @@ import Engine.Components.TransformComponent;
 import static java.lang.Double.NEGATIVE_INFINITY;
 import static java.lang.Double.POSITIVE_INFINITY;
 
+//this holds all the math for complex collision
 // https://www.metanetsoftware.com/technique/tutorialA.html this is the main math code I followed
 public class SweptCollision {
     //declare variables
@@ -75,19 +76,37 @@ public class SweptCollision {
         //    Calculate Times
         // ----------------------
 
-        double entryTimeX = NEGATIVE_INFINITY;
-        double entryTimeY = NEGATIVE_INFINITY;
-        double exitTimeX = POSITIVE_INFINITY;
-        double exitTimeY = POSITIVE_INFINITY; //what?
+        double entryTimeX;
+        double entryTimeY;
+        double exitTimeX;
+        double exitTimeY; //what?
 
         //I don't even know what kind of math is going on here
         //I looked it up :(
-        if (frameVelocityX != 0) {
+        if (frameVelocityX == 0) {
+            //got to make sure to fix this fucking bug
+            //only going diagonal gives collision without it
+            if (ownerMaxX <= otherMinX || ownerMinX >= otherMaxX) return new SweptCollision(0,0,1.0);
+
+            //if going straight right doesn't return zero
+            //give infinity values
+            entryTimeX = NEGATIVE_INFINITY;
+            exitTimeX = POSITIVE_INFINITY;
+
+        } else {
             entryTimeX = nearX / frameVelocityX;
             exitTimeX = farX / frameVelocityX;
         }
 
-        if (frameVelocityY != 0) {
+        //same for Y
+        if (frameVelocityY == 0) {
+            if (ownerMaxY <= otherMinY || ownerMinY >= otherMaxY) return new SweptCollision(0,0,1.0);
+
+            //same thing for Y, fucking bugs
+            entryTimeY = NEGATIVE_INFINITY;
+            exitTimeY = POSITIVE_INFINITY;
+
+        } else {
             entryTimeY = nearY / frameVelocityY;
             exitTimeY = farY / frameVelocityY;
         }
@@ -106,7 +125,7 @@ public class SweptCollision {
         //is between 1.0 and 0.0 cause of invisible stopping
         //between player and wall
         //these are just describing impossible collision btw.
-        if (entry > exit || entry < 0 || entry > 1.0 || entryTimeX == NEGATIVE_INFINITY || entryTimeY == NEGATIVE_INFINITY) {
+        if (entry > exit || entry < 0 || entry > 1.0) {
             //keep player moving
             return new SweptCollision(0, 0, 1.0);
         }

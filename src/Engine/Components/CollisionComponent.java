@@ -1,10 +1,8 @@
 package Engine.Components;
-
 import Engine.Core.Component;
-import Engine.Math.BoxCollision;
-
 import javax.swing.*;
 
+//this is a compoonent that handles collision
 public class CollisionComponent implements Component {
     //call variables
     double height; //for height of hitbox
@@ -13,10 +11,10 @@ public class CollisionComponent implements Component {
     double offsetY;
     TransformComponent transformComponent; //component for x and y
     CollisionComponent test;
-
+    public String type;
     public CollisionComponent(double Width, double Height,
-                              double offsetX, double offsetY, TransformComponent transform) {
-
+                              double offsetX, double offsetY, TransformComponent transform, String type) {
+        this.type = type;
         this.transformComponent = transform;
         this.offsetX = offsetX;
         this.offsetY = offsetY;
@@ -25,21 +23,9 @@ public class CollisionComponent implements Component {
 
     }
 
-    //check for collision
-    public boolean checkCollision(CollisionComponent other) {
-        //AABB math collision checker for 2D games
-        if (transformComponent.x + offsetX < other.transformComponent.x + other.offsetX + other.width
-                && transformComponent.x + offsetX + width > other.transformComponent.x + other.offsetX
-                && transformComponent.y + offsetY < other.transformComponent.y + other.offsetY + other.height
-                && transformComponent.y + offsetY + height > other.transformComponent.y + other.offsetY) {
-            return true;
-        }
-        return false;
-    }
-
     @Override
     public void update(double DeltaTime) {
-
+        //run the swept math and collision fixer logic
 
     }
 

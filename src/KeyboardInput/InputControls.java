@@ -22,8 +22,6 @@ public class InputControls {
 
     }
 
-
-
     //handler for key pressed events
  private EventHandler<KeyEvent>  keyPressedHandler = new EventHandler<KeyEvent>() {
      @Override

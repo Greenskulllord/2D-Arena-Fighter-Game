@@ -3,6 +3,7 @@ package Engine.Math;
 import Engine.Components.CollisionComponent;
 import Engine.Components.TransformComponent;
 
+//this holds the math to handle what to do when collision happens
 public class BoxCollision {
 
     //call components
@@ -12,8 +13,8 @@ public class BoxCollision {
 
     //declare variables
     double DeltaTime;
-    double totalMoveX;
-    double totalMoveY;
+    public double totalMoveX;
+    public double totalMoveY;
 
     BoxCollision(double TotalX, double TotalY, double DeltaTime) {
         this.totalMoveX = TotalX;
@@ -35,6 +36,10 @@ public class BoxCollision {
         //get frame velocity X and Y from swept collision
         double frameVelocityX = transform.velocityX * DeltaTime;
         double frameVelocityY = transform.velocityY * DeltaTime;
+
+        if (time >= 1.0) {
+            return new BoxCollision(frameVelocityX, frameVelocityY, DeltaTime);
+        }
 
         //calculate the vectors
         double vectorX = frameVelocityX * time;

@@ -3,6 +3,7 @@ import Engine.Core.Component;
 import Engine.Core.Entity;
 import KeyboardInput.InputControls;
 
+//this is a component that handles player input
 public class InputComponent implements Component {
     //declare what class to use
     private final InputControls input;

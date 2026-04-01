@@ -74,18 +74,18 @@ import com.google.gson.*;
          * a helper method that calls reader in order to read a file.
          * Example use: JSONReader root = JSONReader.read(Your File);
          *
-         * @param fileName the file to look at
+         * @param filePath the file to look at
          * @throws FileNotFoundException no file found
          * @return JSON file object
          */
-        public static JsonReader read(String fileName) throws FileNotFoundException {
+        public static JsonReader read(String filePath) throws FileNotFoundException {
 
-            return new JsonReader(reader(fileName));
+            return new JsonReader(reader(filePath));
         }
 
-    public static JsonReader arrayread(String fileName) throws FileNotFoundException {
+    public static JsonReader arrayread(String filePath) throws FileNotFoundException {
 
-        return new JsonReader(arrayReader(fileName));
+        return new JsonReader(arrayReader(filePath));
     }
 
         /**
@@ -272,17 +272,17 @@ import com.google.gson.*;
      */
 
         //a support class to read file information
-        private static JsonObject reader(String filename) throws FileNotFoundException {
+        private static JsonObject reader(String filePath) throws FileNotFoundException {
             //reads the JSON file
-            Reader reader = new BufferedReader(new FileReader(filename));
+            Reader reader = new BufferedReader(new FileReader(filePath));
 
             //returns JSON Object
             return new Gson().fromJson(reader, JsonObject.class);
         }
 
-    private static JsonArray arrayReader(String filename) throws FileNotFoundException {
+    private static JsonArray arrayReader(String filePath) throws FileNotFoundException {
         //reads the JSON file
-        Reader reader = new BufferedReader(new FileReader(filename));
+        Reader reader = new BufferedReader(new FileReader(filePath));
 
         //returns JSON Object
         return new Gson().fromJson(reader, JsonArray.class);
