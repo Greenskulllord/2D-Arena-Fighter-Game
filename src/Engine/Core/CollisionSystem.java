@@ -60,7 +60,7 @@ public class CollisionSystem implements Component {
 
                 // somehow, check if both entities
                 //are registered to collide with each other
-                if (checkA != null) {
+                if (checkA != null && checkA.collideList != null) {
                     for (String targetType : checkA.collideList) {
                         if (targetType.equals(collB.type)) {
                                 canHit = true;

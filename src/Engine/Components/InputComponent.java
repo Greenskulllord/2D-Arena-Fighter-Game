@@ -68,12 +68,13 @@ public class InputComponent implements Component {
             //calculate if player speed is player sprints
             //the ? is another way to do if, then in java.
             // ':' = then, '?' = if
-            double currentSpeed = input.isSprinting() ? speed * 1.5 : speed;
+            double currentSpeed = input.isSprinting() ? speed * 2 : speed;
+
+            //speed * 500 is the limit btw...
 
             //using the transform component, add the speed modifiers here to it
             transform.velocityY = dirY * currentSpeed;
             transform.velocityX = dirX * currentSpeed;
-
         }
     }
 }

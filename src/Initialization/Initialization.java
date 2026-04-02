@@ -12,6 +12,9 @@ public class Initialization {
     public static void main(String[] args) throws FileNotFoundException {
         //main is going to handle what happens at start up
 
+        //load everything in the game
+        EntityData.addToEntityList("player_template.json", "player");
+
         //load database
         DataBase.loadDatabase();
 
