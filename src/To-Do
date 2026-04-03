@@ -2,12 +2,13 @@
       Started
 -------------------
 
-[ Started ] - Implement entity/component system
+
 [ Started ] - Create project structure and package organization
 [ Started ] - Design and create base GameObject class
 
 ----- To Do ----
 
+[ Done ] - Implement entity/component system
 [ Not Started ] - Define overall game concept and core gameplay loop
 [ Not Started ] - Decide on game genre and scope boundaries
 [ Done ] - Set up JavaFX application entry point
@@ -23,7 +24,7 @@
 [ Done ] - Implement player movement system
 [ Done ] - Implement collision detection system
 [ Not Started ] - Implement physics or basic movement constraints
-[ Not Started ] - Implement player/enemy behavior
+[ Not Started ] - Implement enemy behavior
 
 [ Not Started ] - Create rendering system for drawing objects
 [ Not Started ] - Implement sprite/image loading system

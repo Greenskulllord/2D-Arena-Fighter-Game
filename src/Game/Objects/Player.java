@@ -4,35 +4,34 @@ import Engine.Components.*;
 import Game.GameObjects;
 import Initialization.EntityData;
 import KeyboardInput.InputControls;
+import javafx.scene.Node;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
-import javafx.scene.shape.Shape;
 import java.io.FileNotFoundException;
 
-public class Player implements GameObjects {
-    double width = 50;
-    double height = 50;
-
-    //make the player entity, this is a ghost object for now.
-    Entity player = new Entity();
-
-    //the player itself, aka the image for the player.
-    Rectangle rectangle = new Rectangle(width, height, Color.WHITE);
-
-    //call the components
-    TransformComponent playerPOS = new TransformComponent(50, 50);
-    RenderComponent renderPlayer = new RenderComponent(rectangle, playerPOS);
-    CollisionComponent collisionComponent = new CollisionComponent(width, height, 0, 0, playerPOS, "PLAYER");
+public class Player extends Entity implements GameObjects  {
+    double width;
+    double height;
 
     //make the constructor
-    public Player(InputControls Controls) throws FileNotFoundException {
-        //building it like in factories now!! WHOO
-        player.addComponent(playerPOS);
-        player.addComponent(collisionComponent);
-        player.addComponent(renderPlayer);
-        player.addComponent(new InputComponent(player, Controls));
-        ActiveEntities.fillActiveEntitiesList(player);
+    public Player(InputControls Controls) {
+        EntityData data = DataBase.getTemplate("PLAYER");
+        height = data.height;
+        width = data.width;
 
+        //the player itself, aka the image for the player.
+        Rectangle rectangle = new Rectangle(width, height, Color.WHITE);
+
+        //add components
+        TransformComponent position = new TransformComponent(50, 50);
+        RenderComponent renderWall = new RenderComponent(rectangle, position);
+        CollisionComponent collisionComponent = new CollisionComponent(width, height, 0, 0, position, "PLAYER");
+
+        //building it like in factories now!! WHOO
+        this.addComponent(position);
+        this.addComponent(renderWall);
+        this.addComponent(collisionComponent);
+        this.addComponent(new InputComponent(this, Controls));
 
     }
 
@@ -41,21 +40,5 @@ public class Player implements GameObjects {
         helper methods
     =========================
      */
-
-    public void update(double DeltaTime) throws FileNotFoundException {
-        player.update(DeltaTime);
-    }
-
-    public CollisionComponent getCollider() {
-        return player.getComponent(CollisionComponent.class);
-    }
-
-    public Shape getNode() {
-        return rectangle;
-    }
-
-    public <T extends Component> T getComponent(Class<T> componentClass) {
-        return player.getComponent(componentClass);
-    }
 
 }

@@ -2,15 +2,14 @@ package Engine.Components;
 import Engine.Core.Component;
 import javax.swing.*;
 
-//this is a compoonent that handles collision
+//this is a component that handles collision
 public class CollisionComponent implements Component {
     //call variables
-    double height; //for height of hitbox
-    double width; //for width of hitbox
+    public double height; //for height of hitbox
+    public double width; //for width of hitbox
     double offsetX;
     double offsetY;
     TransformComponent transformComponent; //component for x and y
-    CollisionComponent test;
     public String type;
     public CollisionComponent(double Width, double Height,
                               double offsetX, double offsetY, TransformComponent transform, String type) {

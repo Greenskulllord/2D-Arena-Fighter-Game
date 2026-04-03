@@ -4,7 +4,7 @@ import java.util.List;
 
 public class ActiveEntities {
 
-    //create the master list
+    //create the master list to handle all current active entities
     private static final List<Entity> activeEntities = new ArrayList<>();
 
     //the class that will fill the list with active entities and return it

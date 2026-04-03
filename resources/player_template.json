@@ -1,0 +1,12 @@
+{
+  "player": [
+    {
+      "width": 50,
+      "height": 50,
+      "canCollideWith": [
+        "PLAYER",
+        "WALL"
+      ]
+    }
+  ]
+}

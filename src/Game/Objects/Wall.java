@@ -5,28 +5,36 @@ import Engine.Components.RenderComponent;
 import Engine.Components.TransformComponent;
 import Engine.Core.ActiveEntities;
 import Engine.Core.Component;
+import Engine.Core.DataBase;
 import Engine.Core.Entity;
 import Game.GameObjects;
+import Initialization.EntityData;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
 
 import java.io.FileNotFoundException;
 
-public class Wall implements GameObjects {
-    Entity wall = new Entity();
-    Rectangle rectangle = new Rectangle(50, 50, Color.BLUE);
-
-    //add components
-    TransformComponent wallPOS = new TransformComponent(150, 150);
-    RenderComponent renderWall = new RenderComponent(rectangle, wallPOS);
-    CollisionComponent collisionComponent = new CollisionComponent(50, 50, 0, 0, wallPOS, "WALL");
+public class Wall extends Entity implements GameObjects {
+    double height;
+    double width;
 
     public Wall() {
-        wall.addComponent(wallPOS);
-        wall.addComponent(collisionComponent);
-        wall.addComponent(renderWall);
-        ActiveEntities.fillActiveEntitiesList(wall);
+        EntityData data = DataBase.getTemplate("WALL");
+        height = data.height;
+        width = data.width;
+
+        Rectangle rectangle = new Rectangle(width, height, Color.BLUE);
+
+        //add components
+        TransformComponent position = new TransformComponent(150, 150);
+        RenderComponent renderWall = new RenderComponent(rectangle, position);
+        CollisionComponent collisionComponent = new CollisionComponent(width, height, 0, 0, position, "WALL");
+
+        this.addComponent(position);
+        this.addComponent(collisionComponent);
+        this.addComponent(renderWall);
+
     }
 
      /*
@@ -34,23 +42,5 @@ public class Wall implements GameObjects {
         helper methods
     =========================
      */
-
-    public void update(double DeltaTime) throws FileNotFoundException {
-        wall.update(DeltaTime);
-    }
-
-    @Override
-    public CollisionComponent getCollider() {
-        return wall.getComponent(CollisionComponent.class);
-    }
-
-    public Shape getNode() {
-        return rectangle;
-    }
-
-    @Override
-    public <T extends Component> T getComponent(Class<T> componentClass) {
-        return wall.getComponent(componentClass);
-    }
 
 }

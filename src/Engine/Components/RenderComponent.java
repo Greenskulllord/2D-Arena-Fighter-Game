@@ -22,4 +22,12 @@ public class RenderComponent implements Component {
        node.setTranslateX(transformComponent.x);
        node.setTranslateY(transformComponent.y);
     }
+
+      /*
+    =========================
+        helper methods
+    =========================
+     */
+
+    public Node getNode() { return node; }
 }

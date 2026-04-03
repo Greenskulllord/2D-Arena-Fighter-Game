@@ -1,5 +1,5 @@
 package Game;
-import Engine.Components.CollisionComponent;
+import Engine.Components.RenderComponent;
 import Engine.Components.TransformComponent;
 import Engine.Core.ActiveEntities;
 import Engine.Core.CollisionSystem;
@@ -12,18 +12,17 @@ import javafx.application.Application;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import KeyboardInput.InputControls;
 
 import java.io.FileNotFoundException;
-import java.util.ArrayList;
-import java.util.List;
+
 
 public class Game extends Application {
-
-
     //set width and height for screen
     private final int WIDTH = 600;
     private final int HEIGHT = 400;
@@ -32,10 +31,6 @@ public class Game extends Application {
     Group root = new Group(); //visual elements
     Scene scene = new Scene(root, Color.BLACK); //content in stage
     InputControls controls = new InputControls();
-
-    //declare variables for objects
-    Player player = new Player(controls);
-    Wall wall = new Wall();
 
     //call the collision system
     CollisionSystem collisionSystem = new CollisionSystem();
@@ -55,9 +50,9 @@ public class Game extends Application {
         stage.setHeight(HEIGHT);
         stage.setTitle("test");
 
-        //add player
-        root.getChildren().add(player.getNode());
-        root.getChildren().add(wall.getNode());
+        //add entities
+        SpawnEntity(new Player(controls));
+        SpawnEntity(new Wall());
 
         //code arguments at end of statement
         gameLoop.start(); //start loop
@@ -105,5 +100,18 @@ public class Game extends Application {
     public void removeListeners() {
         scene.removeEventFilter(KeyEvent.KEY_PRESSED, controls.getKeyPressedHandler());
         scene.removeEventFilter(KeyEvent.KEY_RELEASED, controls.getKeyReleasedHandler());
+    }
+
+    public void SpawnEntity(Entity entity) {
+        //add entity to list of active entities
+        ActiveEntities.fillActiveEntitiesList(entity);
+
+        //call render component to find node
+        RenderComponent render = entity.getComponent(RenderComponent.class);
+
+        //add image to entity
+        if (render != null) {
+            root.getChildren().add(render.getNode());
+        }
     }
 }

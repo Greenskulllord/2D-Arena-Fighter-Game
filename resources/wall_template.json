@@ -1,0 +1,9 @@
+{
+  "wall": [
+    {
+      "width": 50,
+      "height": 150,
+      "canCollideWith": []
+    }
+  ]
+}

@@ -1,11 +1,8 @@
 package Initialization;
 import Engine.Core.DataBase;
 import Game.Game;
-import JsonComponents.JsonReader;
-import com.google.gson.JsonArray;
 import javafx.application.Application;
 import java.io.FileNotFoundException;
-import java.util.*;
 
 public class Initialization {
 
@@ -14,6 +11,7 @@ public class Initialization {
 
         //load everything in the game
         EntityData.addToEntityList("player_template.json", "player");
+        EntityData.addToEntityList("wall_template.json", "wall");
 
         //load database
         DataBase.loadDatabase();
