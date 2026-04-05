@@ -3,6 +3,7 @@
     {
       "width": 50,
       "height": 150,
+      "image" : "",
       "canCollideWith": []
     }
   ]

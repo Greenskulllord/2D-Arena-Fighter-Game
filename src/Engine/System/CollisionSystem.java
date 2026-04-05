@@ -1,8 +1,11 @@
-package Engine.Core;
+package Engine.System;
 import Engine.Components.CollisionComponent;
 import Engine.Components.TransformComponent;
+import Engine.Core.Component;
+import Engine.Core.Entity;
+import Engine.Data.DataBase;
 import Engine.Math.BoxCollision;
-import Initialization.EntityData;
+import Engine.Data.EntityData;
 import java.io.FileNotFoundException;
 import java.util.List;
 

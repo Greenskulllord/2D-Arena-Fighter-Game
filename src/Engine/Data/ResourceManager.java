@@ -1,12 +1,12 @@
-package Engine.Core;
+package Engine.Data;
 import JsonComponents.JsonReader;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-
 import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.util.HashMap;
+import java.util.Objects;
 
 public class ResourceManager {
     //maps that will store data instead of having the program pull from the hard drive
@@ -26,23 +26,26 @@ public class ResourceManager {
 
     //store images into cache list
     public static Image getImage(String filePath) {
+        String path = filePath.startsWith("/") ? filePath : "/" + filePath;
+
         //if it finds key, return and load value
-        if (imageCache.containsKey(filePath)) {
-            return imageCache.get(filePath);
+        if (imageCache.containsKey(path)) {
+            return imageCache.get(path);
         }
 
-
         //try to add image to cache
-        try {
-            Image image = new Image(filePath);
-            imageCache.put(filePath, image);
+        try (InputStream inputStream = ResourceManager.class.getResourceAsStream(path)) {
+            if (inputStream == null) { throw new Exception("image resources not found at: " + path); }
+
+            Image image = new Image(inputStream);
+            imageCache.put(path, image);
             return image;
 
         }
         catch (Exception e){
             //error handling to return a default image
             System.out.println("====== error loading image ======" + "\n" + e);
-            return new Image("error_texture.png");
+            return new Image(Objects.requireNonNull(ResourceManager.class.getResourceAsStream("/error_texture.png")));
         }
     }
 

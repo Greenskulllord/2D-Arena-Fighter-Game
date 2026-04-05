@@ -1,9 +1,9 @@
-package Game;
+package Game.Main;
 import Engine.Components.RenderComponent;
-import Engine.Components.TransformComponent;
 import Engine.Core.ActiveEntities;
-import Engine.Core.CollisionSystem;
+import Engine.System.CollisionSystem;
 import Engine.Core.Entity;
+import Engine.Managers.SceneManager;
 import Engine.Math.DeltaTime;
 import Game.Objects.Player;
 import Game.Objects.Wall;
@@ -12,8 +12,6 @@ import javafx.application.Application;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
@@ -23,9 +21,6 @@ import java.io.FileNotFoundException;
 
 
 public class Game extends Application {
-    //set width and height for screen
-    private final int WIDTH = 600;
-    private final int HEIGHT = 400;
 
     //declare variables for scene
     Group root = new Group(); //visual elements
@@ -36,28 +31,26 @@ public class Game extends Application {
     CollisionSystem collisionSystem = new CollisionSystem();
 
     public Game() throws FileNotFoundException {
+
     }
 
     //block of code to run engine
     @Override
     public void start(Stage stage) {
-        //listeners for keyboard input
-        addListeners();
 
-        //windows properties
-        stage.setScene(scene); //scene in stage
-        stage.setWidth(WIDTH);
-        stage.setHeight(HEIGHT);
-        stage.setTitle("test");
+        new SceneManager(stage);
+        SceneManager.addScene("GAME", scene);//scene in stage
+        SceneManager.SwitchScene("GAME");
+
+        //listeners for keyboard input
+        addListeners(scene);
 
         //add entities
-        SpawnEntity(new Player(controls));
-        SpawnEntity(new Wall());
+        SpawnEntity(new Player(controls), root);
+        SpawnEntity(new Wall(), root);
 
         //code arguments at end of statement
         gameLoop.start(); //start loop
-        stage.show(); //show window
-        root.requestFocus(); //focus
     }
 
     DeltaTime deltaTime = new DeltaTime();
@@ -65,8 +58,10 @@ public class Game extends Application {
     AnimationTimer gameLoop = new AnimationTimer() {
         @Override
         public void handle(long l) {
+
             //get deltaTime via helper method
             double deltatime = deltaTime.getDeltaTime(l);
+            ActiveEntities.updateLists(); //update what's in list
 
             //get entities from master list
             for (Entity entity : ActiveEntities.getActiveEntities()) {
@@ -86,23 +81,28 @@ public class Game extends Application {
         }
     };
 
+    /*
+    =======================================
+                Helper Methods
+    =======================================
+     */
+
     //helper method to draw
     public void draw(GraphicsContext graphics) {}
 
     //add listeners so program knows when a key is being press
-    public void addListeners() {
-        assert scene != null;
-        scene.addEventFilter(KeyEvent.KEY_PRESSED, controls.getKeyPressedHandler());
-        scene.addEventFilter(KeyEvent.KEY_RELEASED, controls.getKeyReleasedHandler());
+    public void addListeners(Scene currentScene) {
+        currentScene.addEventFilter(KeyEvent.KEY_PRESSED, controls.getKeyPressedHandler());
+        currentScene.addEventFilter(KeyEvent.KEY_RELEASED, controls.getKeyReleasedHandler());
     }
 
     //remove listeners so program doesn't when a key is being press
-    public void removeListeners() {
-        scene.removeEventFilter(KeyEvent.KEY_PRESSED, controls.getKeyPressedHandler());
-        scene.removeEventFilter(KeyEvent.KEY_RELEASED, controls.getKeyReleasedHandler());
+    public void removeListeners(Scene currentScene) {
+        currentScene.removeEventFilter(KeyEvent.KEY_PRESSED, controls.getKeyPressedHandler());
+        currentScene.removeEventFilter(KeyEvent.KEY_RELEASED, controls.getKeyReleasedHandler());
     }
 
-    public void SpawnEntity(Entity entity) {
+    public void SpawnEntity(Entity entity, Group root) {
         //add entity to list of active entities
         ActiveEntities.fillActiveEntitiesList(entity);
 

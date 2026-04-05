@@ -1,8 +1,12 @@
 {
   "player": [
     {
-      "width": 50,
-      "height": 50,
+      "width": 32,
+      "height": 32,
+      "health": 100,
+      "speed": 200,
+      "damage": 10,
+      "image" : "player_test.png",
       "canCollideWith": [
         "PLAYER",
         "WALL"

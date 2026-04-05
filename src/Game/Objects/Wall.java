@@ -3,19 +3,13 @@ package Game.Objects;
 import Engine.Components.CollisionComponent;
 import Engine.Components.RenderComponent;
 import Engine.Components.TransformComponent;
-import Engine.Core.ActiveEntities;
-import Engine.Core.Component;
-import Engine.Core.DataBase;
+import Engine.Data.DataBase;
 import Engine.Core.Entity;
-import Game.GameObjects;
-import Initialization.EntityData;
+import Engine.Data.EntityData;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
-import javafx.scene.shape.Shape;
 
-import java.io.FileNotFoundException;
-
-public class Wall extends Entity implements GameObjects {
+public class Wall extends Entity {
     double height;
     double width;
 

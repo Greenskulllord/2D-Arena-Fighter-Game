@@ -1,6 +1,7 @@
 package Initialization;
-import Engine.Core.DataBase;
-import Game.Game;
+import Engine.Data.DataBase;
+import Engine.Data.EntityData;
+import Game.Main.Game;
 import javafx.application.Application;
 import java.io.FileNotFoundException;
 

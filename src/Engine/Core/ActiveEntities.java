@@ -6,13 +6,18 @@ public class ActiveEntities {
 
     //create the master list to handle all current active entities
     private static final List<Entity> activeEntities = new ArrayList<>();
+    private static final List<Entity> waitingList = new ArrayList<>();
 
     //the class that will fill the list with active entities and return it
     public static void fillActiveEntitiesList (Entity entity) {
-        getActiveEntities().add(entity);
+        waitingList.add(entity);
     }
-
     public static List<Entity> getActiveEntities() {
         return activeEntities;
+    }
+
+    public static void updateLists() {
+        activeEntities.addAll(waitingList);
+        waitingList.clear();
     }
 }

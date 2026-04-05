@@ -1,8 +1,7 @@
-package Engine.Core;
-import Initialization.EntityData;
+package Engine.Data;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-
+import javafx.scene.image.Image;
 import java.io.FileNotFoundException;
 import java.util.HashMap;
 
@@ -11,7 +10,7 @@ public class DataBase {
     private static final HashMap<String, EntityData> template = new HashMap<>();
 
     //stores data into the database
-    public static void loadDatabase () throws FileNotFoundException {
+    public static void loadDatabase () {
 
         //loop to find and place info into database
         for (EntityData.EntityList list : EntityData.entityLists) {
@@ -19,24 +18,36 @@ public class DataBase {
             String entityList = list.entityList();
 
             try {
+
                 JsonObject root = ResourceManager.getTemplate("resources/" + entityTemplateFile); // read file
                 JsonObject jsonObject = root.getAsJsonArray(entityList).get(0).getAsJsonObject();
 
                 //all the stats to get from entityTemplateFile files
+
+                //get the image
+                String imagePath = jsonObject.get("image").getAsString();
+                Image image = ResourceManager.getImage(imagePath);
+
+                //what it can collide with
                 JsonArray array = jsonObject.getAsJsonArray("canCollideWith");
+
+                //the width and height
                 int width = jsonObject.get("width").getAsInt();
                 int height = jsonObject.get("height").getAsInt();
 
+                //entity stats like health
+
+
                 //convert Json arrays to string
                 String[] collideList = new String[array.size()];
+
 
                 //loop through the json arrays to pull out everything
                 for (int k = 0; k < array.size(); k++) {
                     collideList[k] = array.get(k).getAsString();
                 }
 
-                EntityData finalData = new EntityData(width, height, collideList);
-
+                EntityData finalData = new EntityData(width, height, collideList, image);
                template.put(entityList.toUpperCase(), finalData);
             }
             catch (RuntimeException e) {
@@ -48,6 +59,6 @@ public class DataBase {
 
     //getters and setters
     public static EntityData getTemplate(String entityName) {
-        return template.get(entityName);
+        return template.get(entityName.toUpperCase());
     }
 }
