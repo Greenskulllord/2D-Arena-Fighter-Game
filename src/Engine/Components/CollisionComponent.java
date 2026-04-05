@@ -24,7 +24,6 @@ public class CollisionComponent implements Component {
 
     @Override
     public void update(double DeltaTime) {
-        //run the swept math and collision fixer logic
 
     }
 
