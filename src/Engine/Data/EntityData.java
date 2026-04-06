@@ -1,5 +1,7 @@
 package Engine.Data;
 import javafx.scene.image.Image;
+
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
 //class to hold a bunch of data during the game loop
@@ -8,6 +10,7 @@ public class EntityData {
     public int height;
     public String[] collideList;
     public Image image;
+
 
     //a record class is a simple data carrier
     public record EntityList(String entityTemplateFile, String entityList) {};
@@ -21,7 +24,9 @@ public class EntityData {
 
     }
 
-    public EntityData(int width, int height, String[] collideList, Image image) {
+    public EntityData(int width, int height, String[] collideList,
+                      Image image, BufferedImage bufferedImage) {
+
         this.image = image;
         this.collideList = collideList;
         this.width = width;

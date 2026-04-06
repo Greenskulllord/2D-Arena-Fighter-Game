@@ -2,6 +2,8 @@ package Engine.Data;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import javafx.scene.image.Image;
+
+import java.awt.image.BufferedImage;
 import java.io.FileNotFoundException;
 import java.util.HashMap;
 
@@ -28,6 +30,17 @@ public class DataBase {
                 String imagePath = jsonObject.get("image").getAsString();
                 Image image = ResourceManager.getImage(imagePath);
 
+                //get buffered Image
+                BufferedImage bufferedImage = null;
+
+                for (int i = 0; i < jsonObject.size(); i++) {
+
+                    String bImagePath = jsonObject.get(String.valueOf(i)).getAsString();
+
+                    bufferedImage = ResourceManager.getTile(bImagePath);
+                }
+
+
                 //what it can collide with
                 JsonArray array = jsonObject.getAsJsonArray("canCollideWith");
 
@@ -47,8 +60,12 @@ public class DataBase {
                     collideList[k] = array.get(k).getAsString();
                 }
 
-                EntityData finalData = new EntityData(width, height, collideList, image);
-               template.put(entityList.toUpperCase(), finalData);
+                //for loop to get tiles all tiles
+
+
+
+                EntityData finalData = new EntityData(width, height, collideList, image, bufferedImage);
+                template.put(entityList.toUpperCase(), finalData);
             }
             catch (RuntimeException e) {
                 System.err.println("failed to load: " + entityList);
@@ -56,6 +73,7 @@ public class DataBase {
             }
         }
     }
+
 
     //getters and setters
     public static EntityData getTemplate(String entityName) {

@@ -13,6 +13,7 @@ public class Initialization {
         //load everything in the game
         EntityData.addToEntityList("player_template.json", "player");
         EntityData.addToEntityList("wall_template.json", "wall");
+        EntityData.addToEntityList("tile_set_template.json", "tile");
 
         //load database
         DataBase.loadDatabase();

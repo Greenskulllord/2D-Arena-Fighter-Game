@@ -24,13 +24,13 @@ public class Game extends Application {
 
     //declare variables for scene
     Group root = new Group(); //visual elements
-    Scene scene = new Scene(root, Color.BLACK); //content in stage
+    Scene scene = new Scene(root, Color.WHITE); //content in stage
     InputControls controls = new InputControls();
 
     //call the collision system
     CollisionSystem collisionSystem = new CollisionSystem();
 
-    public Game() throws FileNotFoundException {
+    public Game() {
 
     }
 
