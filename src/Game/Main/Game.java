@@ -1,6 +1,9 @@
 package Game.Main;
 import Engine.Components.RenderComponent;
 import Engine.Core.ActiveEntities;
+import Engine.Data.DataBase;
+import Engine.Data.EntityData;
+import Engine.Managers.TileMapManager;
 import Engine.System.CollisionSystem;
 import Engine.Core.Entity;
 import Engine.Managers.SceneManager;
@@ -13,6 +16,7 @@ import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import KeyboardInput.InputControls;
@@ -24,7 +28,7 @@ public class Game extends Application {
 
     //declare variables for scene
     Group root = new Group(); //visual elements
-    Scene scene = new Scene(root, Color.WHITE); //content in stage
+    Scene scene = new Scene(root, Color.GRAY); //content in stage
     InputControls controls = new InputControls();
 
     //call the collision system
@@ -45,9 +49,26 @@ public class Game extends Application {
         //listeners for keyboard input
         addListeners(scene);
 
+        //load in the first room
+        Pane backgroundLayer = new Pane();
+        TileMapManager mapManager = new TileMapManager(stage, backgroundLayer);
+        EntityData data = DataBase.getTemplate("room");
+        root.getChildren().addFirst(backgroundLayer);
+
+        mapManager.generateRoom(data.mapData, data.roomWidth, data.tileSize);
+
+        System.out.println("--- ROOM DATA CHECK ---");
+        System.out.println("Tile Size: " + data.tileSize);
+        System.out.println("Room Width: " + data.roomWidth);
+        System.out.println("Map Data Length: " + data.mapData.length);
+        System.out.println("-----------------------");
+
         //add entities
         SpawnEntity(new Player(controls), root);
         SpawnEntity(new Wall(), root);
+
+
+
 
         //code arguments at end of statement
         gameLoop.start(); //start loop

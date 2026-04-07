@@ -1,0 +1,26 @@
+{
+  "roomWidth": 2,
+  "roomHeight": 5,
+  "tileSize": 64,
+  "room": [
+    {
+      "name": "Background",
+      "type": "tileLayer",
+      "data":
+      [
+        1, 1,
+        2, 3,
+        2, 3,
+        2, 2,
+        1, 1
+      ]
+    },
+    {
+      "name": "Entities",
+      "type": "objectGroup",
+      "objects": [
+        {"name": "enemySpawnPoint", "x": 0, "y": 0}
+      ]
+    }
+  ]
+}

@@ -1,8 +1,9 @@
 {
   "tile": [
     {
-      "tile_1": "tile_test.png",
-      "tile_2": ""
+      "floor_1": "FloorTextures/floor_1.png",
+      "floor_2": "FloorTextures/floor_2.png",
+      "floor_3": "FloorTextures/tile_test.png"
     }
   ]
 }

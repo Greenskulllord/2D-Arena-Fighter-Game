@@ -1,9 +1,11 @@
 package Engine.Core;
-import java.awt.image.BufferedImage;
+import javafx.scene.image.Image;
+
+
 
 //layer one, the background images to make things like floor
 // or non-interactable design
 public class Tile {
-    public BufferedImage image;
+    public Image image;
 
 }

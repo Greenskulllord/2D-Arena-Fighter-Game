@@ -1,11 +1,8 @@
 package Engine.Data;
 import JsonComponents.JsonReader;
-import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import javafx.scene.image.Image;
 
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -17,7 +14,7 @@ public class ResourceManager {
     //String is the file path or name (the key) and the value (like a hero sprite)
     private static final HashMap<String, JsonObject> templateCache = new HashMap<>();
     private static final HashMap<String, Image> imageCache = new HashMap<>();
-    private static final HashMap<String, BufferedImage> tileCache = new HashMap<>();
+    private static final HashMap<String, Image> tileCache = new HashMap<>();
 
     //    HashMap<String, sound> soundCache = new HashMap<>();
     //    HashMap<String, fonts> fontCache = new HashMap<>();
@@ -28,7 +25,13 @@ public class ResourceManager {
 
     }
 
-    //store images into cache list
+
+     /*
+    =========================
+          Cache Image
+    =========================
+   */
+
     public static Image getImage(String filePath) {
         String path = filePath.startsWith("/") ? filePath : "/" + filePath;
 
@@ -46,15 +49,29 @@ public class ResourceManager {
             return image;
 
         }
-        catch (Exception e){
-            //error handling to return a default image
-            System.out.println("====== error loading Image ======" + "\n" + e);
-            return new Image(Objects.requireNonNull(ResourceManager.class.getResourceAsStream("/error_texture.png")));
+        catch (Exception e) {
+            try {
+
+                //save image and put into cache
+                Image fallBackImage = new Image(Objects.requireNonNull(ResourceManager.class.getResourceAsStream("/EntityTextures/error_texture.png")));
+                tileCache.put(path, fallBackImage);
+                return fallBackImage;
+                //return the fallback image, the error image
+
+            }
+            catch (Exception ex) {
+                throw new RuntimeException(ex);
+            }
         }
     }
 
-    //store tile sets into cache list
-    public static BufferedImage getTile(String filePath) {
+    /*
+    =========================
+          Cache Tiles
+    =========================
+   */
+
+    public static Image getTile(String filePath) {
         String path = filePath.startsWith("/") ? filePath : "/" + filePath;
 
         //if it finds key, return and load value
@@ -64,9 +81,9 @@ public class ResourceManager {
 
         //try to add image to cache
         try (InputStream inputStream = ResourceManager.class.getResourceAsStream(path)) {
-            if (inputStream == null) { throw new IOException("tile resources not found at: " + path); }
+            if (inputStream == null || filePath.trim().isEmpty()) { throw new IOException("tile resources not found at: " + path); }
 
-            BufferedImage image = ImageIO.read(inputStream);
+            Image image = new Image(inputStream);
             tileCache.put(path, image);
             return image;
 
@@ -76,15 +93,25 @@ public class ResourceManager {
             System.out.println("====== error loading Tile ======" + "\n" + e);
 
             try {
-                return ImageIO.read(Objects.requireNonNull(ResourceManager.class.getResourceAsStream("tile_test.png")));
+                //save image and put into cache
+                Image fallBackImage = new Image(Objects.requireNonNull(ResourceManager.class.getResourceAsStream("/FloorTextures/tile_test.png")));
+                tileCache.put(path, fallBackImage);
+
+                //return the fallback image, the error image
+                return fallBackImage;
             }
-            catch (IOException ex) {
+            catch (Exception ex) {
                 throw new RuntimeException(ex);
             }
         }
     }
 
-    //store the file templates into a cache list
+      /*
+    =========================
+         Cache Templates
+    =========================
+   */
+
     public static JsonObject getTemplate(String filePath) {
         //if memory has it, return it
         if (templateCache.containsKey(filePath)) {
@@ -107,7 +134,6 @@ public class ResourceManager {
             JsonObject dummyData = new JsonObject();
             dummyData.addProperty("width", 32);
             dummyData.addProperty("height", 32);
-            dummyData.add("canCollideWith", new JsonArray());
 
             return dummyData;
         }

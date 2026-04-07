@@ -6,7 +6,7 @@
       "health": 100,
       "speed": 200,
       "damage": 10,
-      "image" : "player_test.png",
+      "image": "EntityTextures/player_test.png",
       "canCollideWith": [
         "PLAYER",
         "WALL"

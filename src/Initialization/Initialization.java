@@ -6,14 +6,23 @@ import javafx.application.Application;
 import java.io.FileNotFoundException;
 
 public class Initialization {
-
     public static void main(String[] args) throws FileNotFoundException {
-        //main is going to handle what happens at start up
 
-        //load everything in the game
-        EntityData.addToEntityList("player_template.json", "player");
-        EntityData.addToEntityList("wall_template.json", "wall");
+        /*
+        ==============================
+           Load everything in game
+        ==============================
+        */
+
+        //add entity templates
+        EntityData.addToEntityList("EntitiesTemplates/player_template.json", "player");
+        EntityData.addToEntityList("EntitiesTemplates/wall_template.json", "wall");
+
+        //add tile sets
         EntityData.addToEntityList("tile_set_template.json", "tile");
+
+        //add rooms
+        EntityData.addToEntityList("Rooms/test_room.json", "room");
 
         //load database
         DataBase.loadDatabase();
