@@ -3,12 +3,14 @@ import Engine.Core.*;
 import Engine.Components.*;
 import Engine.Data.DataBase;
 import Engine.Data.EntityData;
-import Engine.Managers.RoomMapManager;
-import KeyboardInput.InputControls;
+import Input.InputControls;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
-
+/* todo update player class to handle abilities,
+    dashes, attacks, etc. this will be mostly updated in
+    input component
+ */
 public class Player extends Entity  {
     double width;
     double height;

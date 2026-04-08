@@ -1,6 +1,4 @@
 package Engine.Managers;
-
-import Engine.Components.InputComponent;
 import Engine.Components.RenderComponent;
 import Engine.Core.ActiveEntities;
 import Engine.Core.Entity;
@@ -9,14 +7,12 @@ import Engine.Data.DataBase;
 import Engine.Data.EntityData;
 import Game.Objects.Player;
 import Game.Objects.Wall;
-import KeyboardInput.InputControls;
+import Input.InputControls;
 import javafx.scene.Group;
-import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
-
 import java.util.HashMap;
 
 public class RoomMapManager {
@@ -28,7 +24,7 @@ public class RoomMapManager {
 
     //call components for player
     //or other special entities
-    InputControls controls = new InputControls();
+    InputControls controls;
 
     //tile manager to create rooms
     //THIS IS FOR ONLY GENERATING, NOT MAKING
@@ -52,16 +48,13 @@ public class RoomMapManager {
 
             for (int i = 0; i < bImage.length; i++) {
                 //make a new tile at i
-                tile[i] = new Tile();
-
-                //make the new tile the image at i
-                tile[i].image = bImage[i];
+                tile[i] = new Tile(bImage[i]);
 
             }
         }
         catch (Exception e) {
 
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
     }
 
@@ -78,7 +71,7 @@ public class RoomMapManager {
         int tileSize = data.tileSize;
 
         try {
-            //intialize the array
+            //initialize the array
             entities = new Entity[entityMap.length];
 
             //makes a new entity based on array length
@@ -111,6 +104,10 @@ public class RoomMapManager {
                         Wall w = new Wall(spawnX, spawnY);
                         entities[i] = w;
                         SpawnEntity(w, root);
+                    }
+                    default -> {
+                        //do nothing
+                        //prevents crash hopefully
                     }
                 }
 

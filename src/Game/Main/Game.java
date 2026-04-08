@@ -1,5 +1,4 @@
 package Game.Main;
-import Engine.Components.RenderComponent;
 import Engine.Core.ActiveEntities;
 import Engine.Data.DataBase;
 import Engine.Data.EntityData;
@@ -8,8 +7,6 @@ import Engine.System.CollisionSystem;
 import Engine.Core.Entity;
 import Engine.Managers.SceneManager;
 import Engine.Math.DeltaTime;
-import Game.Objects.Player;
-import Game.Objects.Wall;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.scene.Group;
@@ -19,7 +16,7 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
-import KeyboardInput.InputControls;
+import Input.InputControls;
 
 import java.io.FileNotFoundException;
 

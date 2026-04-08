@@ -1,6 +1,5 @@
-package KeyboardInput;
+package Input;
 import javafx.event.EventHandler;
-import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import java.util.BitSet;
@@ -17,6 +16,7 @@ public class InputControls {
     private KeyCode moveRight = KeyCode.D;
     private KeyCode moveLeft= KeyCode.A;
     private final KeyCode sprint = KeyCode.SHIFT;
+    private KeyCode dash = KeyCode.ALT;
 
     public InputControls() {
 
@@ -118,5 +118,13 @@ public class InputControls {
 
     public void setKeyReleasedHandler(EventHandler<KeyEvent> keyReleasedHandler) {
         this.keyReleasedHandler = keyReleasedHandler;
+    }
+
+    public KeyCode getDash() {
+        return dash;
+    }
+
+    public void setDash(KeyCode dash) {
+        this.dash = dash;
     }
 }

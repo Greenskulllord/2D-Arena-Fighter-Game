@@ -1,7 +1,7 @@
 package Engine.Components;
 import Engine.Core.Component;
 import Engine.Core.Entity;
-import KeyboardInput.InputControls;
+import Input.InputControls;
 
 //this is a component that handles player input
 public class InputComponent implements Component {
