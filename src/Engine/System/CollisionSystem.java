@@ -40,6 +40,7 @@ public class CollisionSystem implements Component {
 
             //loop to find entity B
             for (int j = 0; j < getActiveEntities().size(); j++) {
+
                 if (i == j ) { continue;}
 
                 //put B entities into their own variables
@@ -79,10 +80,16 @@ public class CollisionSystem implements Component {
 
                     BoxCollision result = BoxCollision.BoxCollisionMath(transformA, collA, collB, DeltaTime);
                     //run the actual collision logic
+                    if (DeltaTime > 0) {
+                        transformA.velocityX = result.totalMoveX / DeltaTime;
+                        transformA.velocityY = result.totalMoveY / DeltaTime;
+                    }
+
                     finalMoveX = result.totalMoveX;
                     finalMoveY = result.totalMoveY;
 
                    }
+
                 } //end of j loop
 
             transformA.x += finalMoveX;

@@ -21,6 +21,9 @@ public class Initialization {
         //add tile sets
         EntityData.addToEntityList("tile_set_template.json", "tile");
 
+        //add entity sets
+        EntityData.addToEntityList("entity_set_template.json", "entity");
+
         //add rooms
         EntityData.addToEntityList("Rooms/test_room.json", "room");
 

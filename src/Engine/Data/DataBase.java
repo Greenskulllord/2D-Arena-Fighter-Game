@@ -32,7 +32,7 @@ public class DataBase {
                 //check if root is null or not
                 if (!root.has(entityList) || root.get(entityList).isJsonNull()) {
 
-                    System.out.println("System Error: Entity List " + entityList + " is missing");
+                    System.out.println("\nSystem Error: Entity List " + entityList + " is missing");
                     continue;
                 }
 
@@ -56,9 +56,9 @@ public class DataBase {
 
                     String imagePath = jsonObject.get("image").getAsString();
                     image = ResourceManager.getImage(imagePath);
-                } else System.out.println("Warning: image is null in " + jsonObject);
+                } else System.out.println("\nWarning: image is null in " + jsonObject);
 
-                   /*
+                /*
                 =========================
                       Buffered Tiles
                 =========================
@@ -102,14 +102,14 @@ public class DataBase {
                         ? jsonObject.get("height").getAsInt() : 0;
 
 
-                //convert Json arrays to string
-                String[] collideList = new String[0];
-
                  /*
                 =============================
                        Collision Stats
                 =============================
                  */
+
+                //convert Json arrays to string
+                String[] collideList = new String[0];
 
                 //null check if no array
                 if (jsonObject.has("canCollideWith") && !jsonObject.get("canCollideWith").isJsonNull()) {
@@ -124,6 +124,35 @@ public class DataBase {
                     }
                 } else System.out.println("\nWarning: Field canCollideWith is null in " + jsonObject);
 
+                  /*
+                =========================
+                    Entity Room Data
+                =========================
+                 */
+
+                HashMap<Integer, String> entityRoomData = new HashMap<>();
+
+                //get string path to template
+                if (entityList.equalsIgnoreCase("entity")) {
+
+                        for (Map.Entry<String, JsonElement> entry : jsonObject.entrySet()) {
+                            //get key ID and string path
+                            String key = entry.getKey();
+                            String path = entry.getValue().getAsString();
+
+                            try {
+                                //parse string to int
+                                int entityID = Integer.parseInt(key);
+                                entityRoomData.put(entityID, path); //put in data
+
+                            }
+                            catch (Exception e) {
+                                System.out.print("\nissue with template json file or Room json file ");
+                                throw new RuntimeException(e);
+                            }
+                        }
+                } else System.out.println("\nWarning: entity is null in " + jsonObject);
+
                 /*
                 =========================
                       Room Data
@@ -135,7 +164,6 @@ public class DataBase {
                 int roomWidth = root.has("roomWidth") && !root.get("roomWidth").isJsonNull()
                         ? root.get("roomWidth").getAsInt() : 0;
 
-
                 int roomHeight = root.has("roomHeight") && !root.get("roomHeight").isJsonNull()
                         ? root.get("roomHeight").getAsInt() : 0;
 
@@ -143,8 +171,11 @@ public class DataBase {
                         ? root.get("tileSize").getAsInt() : 0;
 
 
-                //initialize the 1D array
+                //initialize the 1D array for room tile data
                 int[] dataArray = new int[0];
+
+                //initialize the 1D array for room entity data
+                int[] entityDataArray = new int[0];
 
                 //null check
                 if (root.has("room") && !root.get("room").isJsonNull()) {
@@ -154,18 +185,34 @@ public class DataBase {
                     if (!layer.isEmpty()) {
 
                         JsonObject roomData = layer.get(0).getAsJsonObject();
+                        JsonObject roomEntityData = layer.get(1).getAsJsonObject();
+
                         //null check
                         if (roomData.has("data") && !roomData.get("data").isJsonNull()) {
 
                             JsonArray data = roomData.getAsJsonArray("data");
+                            JsonArray entityData = roomEntityData.getAsJsonArray("spawnData");
+
                             //add to 1D array
                             dataArray = new int[data.size()];
+                            entityDataArray = new int[entityData.size()];
 
                             for (int i = 0; i < dataArray.length; i++) {
                                 //fill the 1D int array
                                 dataArray[i] = data.get(i).getAsInt();
 
                             }
+
+                            //I know I copy and pasted BUTTTT!!!
+                            //im only going to do it like one more time.
+                            //I don't need to write code to prevent a billion for loops
+                            //just handle the fucking layers.
+                            for (int i = 0; i < entityDataArray.length; i++) {
+                                //fill the 1D int array
+                                entityDataArray[i] = entityData.get(i).getAsInt();
+
+                            }
+
                         } else System.out.println("\nWarning: " + roomData + " is null");
                     } else System.out.println("\nWarning: " + layer + " is empty");
                 } else System.out.println("\nWarning: layer is null in " + jsonObject);
@@ -176,9 +223,9 @@ public class DataBase {
                 EntityData finalData = new EntityData(
                         /* Entity Data */ width, height, collideList, image,
 
-                        /* Room Data */ finalBuffImages, dataArray, roomWidth, roomHeight, tileSize
+                        /* Room Data */ finalBuffImages, dataArray, roomWidth, roomHeight, tileSize,
 
-                        /* */
+                        /* Entity Room Data */ entityRoomData, entityDataArray
                 );
 
                 template.put(entityList.toUpperCase(), finalData);
@@ -190,6 +237,8 @@ public class DataBase {
             }
         }
     }
+
+
 
 
     //getters and setters

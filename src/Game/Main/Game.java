@@ -3,7 +3,7 @@ import Engine.Components.RenderComponent;
 import Engine.Core.ActiveEntities;
 import Engine.Data.DataBase;
 import Engine.Data.EntityData;
-import Engine.Managers.TileMapManager;
+import Engine.Managers.RoomMapManager;
 import Engine.System.CollisionSystem;
 import Engine.Core.Entity;
 import Engine.Managers.SceneManager;
@@ -51,24 +51,11 @@ public class Game extends Application {
 
         //load in the first room
         Pane backgroundLayer = new Pane();
-        TileMapManager mapManager = new TileMapManager(stage, backgroundLayer);
+        RoomMapManager mapManager = new RoomMapManager(stage, backgroundLayer, root, controls);
         EntityData data = DataBase.getTemplate("room");
         root.getChildren().addFirst(backgroundLayer);
 
         mapManager.generateRoom(data.mapData, data.roomWidth, data.tileSize);
-
-        System.out.println("--- ROOM DATA CHECK ---");
-        System.out.println("Tile Size: " + data.tileSize);
-        System.out.println("Room Width: " + data.roomWidth);
-        System.out.println("Map Data Length: " + data.mapData.length);
-        System.out.println("-----------------------");
-
-        //add entities
-        SpawnEntity(new Player(controls), root);
-        SpawnEntity(new Wall(), root);
-
-
-
 
         //code arguments at end of statement
         gameLoop.start(); //start loop
@@ -121,18 +108,5 @@ public class Game extends Application {
     public void removeListeners(Scene currentScene) {
         currentScene.removeEventFilter(KeyEvent.KEY_PRESSED, controls.getKeyPressedHandler());
         currentScene.removeEventFilter(KeyEvent.KEY_RELEASED, controls.getKeyReleasedHandler());
-    }
-
-    public void SpawnEntity(Entity entity, Group root) {
-        //add entity to list of active entities
-        ActiveEntities.fillActiveEntitiesList(entity);
-
-        //call render component to find node
-        RenderComponent render = entity.getComponent(RenderComponent.class);
-
-        //add image to entity
-        if (render != null) {
-            root.getChildren().add(render.getNode());
-        }
     }
 }

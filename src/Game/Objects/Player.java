@@ -3,6 +3,7 @@ import Engine.Core.*;
 import Engine.Components.*;
 import Engine.Data.DataBase;
 import Engine.Data.EntityData;
+import Engine.Managers.RoomMapManager;
 import KeyboardInput.InputControls;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -13,15 +14,16 @@ public class Player extends Entity  {
     double height;
     Image image;
 
+
     //make the constructor
-    public Player(InputControls Controls) {
+    public Player(InputControls Controls, int spawnX, int spawnY) {
         EntityData data = DataBase.getTemplate("PLAYER");
         height = data.height;
         width = data.width;
         image = data.image;
 
         //add components
-        TransformComponent position = new TransformComponent(50, 50);
+        TransformComponent position = new TransformComponent(spawnX, spawnY);
         RenderComponent renderWall = new RenderComponent(new ImageView(image), position);
         CollisionComponent collisionComponent = new CollisionComponent(width, height, 0, 0, position, "PLAYER");
 

@@ -6,6 +6,7 @@ import Engine.Components.TransformComponent;
 import Engine.Data.DataBase;
 import Engine.Core.Entity;
 import Engine.Data.EntityData;
+import Engine.Managers.RoomMapManager;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
@@ -13,15 +14,16 @@ public class Wall extends Entity {
     double height;
     double width;
 
-    public Wall() {
+
+    public Wall(int spawnX, int spawnY) {
         EntityData data = DataBase.getTemplate("WALL");
         height = data.height;
         width = data.width;
 
-        Rectangle rectangle = new Rectangle(width, height, Color.BLUE);
+        Rectangle rectangle = new Rectangle(width, height, Color.DIMGRAY);
 
         //add components
-        TransformComponent position = new TransformComponent(150, 150);
+        TransformComponent position = new TransformComponent(spawnX, spawnY);
         RenderComponent renderWall = new RenderComponent(rectangle, position);
         CollisionComponent collisionComponent = new CollisionComponent(width, height, 0, 0, position, "WALL");
 
