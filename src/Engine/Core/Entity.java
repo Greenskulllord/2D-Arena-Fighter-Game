@@ -37,4 +37,11 @@ public class Entity {
         //returns null if no components are found
         return null;
     }
+
+    public void render(double DeltaTime) {
+        RenderComponent rc = getComponent(RenderComponent.class);
+        if (rc != null) {
+            rc.update(DeltaTime);
+        }
+    }
 }

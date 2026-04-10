@@ -1,8 +1,10 @@
 package Game.Main;
+import Engine.Components.RenderComponent;
 import Engine.Core.ActiveEntities;
 import Engine.Data.DataBase;
 import Engine.Data.EntityData;
 import Engine.Managers.RoomMapManager;
+import Engine.System.CameraSystem;
 import Engine.System.CollisionSystem;
 import Engine.Core.Entity;
 import Engine.Managers.SceneManager;
@@ -27,9 +29,12 @@ public class Game extends Application {
     Group root = new Group(); //visual elements
     Scene scene = new Scene(root, Color.GRAY); //content in stage
     InputControls controls = new InputControls();
+    Pane world = new Pane();
+
 
     //call the collision system
     CollisionSystem collisionSystem = new CollisionSystem();
+    CameraSystem camera;
 
     public Game() {
 
@@ -48,11 +53,18 @@ public class Game extends Application {
 
         //load in the first room
         Pane backgroundLayer = new Pane();
-        RoomMapManager mapManager = new RoomMapManager(stage, backgroundLayer, root, controls);
+        RoomMapManager mapManager = new RoomMapManager(stage, backgroundLayer, world, controls);
         EntityData data = DataBase.getTemplate("room");
-        root.getChildren().addFirst(backgroundLayer);
+
+        root.getChildren().addFirst(world);
+        world.getChildren().addFirst(backgroundLayer);
+
 
         mapManager.generateRoom(data.mapData, data.roomWidth, data.tileSize);
+
+        //load in camera
+        camera = new CameraSystem(stage, world, mapManager.getPlayerEntity(0));
+        camera.createCamera();
 
         //code arguments at end of statement
         gameLoop.start(); //start loop
@@ -78,10 +90,16 @@ public class Game extends Application {
             }
 
             try {
-                collisionSystem.update(deltatime);
-            } catch (FileNotFoundException e) {
-                throw new RuntimeException(e);
+                collisionSystem.update(deltatime); //update collisions
+            } catch (FileNotFoundException e) {throw new RuntimeException(e);}
+
+            for (Entity entity : ActiveEntities.getActiveEntities()) {
+                entity.render(deltatime);
             }
+
+            try {
+                camera.update(deltatime); //update camera
+            } catch (FileNotFoundException e) {throw new RuntimeException(e);}
 
         }
     };
@@ -91,9 +109,6 @@ public class Game extends Application {
                 Helper Methods
     =======================================
      */
-
-    //helper method to draw
-    public void draw(GraphicsContext graphics) {}
 
     //add listeners so program knows when a key is being press
     public void addListeners(Scene currentScene) {

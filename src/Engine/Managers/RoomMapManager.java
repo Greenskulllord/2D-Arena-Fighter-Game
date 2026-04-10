@@ -8,12 +8,16 @@ import Engine.Data.EntityData;
 import Game.Objects.Player;
 import Game.Objects.Wall;
 import Input.InputControls;
+import javafx.scene.CacheHint;
 import javafx.scene.Group;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
+
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class RoomMapManager {
 
@@ -25,16 +29,18 @@ public class RoomMapManager {
     //call components for player
     //or other special entities
     InputControls controls;
+    private final List<Entity> playerEntities = new ArrayList<>();
+
 
     //tile manager to create rooms
     //THIS IS FOR ONLY GENERATING, NOT MAKING
-    public RoomMapManager(Stage stage, Pane backgroundLayer, Group root,  InputControls controls) {
+    public RoomMapManager(Stage stage, Pane backgroundLayer, Pane world,  InputControls controls) {
         this.stage = stage;
         this.backgroundLayer = backgroundLayer;
         this.controls = controls;
 
         getTile();
-        getEntity(root);
+        getEntity(world);
     }
 
     //public void something here
@@ -59,7 +65,7 @@ public class RoomMapManager {
     }
 
     //public void something here
-    private void getEntity (Group root) {
+    private void getEntity (Pane world) {
         //get data
         EntityData entityData = DataBase.getTemplate("entity"); //the entity data
         EntityData data = DataBase.getTemplate("room"); //room data
@@ -98,12 +104,13 @@ public class RoomMapManager {
                     case 1 -> {
                         Player p = new Player(controls, spawnX, spawnY);
                         entities[i] = p;
-                        SpawnEntity(p, root);
+                        this.playerEntities.add(p);
+                        SpawnEntity(p, world);
                     }
                     case 2 -> {
                         Wall w = new Wall(spawnX, spawnY);
                         entities[i] = w;
-                        SpawnEntity(w, root);
+                        SpawnEntity(w, world);
                     }
                     default -> {
                         //do nothing
@@ -146,6 +153,9 @@ public class RoomMapManager {
                 int columns = i % roomSize;
                 int rows = i / roomSize;
 
+                //hopefully gets read of white lines
+                imageView.setSmooth(true);
+
                 //math to set X, Y cords
                 imageView.setX(columns * tileSize);
                 imageView.setY(rows * tileSize);
@@ -161,7 +171,7 @@ public class RoomMapManager {
     }
 
     //spawns the entity
-    public void SpawnEntity(Entity entity, Group root) {
+    public void SpawnEntity(Entity entity, Pane world) {
         //add entity to list of active entities
         ActiveEntities.fillActiveEntitiesList(entity);
 
@@ -170,7 +180,16 @@ public class RoomMapManager {
 
         //add image to entity
         if (render != null) {
-            root.getChildren().add(render.getNode());
+            world.getChildren().add(render.getNode());
         }
+    }
+
+    public Entity getPlayerEntity(int playerIndex) {
+
+        if (playerIndex >= 0 && playerIndex < playerEntities.size()){
+            return playerEntities.get(playerIndex);
+        }
+
+        return null;
     }
 }

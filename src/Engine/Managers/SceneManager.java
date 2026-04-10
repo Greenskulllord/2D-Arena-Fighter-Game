@@ -8,11 +8,14 @@ import java.util.HashMap;
 public class SceneManager {
     private static Stage window;
     private static final HashMap <String, Scene> sceneList= new HashMap<>();
+    public final static double WIDTH = 600;
+    public final static double HEIGHT = 400;
+
 
     public SceneManager(Stage stage) {
        //make window the stage
-        stage.setWidth(600);
-        stage.setHeight(400);
+        stage.setWidth(WIDTH);
+        stage.setHeight(HEIGHT);
         stage.setTitle("test");
         stage.show();
         window = stage;
