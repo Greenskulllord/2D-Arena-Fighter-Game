@@ -10,6 +10,7 @@ import Game.Objects.Wall;
 import Input.InputControls;
 import javafx.scene.CacheHint;
 import javafx.scene.Group;
+import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
@@ -30,14 +31,15 @@ public class RoomMapManager {
     //or other special entities
     InputControls controls;
     private final List<Entity> playerEntities = new ArrayList<>();
-
+    Scene scene;
 
     //tile manager to create rooms
     //THIS IS FOR ONLY GENERATING, NOT MAKING
-    public RoomMapManager(Stage stage, Pane backgroundLayer, Pane world,  InputControls controls) {
+    public RoomMapManager(Stage stage, Pane backgroundLayer, Pane world,  InputControls controls, Scene scene) {
         this.stage = stage;
         this.backgroundLayer = backgroundLayer;
         this.controls = controls;
+        this.scene = scene;
 
         getTile();
         getEntity(world);
@@ -68,7 +70,8 @@ public class RoomMapManager {
     private void getEntity (Pane world) {
         //get data
         EntityData entityData = DataBase.getTemplate("entity"); //the entity data
-        EntityData data = DataBase.getTemplate("room"); //room data
+
+        EntityData data = DataBase.getTemplate("room0"); //room data
 
         int[] entityMap = data.mapEntityData;
         HashMap<Integer, String> entityTemplate = entityData.entityRoomData;
@@ -102,7 +105,7 @@ public class RoomMapManager {
                 //to the id
                 switch (ID) {
                     case 1 -> {
-                        Player p = new Player(controls, spawnX, spawnY);
+                        Player p = new Player(controls, spawnX, spawnY, scene);
                         entities[i] = p;
                         this.playerEntities.add(p);
                         SpawnEntity(p, world);
@@ -154,7 +157,7 @@ public class RoomMapManager {
                 int rows = i / roomSize;
 
                 //hopefully gets read of white lines
-                imageView.setSmooth(true);
+                imageView.setSmooth(false);
 
                 //math to set X, Y cords
                 imageView.setX(columns * tileSize);
@@ -166,6 +169,9 @@ public class RoomMapManager {
 
                 //add it to background layer
                 backgroundLayer.getChildren().add(imageView);
+
+                backgroundLayer.setCache(true);
+                backgroundLayer.setCacheHint(CacheHint.SPEED);
             }
         }
     }

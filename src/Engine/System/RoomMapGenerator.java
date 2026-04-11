@@ -6,7 +6,13 @@ package Engine.System;
        that acts as a connector like a door or something
  */
 
+import java.util.Random;
+
 public class RoomMapGenerator {
+
+    Random random = new Random();
+    private int roomCount;
+
 
     RoomMapGenerator() {
 

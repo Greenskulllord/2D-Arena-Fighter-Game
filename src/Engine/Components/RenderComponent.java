@@ -19,8 +19,8 @@ public class RenderComponent implements Component {
         //using transform component, set the x and y to the node
         //this will snap the node onto the ghost object
         //making a visible object
-       node.setTranslateX(Math.floor(transformComponent.x));
-       node.setTranslateY(Math.floor(transformComponent.y));
+       node.setTranslateX(transformComponent.x);
+       node.setTranslateY(transformComponent.y);
     }
 
       /*

@@ -48,13 +48,10 @@ public class Game extends Application {
         SceneManager.addScene("GAME", scene);//scene in stage
         SceneManager.SwitchScene("GAME");
 
-        //listeners for keyboard input
-        addListeners(scene);
-
         //load in the first room
         Pane backgroundLayer = new Pane();
-        RoomMapManager mapManager = new RoomMapManager(stage, backgroundLayer, world, controls);
-        EntityData data = DataBase.getTemplate("room");
+        RoomMapManager mapManager = new RoomMapManager(stage, backgroundLayer, world, controls, scene);
+        EntityData data = DataBase.getTemplate("room0");
 
         root.getChildren().addFirst(world);
         world.getChildren().addFirst(backgroundLayer);
@@ -110,15 +107,4 @@ public class Game extends Application {
     =======================================
      */
 
-    //add listeners so program knows when a key is being press
-    public void addListeners(Scene currentScene) {
-        currentScene.addEventFilter(KeyEvent.KEY_PRESSED, controls.getKeyPressedHandler());
-        currentScene.addEventFilter(KeyEvent.KEY_RELEASED, controls.getKeyReleasedHandler());
-    }
-
-    //remove listeners so program doesn't when a key is being press
-    public void removeListeners(Scene currentScene) {
-        currentScene.removeEventFilter(KeyEvent.KEY_PRESSED, controls.getKeyPressedHandler());
-        currentScene.removeEventFilter(KeyEvent.KEY_RELEASED, controls.getKeyReleasedHandler());
-    }
 }

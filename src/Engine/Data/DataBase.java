@@ -2,12 +2,8 @@ package Engine.Data;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonPrimitive;
 import javafx.scene.image.Image;
 
-import java.awt.image.BufferedImage;
-import java.io.BufferedWriter;
-import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -161,11 +157,11 @@ public class DataBase {
 
                 //the width and height of room
                 //also get tile size
-                int roomWidth = root.has("roomWidth") && !root.get("roomWidth").isJsonNull()
-                        ? root.get("roomWidth").getAsInt() : 0;
+                int roomWidth = root.has("mapWidth") && !root.get("mapWidth").isJsonNull()
+                        ? root.get("mapWidth").getAsInt() : 0;
 
-                int roomHeight = root.has("roomHeight") && !root.get("roomHeight").isJsonNull()
-                        ? root.get("roomHeight").getAsInt() : 0;
+                int roomHeight = root.has("mapHeight") && !root.get("mapHeight").isJsonNull()
+                        ? root.get("mapHeight").getAsInt() : 0;
 
                 int tileSize = root.has("tileSize") && !root.get("tileSize").isJsonNull()
                         ? root.get("tileSize").getAsInt() : 0;
@@ -177,45 +173,57 @@ public class DataBase {
                 //initialize the 1D array for room entity data
                 int[] entityDataArray = new int[0];
 
-                //null check
-                if (root.has("room") && !root.get("room").isJsonNull()) {
-                    JsonArray layer = root.getAsJsonArray("room");
+                //for loop for every room
+
+                //hardcoded cause trying to fucking find room files
+                //individually is just impossible and im done with this
+                //fuck ass bug. don't event know why gson is coded this way
+                for (Map.Entry<String, JsonElement> entry : root.entrySet()) {
+
+                    String roomKey = entry.getKey();
 
                     //null check
-                    if (!layer.isEmpty()) {
+                    if (roomKey.startsWith("room") && !entry.getValue().isJsonNull()) {
 
-                        JsonObject roomData = layer.get(0).getAsJsonObject();
-                        JsonObject roomEntityData = layer.get(1).getAsJsonObject();
+                        JsonArray layer = entry.getValue().getAsJsonArray();
 
                         //null check
-                        if (roomData.has("data") && !roomData.get("data").isJsonNull()) {
+                        if (!layer.isEmpty()) {
 
-                            JsonArray data = roomData.getAsJsonArray("data");
-                            JsonArray entityData = roomEntityData.getAsJsonArray("spawnData");
+                            JsonObject roomData = layer.get(0).getAsJsonObject();
+                            JsonObject roomEntityData = layer.get(1).getAsJsonObject();
 
-                            //add to 1D array
-                            dataArray = new int[data.size()];
-                            entityDataArray = new int[entityData.size()];
+                            //null check
+                            if (roomData.has("data") && !roomData.get("data").isJsonNull()) {
 
-                            for (int i = 0; i < dataArray.length; i++) {
-                                //fill the 1D int array
-                                dataArray[i] = data.get(i).getAsInt();
+                                JsonArray data = roomData.getAsJsonArray("data");
+                                JsonArray entityData = roomEntityData.getAsJsonArray("spawnData");
 
-                            }
+                                //add to 1D array
+                                dataArray = new int[data.size()];
+                                entityDataArray = new int[entityData.size()];
 
-                            //I know I copy and pasted BUTTTT!!!
-                            //im only going to do it like one more time.
-                            //I don't need to write code to prevent a billion for loops
-                            //just handle the fucking layers.
-                            for (int i = 0; i < entityDataArray.length; i++) {
-                                //fill the 1D int array
-                                entityDataArray[i] = entityData.get(i).getAsInt();
+                                for (int j = 0; j < dataArray.length; j++) {
+                                    //fill the 1D int array
+                                    dataArray[j] = data.get(j).getAsInt();
 
-                            }
+                                }
 
-                        } else System.out.println("\nWarning: " + roomData + " is null");
-                    } else System.out.println("\nWarning: " + layer + " is empty");
-                } else System.out.println("\nWarning: layer is null in " + jsonObject);
+                                //I know I copy and pasted BUTTTT!!!
+                                //im only going to do it like one more time.
+                                //I don't need to write code to prevent a billion for loops
+                                //just handle the fucking layers.
+                                for (int j = 0; j < entityDataArray.length; j++) {
+                                    //fill the 1D int array
+                                    entityDataArray[j] = entityData.get(j).getAsInt();
+
+                                }
+
+                            } else System.out.println("\nWarning: " + roomData + " is null");
+                        } else System.out.println("\nWarning: " + layer + " is empty");
+                    } else System.out.println("\nWarning: layer is null in " + jsonObject);
+                }
+
 
 
 

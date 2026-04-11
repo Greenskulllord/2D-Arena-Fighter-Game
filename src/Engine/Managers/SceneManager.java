@@ -8,8 +8,8 @@ import java.util.HashMap;
 public class SceneManager {
     private static Stage window;
     private static final HashMap <String, Scene> sceneList= new HashMap<>();
-    public final static double WIDTH = 600;
-    public final static double HEIGHT = 400;
+    public final static double WIDTH = 1280;
+    public final static double HEIGHT = 700;
 
 
     public SceneManager(Stage stage) {

@@ -26,6 +26,7 @@ public class Initialization {
 
         //add rooms
         EntityData.addToEntityList("Rooms/test_room.json", "room");
+        EntityData.addToEntityList("Rooms/room_1.json", "room0");
 
         //load database
         DataBase.loadDatabase();

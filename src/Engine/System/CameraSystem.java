@@ -83,9 +83,6 @@ public class CameraSystem implements Component {
         world.setTranslateY(finalCameraY);
     }
 
-
-
-
     //getters and setters
     public double getCameraX() {
         return cameraX;

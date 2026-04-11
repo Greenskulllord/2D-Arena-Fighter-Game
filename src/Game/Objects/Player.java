@@ -4,6 +4,7 @@ import Engine.Components.*;
 import Engine.Data.DataBase;
 import Engine.Data.EntityData;
 import Input.InputControls;
+import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
@@ -18,7 +19,7 @@ public class Player extends Entity  {
 
 
     //make the constructor
-    public Player(InputControls Controls, int spawnX, int spawnY) {
+    public Player(InputControls Controls, int spawnX, int spawnY, Scene scene) {
         EntityData data = DataBase.getTemplate("PLAYER");
         height = data.height;
         width = data.width;
@@ -33,7 +34,7 @@ public class Player extends Entity  {
         this.addComponent(position);
         this.addComponent(renderWall);
         this.addComponent(collisionComponent);
-        this.addComponent(new InputComponent(this, Controls));
+        this.addComponent(new InputComponent(this, Controls, scene));
 
     }
 
