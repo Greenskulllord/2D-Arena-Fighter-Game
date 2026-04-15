@@ -7,6 +7,7 @@ import java.util.List;
 //these are my entities
 public class Entity {
     //make a list for the components
+    //todo instead of list, change to map for more speed
     public final List<Component> components = new ArrayList<>();
 
     //a method to add components
@@ -38,10 +39,28 @@ public class Entity {
         return null;
     }
 
+    public <H extends Component> H removeComponent(Class<H> componentClass) {
+        for (int i = 0; i < components.size(); i++) {
+            Component comp = components.get(i);
+
+            if (componentClass.isInstance(comp)) {
+                components.remove(i);
+
+                return componentClass.cast(comp);
+            }
+        }
+        return null;
+    }
+
+    public <H extends Component> void removeAllComponents(Class<H> componentClass) {
+        components.removeIf(componentClass::isInstance);
+    }
+
     public void render(double DeltaTime) {
         RenderComponent rc = getComponent(RenderComponent.class);
         if (rc != null) {
             rc.update(DeltaTime);
         }
     }
+
 }

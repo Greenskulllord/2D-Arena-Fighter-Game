@@ -7,7 +7,6 @@ public class DamageSystem {
         must work with all entities, not just one
      */
 
-
     DamageSystem() {
 
     }

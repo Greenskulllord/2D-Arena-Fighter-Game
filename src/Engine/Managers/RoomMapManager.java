@@ -9,7 +9,6 @@ import Game.Objects.Player;
 import Game.Objects.Wall;
 import Input.InputControls;
 import javafx.scene.CacheHint;
-import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -120,7 +119,6 @@ public class RoomMapManager {
                         //prevents crash hopefully
                     }
                 }
-
             }
         }
         catch (Exception e) {

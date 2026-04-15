@@ -73,6 +73,9 @@ public class InputControls {
         public void handle(MouseEvent mouseEvent) {
             mouseX = mouseEvent.getX();
             mouseY = mouseEvent.getY();
+
+            System.out.println(mouseX);
+            System.out.println(mouseY);
         }
     };
 
@@ -123,6 +126,10 @@ public class InputControls {
         Getters and Setter
     =========================
      */
+
+    public double getMouseX() { return mouseX; }
+    public double getMouseY() { return mouseY; }
+
     public BitSet getKeyboardBitSet() {
         return keyboardBitSet;
     }

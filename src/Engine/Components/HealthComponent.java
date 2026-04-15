@@ -4,7 +4,7 @@ import Engine.Core.Entity;
 import java.io.FileNotFoundException;
 
 public class HealthComponent implements Component {
-    double health;
+    public double health;
     Entity owner;
     DamageComponent damage;
 

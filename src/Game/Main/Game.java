@@ -5,6 +5,7 @@ import Engine.Data.DataBase;
 import Engine.Data.EntityData;
 import Engine.Managers.RoomMapManager;
 import Engine.System.CameraSystem;
+import Engine.System.CleanUpSystem;
 import Engine.System.CollisionSystem;
 import Engine.Core.Entity;
 import Engine.Managers.SceneManager;
@@ -34,6 +35,7 @@ public class Game extends Application {
 
     //call the collision system
     CollisionSystem collisionSystem = new CollisionSystem();
+    CleanUpSystem clean = new CleanUpSystem(world);
     CameraSystem camera;
 
     public Game() {
@@ -80,7 +82,7 @@ public class Game extends Application {
             //get entities from master list
             for (Entity entity : ActiveEntities.getActiveEntities()) {
                 try {
-                    entity.update(deltatime);
+                    entity.update(deltatime); //update entities
                 } catch (FileNotFoundException e) {
                     throw new RuntimeException(e);
                 }
@@ -91,20 +93,19 @@ public class Game extends Application {
             } catch (FileNotFoundException e) {throw new RuntimeException(e);}
 
             for (Entity entity : ActiveEntities.getActiveEntities()) {
-                entity.render(deltatime);
+                entity.render(deltatime); //render entities
             }
+
+            try {
+                clean.update();
+            } catch (Exception e) {throw new RuntimeException(e);}
 
             try {
                 camera.update(deltatime); //update camera
             } catch (FileNotFoundException e) {throw new RuntimeException(e);}
 
+
+
         }
     };
-
-    /*
-    =======================================
-                Helper Methods
-    =======================================
-     */
-
 }

@@ -18,6 +18,8 @@ public class InputComponent implements Component {
     private final double dashSpeed;
     private double dashDirX;
     private double dashDirY;
+    private double mouseX;
+    private double mouseY;
 
     //timers for abilities cooldowns
     private int dashTimer = 100;
@@ -50,6 +52,10 @@ public class InputComponent implements Component {
         double dirY = 0.0;
         double dirX = 0.0;
 
+        //constantly update position of mouse
+        mouseX = input.getMouseX();
+        mouseY = input.getMouseY();
+
         //for movement
         if (canMove) {
 
@@ -58,7 +64,10 @@ public class InputComponent implements Component {
             if (input.isMoveRight()) dirX += 1;
             if (input.isMoveLeft()) dirX -= 1;
 
-            if (input.onLeftClick()) System.out.print("\nleft click");
+            if (input.onLeftClick()) {
+
+            }
+
             if (input.onRightClick()) System.out.print("\nright click");
             if (input.onMiddleClick()) System.out.print("\nmiddle click");
 

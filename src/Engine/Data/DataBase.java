@@ -224,10 +224,6 @@ public class DataBase {
                     } else System.out.println("\nWarning: layer is null in " + jsonObject);
                 }
 
-
-
-
-
                 EntityData finalData = new EntityData(
                         /* Entity Data */ width, height, collideList, image,
 
