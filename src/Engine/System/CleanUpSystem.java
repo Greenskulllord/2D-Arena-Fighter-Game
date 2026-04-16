@@ -12,7 +12,6 @@ public class CleanUpSystem {
     public CleanUpSystem(Pane parentPane) {
      this.parentPane = parentPane;
 
-
     }
 
     public void update() {
@@ -32,6 +31,7 @@ public class CleanUpSystem {
 
                 //add to a trash list
                 ActiveEntities.fillTrashList(owner);
+                System.out.println("\nadded to trashList");
             }
         }
     }

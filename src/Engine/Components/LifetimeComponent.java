@@ -4,10 +4,10 @@ import Engine.Core.Entity;
 import java.io.FileNotFoundException;
 
 public class LifetimeComponent implements Component {
-    int startTimer;
-    Entity owner;
+    public double startTimer;
+    private Entity owner;
 
-    LifetimeComponent(int timeStart, Entity owner) {
+    LifetimeComponent(double timeStart, Entity owner) {
         this.startTimer = timeStart;
         this.owner = owner;
 

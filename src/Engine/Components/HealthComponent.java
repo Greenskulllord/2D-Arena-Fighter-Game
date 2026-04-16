@@ -5,17 +5,18 @@ import java.io.FileNotFoundException;
 
 public class HealthComponent implements Component {
     public double health;
+    public double maxHealth;
     Entity owner;
-    DamageComponent damage;
 
-    //boolean to check if owner took damage
-    public boolean hit;
-    public boolean heal;
+    //variables to check if owner took damage or healed
+    public double pendingDamage;
+    public double pendingHealing;
 
-    public HealthComponent (Entity owner, double health, DamageComponent damageComponent) {
+    public HealthComponent (Entity owner, double health, double maxHealth) {
         this.health = health;
+        this.maxHealth = maxHealth;
         this.owner = owner;
-        this.damage = damageComponent;
+
 
     }
 
@@ -23,14 +24,6 @@ public class HealthComponent implements Component {
     @Override
     public void update(double DeltaTime) throws FileNotFoundException {
 
-        if (hit) {
-            //take away from health
-            health = health - damage.damage;
-        }
 
-        else if (heal){
-            //add to health
-            health = health + damage.damage;
-        }
     }
 }

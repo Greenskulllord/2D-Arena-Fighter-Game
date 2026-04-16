@@ -4,10 +4,16 @@ import java.io.FileNotFoundException;
 
 public class DamageComponent implements Component {
 
-    double damage;
+    public double damage;
+    public float critMultiplier;
 
-    public DamageComponent(double amount) {
-        this.damage = amount;
+    enum damageType {
+        BASE;
+    }
+
+    public DamageComponent(double damageAmount, float critMultiplier, String damageType) {
+        this.damage = damageAmount;
+        this.critMultiplier = critMultiplier;
 
     }
 

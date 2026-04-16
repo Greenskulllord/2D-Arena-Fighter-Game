@@ -21,18 +21,7 @@ public class DeathComponent implements Component {
 
     @Override
     public void update(double DeltaTime) throws FileNotFoundException {
-        //logic that runs the cleanup system
-        if (health != null && health.health <= 0) {
-            isAlive = false; //flag as dead
-        }
 
-        if (life != null) {
-            life.startTimer -= (int) DeltaTime;
 
-            if (life.startTimer <= 0) {
-                this.isAlive = false;
-
-            }
-        }
     }
 }
