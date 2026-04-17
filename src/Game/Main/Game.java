@@ -3,6 +3,7 @@ import Engine.Components.RenderComponent;
 import Engine.Core.ActiveEntities;
 import Engine.Data.DataBase;
 import Engine.Data.EntityData;
+import Engine.Events.EventBus;
 import Engine.Managers.RoomMapManager;
 import Engine.System.CameraSystem;
 import Engine.System.CleanUpSystem;
@@ -10,6 +11,7 @@ import Engine.System.CollisionSystem;
 import Engine.Core.Entity;
 import Engine.Managers.SceneManager;
 import Engine.Math.DeltaTime;
+import Engine.System.LifeSystem;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.scene.Group;
@@ -31,13 +33,13 @@ public class Game extends Application {
     Scene scene = new Scene(root, Color.GRAY); //content in stage
     InputControls controls = new InputControls();
     Pane world = new Pane();
-
+    EventBus bus = new EventBus();
 
     //call the collision system
-    CollisionSystem collisionSystem = new CollisionSystem();
+    CollisionSystem collisionSystem = new CollisionSystem(bus);
     CleanUpSystem clean = new CleanUpSystem(world);
     CameraSystem camera;
-
+    LifeSystem lifeSystem = new LifeSystem();
     public Game() {
 
     }
@@ -86,6 +88,12 @@ public class Game extends Application {
                 } catch (FileNotFoundException e) {
                     throw new RuntimeException(e);
                 }
+            }
+
+            try {
+                lifeSystem.update(deltatime);
+            } catch (Exception e) {
+                throw new RuntimeException(e);
             }
 
             try {

@@ -17,7 +17,6 @@ public class Player extends Entity  {
     double height;
     Image image;
 
-
     //make the constructor
     public Player(InputControls Controls, int spawnX, int spawnY, Scene scene) {
         EntityData data = DataBase.getTemplate("PLAYER");
@@ -28,12 +27,19 @@ public class Player extends Entity  {
         //add components
         TransformComponent position = new TransformComponent(spawnX, spawnY);
         RenderComponent renderWall = new RenderComponent(new ImageView(image), position);
-        CollisionComponent collisionComponent = new CollisionComponent(width, height, 0, 0, position, "PLAYER");
+        CollisionComponent collisionComponent = new CollisionComponent(width, height, 0, 0, position, data.category, data.type);
+        HealthComponent health = new HealthComponent(data.health, data.maxHealth);
+        DamageComponent damage = new DamageComponent(data.damage, 1.1);
+        DeathComponent death = new DeathComponent(health, null);
+
 
         //building it like in factories now!! WHOO
         this.addComponent(position);
         this.addComponent(renderWall);
         this.addComponent(collisionComponent);
+        this.addComponent(health);
+        this.addComponent(damage);
+        this.addComponent(death);
         this.addComponent(new InputComponent(this, Controls, scene));
 
     }

@@ -14,7 +14,7 @@ public class LifeSystem {
         must work with all entities, not just one
      */
 
-    LifeSystem() {
+    public LifeSystem() {
 
     }
 
@@ -36,7 +36,7 @@ public class LifeSystem {
             if (HP == null && DMG == null && death == null && lifeTime == null) { continue; }
 
             //this code is ran for entities health values
-            if (HP != null && death != null) {
+            if (HP != null && DMG != null) {
 
                 //check if entity got hit
                 if (HP.pendingDamage > 0) {

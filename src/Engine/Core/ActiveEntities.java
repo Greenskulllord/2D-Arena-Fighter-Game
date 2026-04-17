@@ -27,6 +27,5 @@ public class ActiveEntities {
 
         activeEntities.removeAll(trashList);
         trashList.clear();
-        System.out.print("\nentity Successfully Deleted");
     }
 }

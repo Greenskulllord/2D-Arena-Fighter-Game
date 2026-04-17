@@ -2,7 +2,11 @@
   "wall": [
     {
       "width": 48,
-      "height": 48
+      "height": 48,
+      "image": "",
+      "category": "WALL",
+      "type": "STATIC",
+      "canCollideWith": []
     }
   ]
 }

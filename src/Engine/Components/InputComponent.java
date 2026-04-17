@@ -64,11 +64,23 @@ public class InputComponent implements Component {
             if (input.isMoveRight()) dirX += 1;
             if (input.isMoveLeft()) dirX -= 1;
 
-            if (input.onLeftClick()) {
 
+
+            if (input.onLeftClick()) {
+                HealthComponent hp = owner.getComponent(HealthComponent.class);
+                hp.pendingDamage += 10;
+                System.out.println("taking damage: " + hp.pendingDamage);
+                System.out.println("current Health:" + hp.health);
             }
 
-            if (input.onRightClick()) System.out.print("\nright click");
+            if (input.onRightClick()) {
+                HealthComponent hp = owner.getComponent(HealthComponent.class);
+                hp.pendingHealing += 10;
+                System.out.println("healing" + hp.pendingHealing);
+                System.out.println("current Health:" + hp.health);
+            }
+
+
             if (input.onMiddleClick()) System.out.print("\nmiddle click");
 
 

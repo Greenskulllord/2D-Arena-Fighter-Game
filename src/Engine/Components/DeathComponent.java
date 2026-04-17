@@ -6,13 +6,12 @@ import java.io.FileNotFoundException;
 
 public class DeathComponent implements Component {
 
-    private Entity owner;
+
     private final HealthComponent health;
     private final LifetimeComponent life;
     public boolean isAlive;
 
-    DeathComponent(Entity owner, HealthComponent health, LifetimeComponent life) {
-        this.owner = owner;
+    public DeathComponent(HealthComponent health, LifetimeComponent life) {
         this.health = health;
         this.life = life;
         this.isAlive = true;
