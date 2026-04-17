@@ -4,6 +4,8 @@ import Engine.Components.TransformComponent;
 import Engine.Core.Component;
 import Engine.Core.Entity;
 import Engine.Data.DataBase;
+import Engine.Events.CollisionEvent;
+import Engine.Events.EventBus;
 import Engine.Math.BoxCollision;
 import Engine.Data.EntityData;
 import java.io.FileNotFoundException;
@@ -13,6 +15,11 @@ import static Engine.Core.ActiveEntities.getActiveEntities;
 
 //the system that will run every collision check and logic
 public class CollisionSystem implements Component {
+    EventBus eventBus;
+
+    public CollisionSystem(EventBus eventBus){
+        this.eventBus = eventBus;
+    }
 
     @Override
     public void update(double DeltaTime) throws FileNotFoundException {
@@ -41,13 +48,11 @@ public class CollisionSystem implements Component {
             //loop to find entity B
             for (int j = 0; j < getActiveEntities().size(); j++) {
 
-                if (i == j ) { continue;}
-
-                //put B entities into their own variables
-                Entity entityB = entities.get(j);
+                if (i == j) { continue; }
 
                 //get the collision component from B
                 //other, pretty much
+                Entity entityB = entities.get(j);
                 CollisionComponent collB = entityB.getComponent(CollisionComponent.class);
 
                 //check if both are null
@@ -60,15 +65,15 @@ public class CollisionSystem implements Component {
                 boolean canHit = false;
 
                 //call for the database
-                EntityData checkA = DataBase.getTemplate(collA.type);
+                EntityData checkA = DataBase.getTemplate(collA.category);
 
-                // somehow, check if both entities
+                //somehow, check if both entities
                 //are registered to collide with each other
                 if (checkA != null && checkA.collideList != null) {
 
                     for (String targetType : checkA.collideList) {
 
-                        if (targetType.equals(collB.type)) {
+                        if (targetType.equals(collB.category)) {
                                 canHit = true;
                                 break;
                         }
@@ -79,17 +84,21 @@ public class CollisionSystem implements Component {
                 if (canHit) {
 
                     BoxCollision result = BoxCollision.BoxCollisionMath(transformA, collA, collB, DeltaTime);
-                    //run the actual collision logic
-                    if (DeltaTime > 0) {
-                        transformA.velocityX = result.totalMoveX / DeltaTime;
-                        transformA.velocityY = result.totalMoveY / DeltaTime;
+
+                    if (result.isColliding) {
+                        eventBus.publishEvent(new CollisionEvent(entityA, entityB, result.normalX, result.normalY));
+
+
+                        //run the actual collision logic
+                        if (DeltaTime > 0) {
+                            transformA.velocityX = result.totalMoveX / DeltaTime;
+                            transformA.velocityY = result.totalMoveY / DeltaTime;
+                        }
+
+                        finalMoveX = result.totalMoveX;
+                        finalMoveY = result.totalMoveY;
                     }
-
-                    finalMoveX = result.totalMoveX;
-                    finalMoveY = result.totalMoveY;
-
                    }
-
                 } //end of j loop
 
             transformA.x += finalMoveX;

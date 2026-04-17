@@ -93,9 +93,17 @@ public class DataBase {
                 int width = jsonObject.has("width") && !jsonObject.get("width").isJsonNull()
                         ? jsonObject.get("width").getAsInt() : 0;
 
-
                 int height = jsonObject.has("height") && !jsonObject.get("height").isJsonNull()
                         ? jsonObject.get("height").getAsInt() : 0;
+
+                int health = jsonObject.has("health") && !jsonObject.get("health").isJsonNull()
+                        ? jsonObject.get("health").getAsInt() : 0;
+
+                int damage = jsonObject.has("damage") && !jsonObject.get("damage").isJsonNull()
+                        ? jsonObject.get("damage").getAsInt() : 0;
+
+                int maxHealth = jsonObject.has("max_health") && !jsonObject.get("max_health").isJsonNull()
+                        ? jsonObject.get("max_health").getAsInt() : 0;
 
 
                  /*
@@ -103,6 +111,12 @@ public class DataBase {
                        Collision Stats
                 =============================
                  */
+
+                String type = jsonObject.has("type") && !jsonObject.get("type").isJsonNull()
+                        ? jsonObject.get("type").getAsString() : "NONE";
+
+                String category = jsonObject.has("category") && !jsonObject.get("category").isJsonNull()
+                        ? jsonObject.get("category").getAsString() : "NONE";
 
                 //convert Json arrays to string
                 String[] collideList = new String[0];
@@ -119,6 +133,8 @@ public class DataBase {
                         collideList[k] = array.get(k).getAsString();
                     }
                 } else System.out.println("\nWarning: Field canCollideWith is null in " + jsonObject);
+
+
 
                   /*
                 =========================
@@ -225,7 +241,7 @@ public class DataBase {
                 }
 
                 EntityData finalData = new EntityData(
-                        /* Entity Data */ width, height, collideList, image,
+                        /* Entity Data */ width, height, collideList, image, health, damage, maxHealth, category, type,
 
                         /* Room Data */ finalBuffImages, dataArray, roomWidth, roomHeight, tileSize,
 

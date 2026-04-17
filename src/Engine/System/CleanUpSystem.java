@@ -1,4 +1,5 @@
 package Engine.System;
+import Engine.Components.CollisionComponent;
 import Engine.Components.DeathComponent;
 import Engine.Components.RenderComponent;
 import Engine.Core.ActiveEntities;
@@ -21,17 +22,29 @@ public class CleanUpSystem {
             DeathComponent death = owner.getComponent(DeathComponent.class);
 
             if (death != null && !death.isAlive) {
+
+                CollisionComponent coll = owner.getComponent(CollisionComponent.class);
+                //check if its player
+
+                if (coll != null && coll.category.equals("PLAYER")) {
+                    //run a respawn system or like a game over system
+                    System.out.print("player is dead");
+                    return;
+                }
+
                 Node node = owner.getComponent(RenderComponent.class).getNode();
 
                 //remove the node
-                parentPane.getChildren().remove(node);
+                if (owner.getComponent(RenderComponent.class) != null && owner.getComponent(RenderComponent.class).getNode() != null) {
+                    parentPane.getChildren().remove(node);
+                }
 
                 //remove components
                 owner.removeAllComponents(Component.class);
 
                 //add to a trash list
                 ActiveEntities.fillTrashList(owner);
-                System.out.println("\nadded to trashList");
+                System.out.println("\nadded to trashList: " + owner);
             }
         }
     }

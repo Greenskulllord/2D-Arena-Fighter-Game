@@ -15,11 +15,15 @@ public class BoxCollision {
     double DeltaTime;
     public double totalMoveX;
     public double totalMoveY;
+    public boolean isColliding;
+    public double normalX;
+    public double normalY;
 
-    BoxCollision(double TotalX, double TotalY, double DeltaTime) {
+    BoxCollision(double TotalX, double TotalY, double DeltaTime, boolean isColliding) {
         this.totalMoveX = TotalX;
         this.totalMoveY = TotalY;
         this.DeltaTime = DeltaTime;
+        this.isColliding = isColliding;
     }
 
    public static BoxCollision BoxCollisionMath(TransformComponent transform, CollisionComponent owner,
@@ -38,7 +42,7 @@ public class BoxCollision {
         double frameVelocityY = transform.velocityY * DeltaTime;
 
         if (time >= 1.0) {
-            return new BoxCollision(frameVelocityX, frameVelocityY, DeltaTime);
+            return new BoxCollision(frameVelocityX, frameVelocityY, DeltaTime, false);
         }
 
         //calculate the vectors
@@ -72,6 +76,9 @@ public class BoxCollision {
         double totalY = vectorY + slideY;
 
         //return the variables
-        return new BoxCollision(totalX, totalY, DeltaTime);
+       BoxCollision result = new BoxCollision(totalX, totalY, DeltaTime, true);
+       result.normalX = normalX;
+       result.normalY = normalY;
+       return result;
     }
 }

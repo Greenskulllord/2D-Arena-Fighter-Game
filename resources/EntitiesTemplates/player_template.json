@@ -4,9 +4,12 @@
       "width": 32,
       "height": 32,
       "health": 100,
+      "max_health": 150,
       "speed": 200,
       "damage": 10,
       "image": "EntityTextures/player_test.png",
+      "category": "PLAYER",
+      "type": "DYNAMIC",
       "canCollideWith": [
         "PLAYER",
         "WALL"

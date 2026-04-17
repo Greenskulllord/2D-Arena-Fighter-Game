@@ -49,6 +49,7 @@ public class CameraSystem implements Component {
 
         //get player x and y
         //this way camera knows where player is
+
         double playerX = transform.x;
         double playerY = transform.y;
 

@@ -9,10 +9,15 @@ public class CollisionComponent implements Component {
     public double width; //for width of hitbox
     double offsetX;
     double offsetY;
+
     TransformComponent transformComponent; //component for x and y
+    public String category;
     public String type;
+
     public CollisionComponent(double Width, double Height,
-                              double offsetX, double offsetY, TransformComponent transform, String type) {
+                              double offsetX, double offsetY, TransformComponent transform, String category, String type) {
+
+        this.category = category;
         this.type = type;
         this.transformComponent = transform;
         this.offsetX = offsetX;
@@ -24,7 +29,6 @@ public class CollisionComponent implements Component {
 
     @Override
     public void update(double DeltaTime) {
-
     }
 
       /*

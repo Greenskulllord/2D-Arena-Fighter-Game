@@ -73,9 +73,6 @@ public class InputControls {
         public void handle(MouseEvent mouseEvent) {
             mouseX = mouseEvent.getX();
             mouseY = mouseEvent.getY();
-
-            System.out.println(mouseX);
-            System.out.println(mouseY);
         }
     };
 

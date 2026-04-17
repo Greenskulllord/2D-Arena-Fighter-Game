@@ -10,8 +10,17 @@ public class EntityData {
     //entity data
     public int width;
     public int height;
+    public int health;
+    public int maxHealth;
+    public int damage;
     public String[] collideList;
     public Image image;
+
+
+
+    //collision stats
+    public String category;
+    public String type;
 
     //room data
     public Image[] bImage;
@@ -31,7 +40,9 @@ public class EntityData {
     public static ArrayList<EntityList> entityLists = new ArrayList<>();
 
     public EntityData(
-            /* Entity Data */ int width, int height, String[] collideList, Image image,
+            /* Entity Data */ int width, int height, String[] collideList, Image image, int health, int damage, int maxHealth,
+
+            /* Collision Stats */ String category, String type,
 
             /* Room Data */ Image[] bufferedImage, int[] mapData, int roomWidth, int roomHeight, int tileSize,
 
@@ -43,6 +54,13 @@ public class EntityData {
         this.collideList = collideList;
         this.width = width;
         this.height = height;
+        this.health = health;
+        this.maxHealth = maxHealth;
+        this.damage = damage;
+
+        //collision stats
+        this.category = category;
+        this.type = type;
 
         //room data
         this.bImage = bufferedImage;
@@ -54,7 +72,6 @@ public class EntityData {
         //entity room data
         this.entityRoomData = entityRoomData;
         this.mapEntityData = mapEntityData;
-
     }
 
     //helper method to add entities to the master template lists

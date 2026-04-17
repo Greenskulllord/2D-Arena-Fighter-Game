@@ -6,17 +6,15 @@ import java.io.FileNotFoundException;
 public class HealthComponent implements Component {
     public double health;
     public double maxHealth;
-    Entity owner;
+
 
     //variables to check if owner took damage or healed
     public double pendingDamage;
     public double pendingHealing;
 
-    public HealthComponent (Entity owner, double health, double maxHealth) {
+    public HealthComponent (double health, double maxHealth) {
         this.health = health;
         this.maxHealth = maxHealth;
-        this.owner = owner;
-
 
     }
 

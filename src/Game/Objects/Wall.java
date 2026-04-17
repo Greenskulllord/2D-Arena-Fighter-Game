@@ -1,5 +1,4 @@
 package Game.Objects;
-
 import Engine.Components.CollisionComponent;
 import Engine.Components.RenderComponent;
 import Engine.Components.TransformComponent;
@@ -14,7 +13,6 @@ public class Wall extends Entity {
     double height;
     double width;
 
-
     public Wall(int spawnX, int spawnY) {
         EntityData data = DataBase.getTemplate("WALL");
         height = data.height;
@@ -25,7 +23,7 @@ public class Wall extends Entity {
         //add components
         TransformComponent position = new TransformComponent(spawnX, spawnY);
         RenderComponent renderWall = new RenderComponent(rectangle, position);
-        CollisionComponent collisionComponent = new CollisionComponent(width, height, 0, 0, position, "WALL");
+        CollisionComponent collisionComponent = new CollisionComponent(width, height, 0, 0, position, data.category, data.type);
 
         this.addComponent(position);
         this.addComponent(collisionComponent);
