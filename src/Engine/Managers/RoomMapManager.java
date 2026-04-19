@@ -2,9 +2,11 @@ package Engine.Managers;
 import Engine.Components.RenderComponent;
 import Engine.Core.ActiveEntities;
 import Engine.Core.Entity;
+import Engine.Core.GameContext;
 import Engine.Core.Tile;
 import Engine.Data.DataBase;
 import Engine.Data.EntityData;
+import Engine.System.Spawner;
 import Game.Objects.Enemy;
 import Game.Objects.Player;
 import Game.Objects.Wall;
@@ -26,23 +28,21 @@ public class RoomMapManager {
     private Tile[] tile;
     private Pane backgroundLayer;
     private Entity[] entities;
+    private GameContext context;
 
-    //call components for player
     //or other special entities
-    InputControls controls;
     private final List<Entity> playerEntities = new ArrayList<>();
-    Scene scene;
+
 
     //tile manager to create rooms
     //THIS IS FOR ONLY GENERATING, NOT MAKING
-    public RoomMapManager(Stage stage, Pane backgroundLayer, Pane world,  InputControls controls, Scene scene) {
+    public RoomMapManager(Stage stage, Pane backgroundLayer, GameContext context) {
         this.stage = stage;
         this.backgroundLayer = backgroundLayer;
-        this.controls = controls;
-        this.scene = scene;
+        this.context = context;
 
         getTile();
-        getEntity(world);
+        getEntity();
     }
 
     //public void something here
@@ -67,7 +67,7 @@ public class RoomMapManager {
     }
 
     //public void something here
-    private void getEntity (Pane world) {
+    private void getEntity () {
         //get data
         EntityData entityData = DataBase.getTemplate("entity"); //the entity data
         EntityData data = DataBase.getTemplate("room0"); //room data
@@ -104,20 +104,20 @@ public class RoomMapManager {
                 //to the id
                 switch (ID) {
                     case 1 -> {
-                        Player p = new Player(controls, spawnX, spawnY, scene);
+                        Player p = new Player(context, spawnX, spawnY, context.scene);
                         entities[i] = p;
                         this.playerEntities.add(p);
-                        SpawnEntity(p, world);
+                        context.spawner.spawn(p);
                     }
                     case 2 -> {
                         Wall w = new Wall(spawnX, spawnY);
                         entities[i] = w;
-                        SpawnEntity(w, world);
+                        context.spawner.spawn(w);
                     }
                     case 3 -> {
                         Enemy e = new Enemy(spawnX, spawnY);
                         entities[i] = e;
-                        SpawnEntity(e, world);
+                        context.spawner.spawn(e);
                     }
                     default -> {
                         //do nothing
@@ -175,20 +175,6 @@ public class RoomMapManager {
                 backgroundLayer.setCache(true);
                 backgroundLayer.setCacheHint(CacheHint.SPEED);
             }
-        }
-    }
-
-    //spawns the entity
-    public void SpawnEntity(Entity entity, Pane world) {
-        //add entity to list of active entities
-        ActiveEntities.fillActiveEntitiesList(entity);
-
-        //call render component to find node
-        RenderComponent render = entity.getComponent(RenderComponent.class);
-
-        //add image to entity
-        if (render != null) {
-            world.getChildren().add(render.getNode());
         }
     }
 

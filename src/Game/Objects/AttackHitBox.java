@@ -8,19 +8,10 @@ import javafx.scene.shape.Rectangle;
 
 public class AttackHitBox extends Entity {
 
-    AttackHitBox (int spawnX, int spawnY, Entity owner) {
+    public AttackHitBox(int spawnX, int spawnY) {
 
         double damageAmount = 0.0;
-        double critMultiplier = 0.0;
-
-        Rectangle rectangle = new Rectangle(50, 50, Color.BLUE);
-
-        TransformComponent trans = new TransformComponent(spawnX, spawnY);
-        CollisionComponent coll = new CollisionComponent(50, 50, 0, 0, trans, "HITBOX", "ATTACK");
-        RenderComponent render = new RenderComponent(rectangle, trans);
-        LifetimeComponent life = new LifetimeComponent(150.0);
-        DeathComponent death = new DeathComponent(null, life);
-        DamageComponent damage = new DamageComponent(damageAmount, critMultiplier);
+        double critMultiplier = 1.0;
 
         //sum way to reference owner of hitbox
         for (int i = ActiveEntities.getActiveEntities().size() - 1; i >= 0; i--) {
@@ -33,11 +24,21 @@ public class AttackHitBox extends Entity {
             if (collA == null) continue; // skip if null
 
             if (collA.category.equals("PLAYER")) {
-                damageAmount = damageA.damage; //hopefully this works
+                damageAmount = damageA.damage;//hopefully this works
+                critMultiplier = damageA.critMultiplier;
             }
         }
 
-        //add components after finding damage to owner
+        //make everything
+        Rectangle rectangle = new Rectangle(50, 50, Color.BLUE);
+        TransformComponent trans = new TransformComponent(spawnX, spawnY);
+        CollisionComponent coll = new CollisionComponent(50, 50, 0, 0, trans, "ATTACK", "HITBOX");
+        RenderComponent render = new RenderComponent(rectangle, trans);
+        LifetimeComponent life = new LifetimeComponent(10.0);
+        DeathComponent death = new DeathComponent(null, life);
+        DamageComponent damage = new DamageComponent(damageAmount, critMultiplier);
+
+        //add components
         this.addComponent(trans);
         this.addComponent(coll);
         this.addComponent(render);

@@ -7,12 +7,8 @@ import Engine.Components.LifetimeComponent;
 import Engine.Core.ActiveEntities;
 import Engine.Core.Entity;
 
-public class LifeSystem {
-
-    /*todo a system to handle healing and taking damage to reduce health
-        must work with health and damage components.
-        must work with all entities, not just one
-     */
+public class
+LifeSystem {
 
     public LifeSystem() {
     }

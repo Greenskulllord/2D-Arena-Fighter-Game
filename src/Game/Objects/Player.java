@@ -13,9 +13,10 @@ import javafx.scene.image.ImageView;
     input component
  */
 public class Player extends Entity  {
+    GameContext context;
 
     //make the constructor
-    public Player(InputControls Controls, int spawnX, int spawnY, Scene scene) {
+    public Player(GameContext context, int spawnX, int spawnY, Scene scene) {
         EntityData data = DataBase.getTemplate("PLAYER");
 
         //add components
@@ -33,7 +34,7 @@ public class Player extends Entity  {
         this.addComponent(health);
         this.addComponent(damage);
         this.addComponent(death);
-        this.addComponent(new InputComponent(this, Controls, scene));
+        this.addComponent(new InputComponent(this, context, scene));
     }
 
      /*
