@@ -21,7 +21,6 @@ public class CombatSystem {
             }
         }
 
-
         if (categoryA.equals("HEAL")) {
             DamageComponent damageA = event.A.getComponent(DamageComponent.class);
             HealthComponent healthB = event.B.getComponent(HealthComponent.class);
