@@ -1,15 +1,12 @@
 package Engine.Components;
-import Engine.Core.ActiveEntities;
 import Engine.Core.Component;
 import Engine.Core.Entity;
-import Engine.Managers.RoomMapManager;
-import Game.Objects.Enemy;
+import Engine.Core.GameContext;
+import Game.Objects.AttackHitBox;
 import Input.InputControls;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
-
-import java.util.List;
 
 //this is a component that handles player input
 public class InputComponent implements Component {
@@ -17,24 +14,25 @@ public class InputComponent implements Component {
     private final InputControls input;
     private final Entity owner;
     private final Scene currentScene;
+    GameContext context;
 
     //declare the base variables
     private final double speed;
     private final double dashSpeed;
     private double dashDirX;
     private double dashDirY;
-    private double mouseX;
-    private double mouseY;
 
     //timers for abilities cooldowns
     private int dashTimer = 100;
     private boolean canMove = true;
 
+
     //an attempt at making a component to just add controls to anything
-    public InputComponent(Entity Owner, InputControls Input, Scene currentScene) {
+    public InputComponent(Entity Owner, GameContext context, Scene currentScene) {
         //get the owner and input controls, also set speed
         this.owner = Owner;
-        this.input = Input;
+        this.context = context;
+        this.input = context.controls;
         this.speed = 200;
         this.dashSpeed = 300;
 
@@ -48,7 +46,7 @@ public class InputComponent implements Component {
 
         //get the transform component
         TransformComponent transform = owner.getComponent(TransformComponent.class);
-
+        
         //if there is no transform component, do nothing
         //makes it not crash
         if (transform == null) return;
@@ -58,8 +56,8 @@ public class InputComponent implements Component {
         double dirX = 0.0;
 
         //constantly update position of mouse
-        mouseX = input.getMouseX();
-        mouseY = input.getMouseY();
+        double worldX = input.getMouseX() - context.camera.getCameraX();
+        double worldY = input.getMouseY() - context.camera.getCameraY();
 
         //for movement
         if (canMove) {
@@ -70,17 +68,11 @@ public class InputComponent implements Component {
             if (input.isMoveLeft()) dirX -= 1;
 
             if (input.onLeftClick()) {
-                HealthComponent hp = owner.getComponent(HealthComponent.class);
-                hp.pendingDamage += 10;
-                System.out.println("taking damage: " + hp.pendingDamage);
-                System.out.println("current Health:" + hp.health);
+                context.spawner.spawn(new AttackHitBox((int) worldX, (int) worldY));
+
             }
 
-            if (input.onRightClick()) {
-                HealthComponent hp = owner.getComponent(HealthComponent.class);
-                hp.pendingHealing += 10;
-                System.out.println("healing" + hp.pendingHealing);
-                System.out.println("current Health:" + hp.health);
+            if (input.onRightClickOnce()) {
 
             }
 

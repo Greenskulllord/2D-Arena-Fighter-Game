@@ -84,6 +84,10 @@ public class CameraSystem implements Component {
         world.setTranslateY(finalCameraY);
     }
 
+    public void setOwner(Entity owner) {
+        this.owner = owner;
+    }
+
     //getters and setters
     public double getCameraX() {
         return cameraX;
@@ -108,4 +112,6 @@ public class CameraSystem implements Component {
     public void setOnStart(Boolean onStart) {
         this.onStart = onStart;
     }
+
+
 }

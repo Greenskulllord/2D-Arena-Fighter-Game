@@ -1,17 +1,15 @@
 package Game.Main;
 import Engine.Components.RenderComponent;
 import Engine.Core.ActiveEntities;
+import Engine.Core.GameContext;
 import Engine.Data.DataBase;
 import Engine.Data.EntityData;
 import Engine.Events.EventBus;
 import Engine.Managers.RoomMapManager;
-import Engine.System.CameraSystem;
-import Engine.System.CleanUpSystem;
-import Engine.System.CollisionSystem;
+import Engine.System.*;
 import Engine.Core.Entity;
 import Engine.Managers.SceneManager;
 import Engine.Math.DeltaTime;
-import Engine.System.LifeSystem;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.scene.Group;
@@ -40,31 +38,38 @@ public class Game extends Application {
     CleanUpSystem clean = new CleanUpSystem(world);
     CameraSystem camera;
     LifeSystem lifeSystem = new LifeSystem();
-    public Game() {
+    Spawner spawner = new Spawner();
 
-    }
 
     //block of code to run engine
     @Override
     public void start(Stage stage) {
+        Pane backgroundLayer = new Pane();
 
         new SceneManager(stage);
         SceneManager.addScene("GAME", scene);//scene in stage
         SceneManager.SwitchScene("GAME");
 
-        //load in the first room
-        Pane backgroundLayer = new Pane();
-        RoomMapManager mapManager = new RoomMapManager(stage, backgroundLayer, world, controls, scene);
-        EntityData data = DataBase.getTemplate("room0");
-
         root.getChildren().addFirst(world);
         world.getChildren().addFirst(backgroundLayer);
 
+        //load in camera
+        camera = new CameraSystem(stage, world, null);
+        camera.createCamera();
+        spawner.start(world);
+
+        //add context on start
+        GameContext context = new GameContext(camera, spawner, bus, controls, scene);
+
+        //load in the first room
+
+        RoomMapManager mapManager = new RoomMapManager(stage, backgroundLayer, context);
+        EntityData data = DataBase.getTemplate("room0");
+
         mapManager.generateRoom(data.mapData, data.roomWidth, data.tileSize);
 
-        //load in camera
-        camera = new CameraSystem(stage, world, mapManager.getPlayerEntity(0));
-        camera.createCamera();
+        //set owner of camera
+        camera.setOwner(mapManager.getPlayerEntity(0));
 
         //code arguments at end of statement
         gameLoop.start(); //start loop

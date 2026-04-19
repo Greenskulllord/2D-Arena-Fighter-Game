@@ -31,6 +31,7 @@ public class InputControls {
     public double mouseX;
     public double mouseY;
     private final int mouseCodeOffset = 1000;
+    private boolean mouseClickConsumed = false;
 
     public InputControls() {
     }
@@ -122,6 +123,32 @@ public class InputControls {
     public boolean onForwardClick() {
         return keyboardBitSet.get(forwardClick.ordinal() + mouseCodeOffset);
     }
+
+    //for single click events
+    public boolean onLeftClickOnce() {
+        if (!mouseClickConsumed && keyboardBitSet.get(leftClick.ordinal() + mouseCodeOffset)) {
+            mouseClickConsumed = true;
+            return true;
+        }
+        return false;
+    }
+
+    public boolean onRightClickOnce() {
+        if (!mouseClickConsumed && keyboardBitSet.get(rightClick.ordinal() + mouseCodeOffset)) {
+            mouseClickConsumed = true;
+            return true;
+        }
+        return false;
+    }
+
+    public boolean onMiddleClickOnce() {
+        if (!mouseClickConsumed && keyboardBitSet.get(middleCLick.ordinal() + mouseCodeOffset)) {
+            mouseClickConsumed = true;
+            return true;
+        }
+        return false;
+    }
+
 
     /*
     =========================

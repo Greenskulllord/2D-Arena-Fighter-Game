@@ -6,6 +6,8 @@ import Engine.Events.CollisionEvent;
 
 public class CombatSystem {
 
+    // I do not know if this works or not
+
     public void onCollision(CollisionEvent event) {
         String categoryA = event.A.getComponent(CollisionComponent.class).category;
         String categoryB = event.B.getComponent(CollisionComponent.class).category;

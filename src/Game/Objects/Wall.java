@@ -15,7 +15,7 @@ public class Wall extends Entity {
 
     public Wall(int spawnX, int spawnY) {
         EntityData data = DataBase.getTemplate("WALL");
-        Rectangle rectangle = new Rectangle(width, height, Color.BLACK);
+        Rectangle rectangle = new Rectangle(data.width, data.height, Color.BLACK);
 
         //add components
         TransformComponent position = new TransformComponent(spawnX, spawnY);
