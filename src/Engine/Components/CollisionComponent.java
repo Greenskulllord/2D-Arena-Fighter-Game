@@ -40,15 +40,12 @@ public class CollisionComponent implements Component {
     public double getMinX() {
         return transformComponent.x + offsetX;
     }
-
     public double getMinY() {
         return transformComponent.y + offsetY;
     }
-
     public double getMaxX() {
         return transformComponent.x + offsetX + width;
     }
-
     public double getMaxY() {
         return transformComponent.y + offsetY + height;
     }

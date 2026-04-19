@@ -15,20 +15,16 @@ public class Wall extends Entity {
 
     public Wall(int spawnX, int spawnY) {
         EntityData data = DataBase.getTemplate("WALL");
-        height = data.height;
-        width = data.width;
-
-        Rectangle rectangle = new Rectangle(width, height, Color.DIMGRAY);
+        Rectangle rectangle = new Rectangle(width, height, Color.BLACK);
 
         //add components
         TransformComponent position = new TransformComponent(spawnX, spawnY);
         RenderComponent renderWall = new RenderComponent(rectangle, position);
-        CollisionComponent collisionComponent = new CollisionComponent(width, height, 0, 0, position, data.category, data.type);
+        CollisionComponent collisionComponent = new CollisionComponent(data.width, data.height, 0, 0, position, data.category, data.type);
 
         this.addComponent(position);
         this.addComponent(collisionComponent);
         this.addComponent(renderWall);
-
     }
 
      /*

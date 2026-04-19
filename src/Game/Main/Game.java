@@ -60,7 +60,6 @@ public class Game extends Application {
         root.getChildren().addFirst(world);
         world.getChildren().addFirst(backgroundLayer);
 
-
         mapManager.generateRoom(data.mapData, data.roomWidth, data.tileSize);
 
         //load in camera

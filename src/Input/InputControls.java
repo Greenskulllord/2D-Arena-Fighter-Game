@@ -25,6 +25,7 @@ public class InputControls {
     private MouseButton leftClick = MouseButton.PRIMARY;
     private MouseButton rightClick = MouseButton.SECONDARY;
     private MouseButton middleCLick = MouseButton.MIDDLE;
+    private final MouseButton forwardClick = MouseButton.FORWARD;
 
     //get mouse X and Y constantly
     public double mouseX;
@@ -116,6 +117,10 @@ public class InputControls {
 
     public boolean onMiddleClick() {
         return keyboardBitSet.get(middleCLick.ordinal() + mouseCodeOffset);
+    }
+
+    public boolean onForwardClick() {
+        return keyboardBitSet.get(forwardClick.ordinal() + mouseCodeOffset);
     }
 
     /*

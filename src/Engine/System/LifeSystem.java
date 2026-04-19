@@ -15,7 +15,6 @@ public class LifeSystem {
      */
 
     public LifeSystem() {
-
     }
 
     public void update(double DeltaTime) {

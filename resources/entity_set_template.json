@@ -2,7 +2,8 @@
   "entity": [
     {
       "1": "EntitiesTemplates/player_template.json",
-      "2": "EntitiesTemplates/wall_template.json"
+      "2": "EntitiesTemplates/wall_template.json",
+      "3": "EntitiesTemplates/enemy_template.json"
     }
   ]
 }

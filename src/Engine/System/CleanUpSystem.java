@@ -9,7 +9,7 @@ import javafx.scene.Node;
 import javafx.scene.layout.Pane;
 
 public class CleanUpSystem {
-    private Pane parentPane;
+    private final Pane parentPane;
     public CleanUpSystem(Pane parentPane) {
      this.parentPane = parentPane;
 
@@ -28,8 +28,9 @@ public class CleanUpSystem {
 
                 if (coll != null && coll.category.equals("PLAYER")) {
                     //run a respawn system or like a game over system
-                    System.out.print("player is dead");
-                    return;
+                    System.out.print("\nplayer is dead");
+                    death.isAlive = true;
+                    break;
                 }
 
                 Node node = owner.getComponent(RenderComponent.class).getNode();

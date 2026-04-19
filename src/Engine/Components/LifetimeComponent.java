@@ -5,12 +5,10 @@ import java.io.FileNotFoundException;
 
 public class LifetimeComponent implements Component {
     public double startTimer;
-    private Entity owner;
 
-    LifetimeComponent(double timeStart, Entity owner) {
+
+    public LifetimeComponent(double timeStart) {
         this.startTimer = timeStart;
-        this.owner = owner;
-
     }
 
     @Override

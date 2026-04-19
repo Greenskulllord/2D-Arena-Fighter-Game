@@ -5,6 +5,7 @@ import Engine.Core.Entity;
 import Engine.Core.Tile;
 import Engine.Data.DataBase;
 import Engine.Data.EntityData;
+import Game.Objects.Enemy;
 import Game.Objects.Player;
 import Game.Objects.Wall;
 import Input.InputControls;
@@ -69,7 +70,6 @@ public class RoomMapManager {
     private void getEntity (Pane world) {
         //get data
         EntityData entityData = DataBase.getTemplate("entity"); //the entity data
-
         EntityData data = DataBase.getTemplate("room0"); //room data
 
         int[] entityMap = data.mapEntityData;
@@ -114,6 +114,11 @@ public class RoomMapManager {
                         entities[i] = w;
                         SpawnEntity(w, world);
                     }
+                    case 3 -> {
+                        Enemy e = new Enemy(spawnX, spawnY);
+                        entities[i] = e;
+                        SpawnEntity(e, world);
+                    }
                     default -> {
                         //do nothing
                         //prevents crash hopefully
@@ -126,7 +131,6 @@ public class RoomMapManager {
             throw new RuntimeException(e);
         }
     }
-
 
     public void generateRoom(int[] mapData, int roomSize, int tileSize) {
         //clear first to prevent overlapping rooms

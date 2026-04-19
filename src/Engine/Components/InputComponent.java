@@ -1,10 +1,15 @@
 package Engine.Components;
+import Engine.Core.ActiveEntities;
 import Engine.Core.Component;
 import Engine.Core.Entity;
+import Engine.Managers.RoomMapManager;
+import Game.Objects.Enemy;
 import Input.InputControls;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
+
+import java.util.List;
 
 //this is a component that handles player input
 public class InputComponent implements Component {
@@ -64,8 +69,6 @@ public class InputComponent implements Component {
             if (input.isMoveRight()) dirX += 1;
             if (input.isMoveLeft()) dirX -= 1;
 
-
-
             if (input.onLeftClick()) {
                 HealthComponent hp = owner.getComponent(HealthComponent.class);
                 hp.pendingDamage += 10;
@@ -78,11 +81,8 @@ public class InputComponent implements Component {
                 hp.pendingHealing += 10;
                 System.out.println("healing" + hp.pendingHealing);
                 System.out.println("current Health:" + hp.health);
+
             }
-
-
-            if (input.onMiddleClick()) System.out.print("\nmiddle click");
-
 
             //-----------------------------------------------------------
             //this is for fixing and normalizing the velocity for diagonals
