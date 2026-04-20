@@ -4,8 +4,8 @@
       "width": 48,
       "height": 48,
       "image": "",
-      "category": "WALL",
-      "type": "STATIC",
+      "category": "STATIC",
+      "type": "WALL",
       "canCollideWith": []
     }
   ]

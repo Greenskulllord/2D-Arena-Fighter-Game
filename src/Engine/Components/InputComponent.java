@@ -2,7 +2,9 @@ package Engine.Components;
 import Engine.Core.Component;
 import Engine.Core.Entity;
 import Engine.Core.GameContext;
+import Engine.System.MovementSystem;
 import Game.Objects.AttackHitBox;
+import Game.Objects.Enemy;
 import Input.InputControls;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyEvent;
@@ -13,11 +15,9 @@ public class InputComponent implements Component {
     //declare what class to use
     private final InputControls input;
     private final Entity owner;
-    private final Scene currentScene;
     GameContext context;
 
     //declare the base variables
-    private final double speed;
     private final double dashSpeed;
     private double dashDirX;
     private double dashDirY;
@@ -26,17 +26,14 @@ public class InputComponent implements Component {
     private int dashTimer = 100;
     private boolean canMove = true;
 
-
     //an attempt at making a component to just add controls to anything
     public InputComponent(Entity Owner, GameContext context, Scene currentScene) {
         //get the owner and input controls, also set speed
         this.owner = Owner;
         this.context = context;
         this.input = context.controls;
-        this.speed = 200;
         this.dashSpeed = 300;
 
-        this.currentScene = currentScene;
         addListeners(currentScene);
         addMouseListeners(currentScene);
     }
@@ -44,9 +41,11 @@ public class InputComponent implements Component {
     @Override
     public void update(double DeltaTime) {
 
-        //get the transform component
+        //get the components
         TransformComponent transform = owner.getComponent(TransformComponent.class);
-        
+        MovementComponent move = owner.getComponent(MovementComponent.class);
+        double speed = move.speed;
+
         //if there is no transform component, do nothing
         //makes it not crash
         if (transform == null) return;
@@ -68,11 +67,12 @@ public class InputComponent implements Component {
             if (input.isMoveLeft()) dirX -= 1;
 
             if (input.onLeftClick()) {
-                context.spawner.spawn(new AttackHitBox((int) worldX, (int) worldY));
+                context.spawner.spawn(new AttackHitBox((int) worldX, (int) worldY, owner));
 
             }
 
-            if (input.onRightClickOnce()) {
+            if (input.onRightClick()) {
+                context.spawner.spawn(new Enemy((int) worldX, (int) worldY));
 
             }
 
@@ -101,7 +101,7 @@ public class InputComponent implements Component {
             //calculate if player speed is player sprints
             //the ? is another way to do if, then in java.
             // ':' = then, '?' = if
-            double currentSpeed = input.isSprinting() ? speed * 2 : speed;
+            double currentSpeed = input.isSprinting() ? speed * 2.0 : speed;
 
             //using the transform component, add the speed modifiers here to it
             transform.velocityY = dirY * currentSpeed;

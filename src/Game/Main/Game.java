@@ -1,9 +1,9 @@
 package Game.Main;
-import Engine.Components.RenderComponent;
 import Engine.Core.ActiveEntities;
 import Engine.Core.GameContext;
 import Engine.Data.DataBase;
 import Engine.Data.EntityData;
+import Engine.Events.CollisionEvent;
 import Engine.Events.EventBus;
 import Engine.Managers.RoomMapManager;
 import Engine.System.*;
@@ -14,14 +14,10 @@ import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.scene.Group;
 import javafx.scene.Scene;
-import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import Input.InputControls;
-
-import java.io.FileNotFoundException;
 
 
 public class Game extends Application {
@@ -30,8 +26,9 @@ public class Game extends Application {
     Group root = new Group(); //visual elements
     Scene scene = new Scene(root, Color.GRAY); //content in stage
     InputControls controls = new InputControls();
-    Pane world = new Pane();
     EventBus bus = new EventBus();
+    Pane world = new Pane();
+    Pane backgroundLayer = new Pane();
 
     //call the collision system
     CollisionSystem collisionSystem = new CollisionSystem(bus);
@@ -40,16 +37,19 @@ public class Game extends Application {
     LifeSystem lifeSystem = new LifeSystem();
     Spawner spawner = new Spawner();
 
+    CombatSystem combat = new CombatSystem();
+    MovementConst move = new MovementConst(bus);
+    MovementSystem moveSystem = new MovementSystem();
 
     //block of code to run engine
     @Override
     public void start(Stage stage) {
-        Pane backgroundLayer = new Pane();
-
+        //make scene and set it
         new SceneManager(stage);
         SceneManager.addScene("GAME", scene);//scene in stage
         SceneManager.SwitchScene("GAME");
 
+        //add the children
         root.getChildren().addFirst(world);
         world.getChildren().addFirst(backgroundLayer);
 
@@ -62,14 +62,15 @@ public class Game extends Application {
         GameContext context = new GameContext(camera, spawner, bus, controls, scene);
 
         //load in the first room
-
         RoomMapManager mapManager = new RoomMapManager(stage, backgroundLayer, context);
         EntityData data = DataBase.getTemplate("room0");
-
         mapManager.generateRoom(data.mapData, data.roomWidth, data.tileSize);
 
         //set owner of camera
         camera.setOwner(mapManager.getPlayerEntity(0));
+
+        //load in events
+        bus.subscribeEvent(CollisionEvent.class, combat::onCollision);
 
         //code arguments at end of statement
         gameLoop.start(); //start loop
@@ -87,36 +88,20 @@ public class Game extends Application {
 
             //get entities from master list
             for (Entity entity : ActiveEntities.getActiveEntities()) {
-                try {
-                    entity.update(deltatime); //update entities
-                } catch (FileNotFoundException e) {
-                    throw new RuntimeException(e);
-                }
+                entity.update(deltatime);//update entities
             }
 
-            try {
-                lifeSystem.update(deltatime);
-            } catch (Exception e) {
-                throw new RuntimeException(e);
-            }
-
-            try {
-                collisionSystem.update(deltatime); //update collisions
-            } catch (FileNotFoundException e) {throw new RuntimeException(e);}
+            collisionSystem.update(deltatime);//update collisions
+            bus.dispatchEvents();
+            moveSystem.update(deltatime);
 
             for (Entity entity : ActiveEntities.getActiveEntities()) {
                 entity.render(deltatime); //render entities
             }
 
-            try {
-                clean.update();
-            } catch (Exception e) {throw new RuntimeException(e);}
-
-            try {
-                camera.update(deltatime); //update camera
-            } catch (FileNotFoundException e) {throw new RuntimeException(e);}
-
-
+            lifeSystem.update(deltatime);
+            clean.update();
+            camera.update(deltatime); //update camera
 
         }
     };

@@ -26,9 +26,8 @@ public class CleanUpSystem {
                 CollisionComponent coll = owner.getComponent(CollisionComponent.class);
                 //check if its player
 
-                if (coll != null && coll.category.equals("PLAYER")) {
+                if (coll != null && coll.type.equals("PLAYER")) {
                     //run a respawn system or like a game over system
-                    System.out.print("\nplayer is dead");
                     death.isAlive = true;
                     break;
                 }
@@ -45,7 +44,6 @@ public class CleanUpSystem {
 
                 //add to a trash list
                 ActiveEntities.fillTrashList(owner);
-                System.out.println("\nadded to trashList: " + owner);
             }
         }
     }

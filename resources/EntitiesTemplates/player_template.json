@@ -6,9 +6,10 @@
       "health": 100,
       "max_health": 150,
       "damage": 10,
+      "speed": 100,
       "image": "EntityTextures/player_test.png",
-      "category": "PLAYER",
-      "type": "DYNAMIC",
+      "category": "DYNAMIC",
+      "type": "PLAYER",
       "canCollideWith": [
         "PLAYER",
         "WALL"

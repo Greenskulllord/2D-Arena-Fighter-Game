@@ -16,7 +16,7 @@ public class Entity {
     }
 
     //a method to update components every 60 frames
-    public void update(double DeltaTime) throws FileNotFoundException {
+    public void update(double DeltaTime) {
         for (Component component : components) {
             component.update(DeltaTime);
         }

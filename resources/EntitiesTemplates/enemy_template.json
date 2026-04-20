@@ -7,11 +7,10 @@
       "max_health": 150,
       "damage": 10,
       "image": "EntityTextures/player_test.png",
-      "category": "ENEMY",
-      "type": "DYNAMIC",
+      "category": "DYNAMIC",
+      "type": "ENEMY",
       "canCollideWith": [
-        "PLAYER",
-        "WALL"
+        "PLAYER"
       ]
     }
   ]

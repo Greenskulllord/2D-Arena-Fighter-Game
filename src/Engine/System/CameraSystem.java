@@ -42,7 +42,7 @@ public class CameraSystem implements Component {
     }
 
     @Override
-    public void update(double DeltaTime) throws FileNotFoundException {
+    public void update(double DeltaTime) {
         if (owner == null) return;
         //get owner location
         TransformComponent transform = owner.getComponent(TransformComponent.class);

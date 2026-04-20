@@ -38,6 +38,7 @@ LifeSystem {
                     //code to run "take damage" logic
                     HP.health -= HP.pendingDamage * DMG.critMultiplier;
                     HP.pendingDamage = 0;
+                    System.out.print("dealing damage");
                 }
 
                 //check if entity got healed

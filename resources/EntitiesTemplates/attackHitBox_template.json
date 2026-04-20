@@ -1,0 +1,9 @@
+{
+  "attackBox": [
+    {
+      "category": "ATTACK",
+      "type": "HITBOX",
+      "canCollideWith": []
+    }
+  ]
+}

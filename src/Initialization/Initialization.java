@@ -18,6 +18,7 @@ public class Initialization {
         EntityData.addToEntityList("EntitiesTemplates/player_template.json", "player");
         EntityData.addToEntityList("EntitiesTemplates/enemy_template.json", "enemy");
         EntityData.addToEntityList("EntitiesTemplates/wall_template.json", "wall");
+        EntityData.addToEntityList("EntitiesTemplates/attackHitBox_template.json", "attackBox");
 
         //add tile sets
         EntityData.addToEntityList("tile_set_template.json", "tile");

@@ -20,7 +20,7 @@ public class HealthComponent implements Component {
 
     //on update, check if entity lost or gained health
     @Override
-    public void update(double DeltaTime) throws FileNotFoundException {
+    public void update(double DeltaTime)  {
 
 
     }

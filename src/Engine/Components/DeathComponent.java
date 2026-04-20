@@ -19,7 +19,7 @@ public class DeathComponent implements Component {
     }
 
     @Override
-    public void update(double DeltaTime) throws FileNotFoundException {
+    public void update(double DeltaTime) {
 
 
     }

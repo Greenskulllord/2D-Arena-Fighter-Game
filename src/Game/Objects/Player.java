@@ -3,9 +3,8 @@ import Engine.Core.*;
 import Engine.Components.*;
 import Engine.Data.DataBase;
 import Engine.Data.EntityData;
-import Input.InputControls;
+import Engine.System.MovementSystem;
 import javafx.scene.Scene;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
 /* todo update player class to handle abilities,
@@ -24,8 +23,9 @@ public class Player extends Entity  {
         RenderComponent render = new RenderComponent(new ImageView(data.image), position);
         CollisionComponent collisionComponent = new CollisionComponent(data.width, data.height, 0, 0, position, data.category, data.type);
         HealthComponent health = new HealthComponent(data.health, data.maxHealth);
-        DamageComponent damage = new DamageComponent(data.damage, 1.1);
+        DamageComponent damage = new DamageComponent(data.damage, 1.1, 1);
         DeathComponent death = new DeathComponent(health, null);
+        MovementComponent move = new MovementComponent(200.0);
 
         //building it like in factories now!! WHOO
         this.addComponent(position);
@@ -34,6 +34,7 @@ public class Player extends Entity  {
         this.addComponent(health);
         this.addComponent(damage);
         this.addComponent(death);
+        this.addComponent(move);
         this.addComponent(new InputComponent(this, context, scene));
     }
 

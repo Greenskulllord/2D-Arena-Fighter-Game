@@ -6,8 +6,9 @@ import Engine.Core.Entity;
 import Engine.Data.DataBase;
 import Engine.Events.CollisionEvent;
 import Engine.Events.EventBus;
-import Engine.Math.BoxCollision;
 import Engine.Data.EntityData;
+import Engine.Math.SweptCollision;
+
 import java.io.FileNotFoundException;
 import java.util.List;
 
@@ -22,7 +23,7 @@ public class CollisionSystem implements Component {
     }
 
     @Override
-    public void update(double DeltaTime) throws FileNotFoundException {
+    public void update(double DeltaTime) {
         List<Entity> entities = getActiveEntities();
 
         //loop to find what it is being collided and what it can be collided with
@@ -40,10 +41,6 @@ public class CollisionSystem implements Component {
             if (collA == null || transformA == null) {
                 continue;
             }
-
-            //figure out how it would want to move
-            double finalMoveX = transformA.velocityX * DeltaTime;
-            double finalMoveY = transformA.velocityY * DeltaTime;
 
             //loop to find entity B
             for (int j = 0; j < getActiveEntities().size(); j++) {
@@ -65,7 +62,7 @@ public class CollisionSystem implements Component {
                 boolean canHit = false;
 
                 //call for the database
-                EntityData checkA = DataBase.getTemplate(collA.category);
+                EntityData checkA = DataBase.getTemplate(collA.type);
 
                 //somehow, check if both entities
                 //are registered to collide with each other
@@ -73,7 +70,7 @@ public class CollisionSystem implements Component {
 
                     for (String targetType : checkA.collideList) {
 
-                        if (targetType.equals(collB.category)) {
+                        if (targetType.equals(collB.type)) {
                                 canHit = true;
                                 break;
                         }
@@ -82,28 +79,13 @@ public class CollisionSystem implements Component {
 
                 //if canHit is true, run all the collision math
                 if (canHit) {
+                    SweptCollision result = SweptCollision.boxCollision(transformA, collA, collB, DeltaTime);
 
-                    BoxCollision result = BoxCollision.BoxCollisionMath(transformA, collA, collB, DeltaTime);
-
-                    if (result.isColliding) {
-                        eventBus.publishEvent(new CollisionEvent(entityA, entityB, result.normalX, result.normalY));
-
-
-                        //run the actual collision logic
-                        if (DeltaTime > 0) {
-                            transformA.velocityX = result.totalMoveX / DeltaTime;
-                            transformA.velocityY = result.totalMoveY / DeltaTime;
-                        }
-
-                        finalMoveX = result.totalMoveX;
-                        finalMoveY = result.totalMoveY;
+                    if (result.time_ < 1.0) {
+                        eventBus.publishEvent(new CollisionEvent(entityA, entityB, result.normalX_, result.normalY_, result.time_, DeltaTime));
                     }
-                   }
-                } //end of j loop
-
-            transformA.x += finalMoveX;
-            transformA.y += finalMoveY;
-
+                }
+            } //end of j loop
         } //end of i loop
     }
 }

@@ -8,11 +8,11 @@ import static java.lang.Double.POSITIVE_INFINITY;
 // https://www.metanetsoftware.com/technique/tutorialA.html this is the main math code I followed
 public class SweptCollision {
     //declare variables
-    double normalX_;
-    double normalY_;
-    double time_;
+    public double normalX_;
+    public double normalY_;
+    public double time_;
 
-    SweptCollision (double normalX, double normalY, double time) {
+    public SweptCollision(double normalX, double normalY, double time) {
         this.normalX_ = normalX;
         this.normalY_ = normalY;
         this.time_ = time;
@@ -20,7 +20,7 @@ public class SweptCollision {
     }
 
     //create a method for handling swept AABB collision
-    public static SweptCollision boxBoxCollision(TransformComponent transformComponent,
+    public static SweptCollision boxCollision(TransformComponent transformComponent,
                                          CollisionComponent owner, CollisionComponent other, double DeltaTime) {
         //this is so fucking big that imma just break it down
         //so it's easier to read

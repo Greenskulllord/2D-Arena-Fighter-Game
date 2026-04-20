@@ -24,6 +24,7 @@ public class Spawner {
         //add image to entity
         if (render != null) {
             world.getChildren().add(render.getNode());
+            render.update(0);
         }
     }
 }
