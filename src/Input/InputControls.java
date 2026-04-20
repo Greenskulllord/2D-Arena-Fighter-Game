@@ -31,7 +31,8 @@ public class InputControls {
     public double mouseX;
     public double mouseY;
     private final int mouseCodeOffset = 1000;
-    private boolean mouseClickConsumed = false;
+    private boolean mouseRight = false;
+    private boolean mouseLeft = false;
 
     public InputControls() {
     }
@@ -57,6 +58,8 @@ public class InputControls {
         @Override
         public void handle(MouseEvent mouseEvent) {
             keyboardBitSet.set(mouseEvent.getButton().ordinal() + mouseCodeOffset, true);
+            mouseLeft = true;
+            mouseRight = true;
 
         }
     };
@@ -66,7 +69,8 @@ public class InputControls {
         @Override
         public void handle(MouseEvent mouseEvent) {
             keyboardBitSet.set(mouseEvent.getButton().ordinal() + mouseCodeOffset, false);
-
+            mouseLeft = false;
+            mouseRight = false;
         }
     };
 
@@ -109,11 +113,22 @@ public class InputControls {
 
     //mouse input booleans
     public boolean onLeftClick() {
-     return keyboardBitSet.get(leftClick.ordinal() + mouseCodeOffset);
+        if (mouseLeft) {
+            mouseLeft = false;
+            return keyboardBitSet.get(leftClick.ordinal() + mouseCodeOffset);
+        }
+
+        return false;
     }
 
     public boolean onRightClick() {
-        return keyboardBitSet.get(rightClick.ordinal() + mouseCodeOffset);
+
+        if (mouseRight) {
+            mouseRight = false;
+            return keyboardBitSet.get(rightClick.ordinal() + mouseCodeOffset);
+        }
+
+        return false;
     }
 
     public boolean onMiddleClick() {
@@ -123,32 +138,6 @@ public class InputControls {
     public boolean onForwardClick() {
         return keyboardBitSet.get(forwardClick.ordinal() + mouseCodeOffset);
     }
-
-    //for single click events
-    public boolean onLeftClickOnce() {
-        if (!mouseClickConsumed && keyboardBitSet.get(leftClick.ordinal() + mouseCodeOffset)) {
-            mouseClickConsumed = true;
-            return true;
-        }
-        return false;
-    }
-
-    public boolean onRightClickOnce() {
-        if (!mouseClickConsumed && keyboardBitSet.get(rightClick.ordinal() + mouseCodeOffset)) {
-            mouseClickConsumed = true;
-            return true;
-        }
-        return false;
-    }
-
-    public boolean onMiddleClickOnce() {
-        if (!mouseClickConsumed && keyboardBitSet.get(middleCLick.ordinal() + mouseCodeOffset)) {
-            mouseClickConsumed = true;
-            return true;
-        }
-        return false;
-    }
-
 
     /*
     =========================

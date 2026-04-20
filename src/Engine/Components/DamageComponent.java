@@ -16,6 +16,7 @@ public class DamageComponent implements Component {
     public DamageComponent(double damageAmount, double critMultiplier, double attackSpeed) {
         this.damage = damageAmount;
         this.critMultiplier = critMultiplier;
+        this.attackSpeed = attackSpeed;
 
     }
 

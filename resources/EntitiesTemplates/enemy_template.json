@@ -10,7 +10,9 @@
       "category": "DYNAMIC",
       "type": "ENEMY",
       "canCollideWith": [
-        "PLAYER"
+        "PLAYER",
+        "ENEMY",
+        "HITBOX"
       ]
     }
   ]

@@ -32,11 +32,11 @@ public class CleanUpSystem {
                     break;
                 }
 
-                Node node = owner.getComponent(RenderComponent.class).getNode();
+                RenderComponent render = owner.getComponent(RenderComponent.class);
 
                 //remove the node
-                if (owner.getComponent(RenderComponent.class) != null && owner.getComponent(RenderComponent.class).getNode() != null) {
-                    parentPane.getChildren().remove(node);
+                if (render != null && render.getNode() != null) {
+                    parentPane.getChildren().remove(render.getNode());
                 }
 
                 //remove components

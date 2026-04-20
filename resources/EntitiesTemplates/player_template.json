@@ -12,7 +12,9 @@
       "type": "PLAYER",
       "canCollideWith": [
         "PLAYER",
-        "WALL"
+        "WALL",
+        "ENEMY",
+        "HITBOX"
       ]
     }
   ]

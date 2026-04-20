@@ -249,6 +249,7 @@ public class DataBase {
                 );
 
                 template.put(entityList.toUpperCase(), finalData);
+                template.put(type.toUpperCase(), finalData);
             }
 
             catch (RuntimeException e) {

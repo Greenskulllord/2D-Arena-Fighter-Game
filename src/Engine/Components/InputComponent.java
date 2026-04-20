@@ -45,6 +45,8 @@ public class InputComponent implements Component {
         TransformComponent transform = owner.getComponent(TransformComponent.class);
         MovementComponent move = owner.getComponent(MovementComponent.class);
         double speed = move.speed;
+        double ownerX = transform.x;
+        double ownerY = transform.y;
 
         //if there is no transform component, do nothing
         //makes it not crash
@@ -67,7 +69,11 @@ public class InputComponent implements Component {
             if (input.isMoveLeft()) dirX -= 1;
 
             if (input.onLeftClick()) {
-                context.spawner.spawn(new AttackHitBox((int) worldX, (int) worldY, owner));
+                //calculates distance between two points
+                double distance = Math.hypot(ownerX - worldX, ownerY - worldY);
+                System.out.println(distance);
+
+                context.spawner.spawn(new AttackHitBox(50, 50, (int) worldX, (int) worldY, owner));
 
             }
 

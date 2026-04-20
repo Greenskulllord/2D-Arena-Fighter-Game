@@ -2,8 +2,11 @@
   "attackBox": [
     {
       "category": "ATTACK",
-      "type": "HITBOX",
-      "canCollideWith": []
+      "type": "ATTACKBOX",
+      "canCollideWith": [
+        "ENEMY",
+        "PLAYER"
+      ]
     }
   ]
 }

@@ -7,8 +7,8 @@ import java.io.FileNotFoundException;
 public class DeathComponent implements Component {
 
 
-    private final HealthComponent health;
-    private final LifetimeComponent life;
+    public final HealthComponent health;
+    public final LifetimeComponent life;
     public boolean isAlive;
 
     public DeathComponent(HealthComponent health, LifetimeComponent life) {

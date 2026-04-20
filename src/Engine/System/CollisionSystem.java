@@ -8,8 +8,6 @@ import Engine.Events.CollisionEvent;
 import Engine.Events.EventBus;
 import Engine.Data.EntityData;
 import Engine.Math.SweptCollision;
-
-import java.io.FileNotFoundException;
 import java.util.List;
 
 import static Engine.Core.ActiveEntities.getActiveEntities;
@@ -79,10 +77,24 @@ public class CollisionSystem implements Component {
 
                 //if canHit is true, run all the collision math
                 if (canHit) {
-                    SweptCollision result = SweptCollision.boxCollision(transformA, collA, collB, DeltaTime);
 
-                    if (result.time_ < 1.0) {
-                        eventBus.publishEvent(new CollisionEvent(entityA, entityB, result.normalX_, result.normalY_, result.time_, DeltaTime));
+                    if (collA.category.equals("ATTACK")) {
+                        boolean onCollide = collA.getMaxX() > collB.getMinX() &&
+                                collA.getMinX() < collB.getMaxX() &&
+                                collA.getMaxY() > collB.getMinY() &&
+                                collA.getMinY() < collB.getMaxY();
+
+                        if (onCollide) {
+                            Entity attacker = collA.category.equals("ATTACK") ? entityA : entityB;
+                            Entity target = collA.category.equals("ATTACK") ? entityB : entityA;
+                            eventBus.publishEvent((new CollisionEvent(attacker, target, 0, 0, 0, DeltaTime)));
+                        }
+                    } else {
+                        SweptCollision result = SweptCollision.boxCollision(transformA, collA, collB, DeltaTime);
+
+                        if (result.time_ < 1.0) {
+                            eventBus.publishEvent(new CollisionEvent(entityA, entityB, result.normalX_, result.normalY_, result.time_, DeltaTime));
+                        }
                     }
                 }
             } //end of j loop

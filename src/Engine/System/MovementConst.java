@@ -1,4 +1,5 @@
 package Engine.System;
+import Engine.Components.CollisionComponent;
 import Engine.Components.TransformComponent;
 import Engine.Events.CollisionEvent;
 import Engine.Events.EventBus;
@@ -14,6 +15,9 @@ public class MovementConst {
         //get the transform
         TransformComponent transform = event.A.getComponent(TransformComponent.class);
         if (transform == null) return;
+
+        CollisionComponent coll = event.A.getComponent(CollisionComponent.class);
+        if (coll != null && coll.type.equals("ATTACKBOX")) return;
 
         double frameVelocityX = transform.velocityX * event.DeltaTime;
         double frameVelocityY = transform.velocityY * event.DeltaTime;
@@ -45,6 +49,7 @@ public class MovementConst {
         double slideY = remainVelY - projectionY;
 
         if (event.DeltaTime > 0) {
+
             transform.velocityX = (vectorX + slideX) / event.DeltaTime;
             transform.velocityY = (vectorY + slideY) / event.DeltaTime;
         }

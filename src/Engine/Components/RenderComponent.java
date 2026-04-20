@@ -21,6 +21,7 @@ public class RenderComponent implements Component {
         //making a visible object
        node.setTranslateX(transformComponent.x);
        node.setTranslateY(transformComponent.y);
+
     }
 
       /*

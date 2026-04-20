@@ -16,8 +16,6 @@ public class EntityData {
     public String[] collideList;
     public Image image;
 
-
-
     //collision stats
     public String category;
     public String type;

@@ -25,7 +25,7 @@ public class CombatSystem {
             HealthComponent healthB = target.getComponent(HealthComponent.class);
 
             if (damageA != null && healthB != null) {
-                healthB.pendingDamage += damageA.damage;
+                healthB.pendingDamage += damageA.damage * damageA.critMultiplier;
 
             }
         }
@@ -45,5 +45,4 @@ public class CombatSystem {
             }
         }
     }
-
 }
