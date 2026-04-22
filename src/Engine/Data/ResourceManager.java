@@ -2,7 +2,6 @@ package Engine.Data;
 import JsonComponents.JsonReader;
 import com.google.gson.JsonObject;
 import javafx.scene.image.Image;
-
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;

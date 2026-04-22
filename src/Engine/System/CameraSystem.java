@@ -11,9 +11,6 @@ import javafx.stage.Stage;
 
 import java.io.FileNotFoundException;
 
-/*todo make a camera system for the game
-    the system will use camera entities
- */
 public class CameraSystem implements Component {
     Pane world;
     Stage stage;

@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 //these are my entities
-public class Entity {
+public abstract class Entity {
     //make a list for the components
     //todo instead of list, change to map for more speed
     public final List<Component> components = new ArrayList<>();
