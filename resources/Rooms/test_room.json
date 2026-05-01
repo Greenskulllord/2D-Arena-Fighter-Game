@@ -1,6 +1,6 @@
 {
-  "mapWidth": 10,
-  "mapHeight": 10,
+  "mapWidth": 50,
+  "mapHeight": 50,
   "tileSize": 48,
   "room": [
     {

@@ -121,6 +121,12 @@ public class InputControls {
         return false;
     }
 
+    //mouse input booleans
+    public boolean onLeftHold() {
+
+     return keyboardBitSet.get(leftClick.ordinal() + mouseCodeOffset);
+    }
+
     public boolean onRightClick() {
 
         if (mouseRight) {
