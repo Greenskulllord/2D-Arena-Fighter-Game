@@ -30,12 +30,14 @@ public class Game extends Application {
     Pane world = new Pane();
     Pane backgroundLayer = new Pane();
 
-    //call the collision system
+    //call the systems
     CollisionSystem collisionSystem = new CollisionSystem(bus);
     CleanUpSystem clean = new CleanUpSystem(world);
     CameraSystem camera;
     LifeSystem lifeSystem = new LifeSystem();
     Spawner spawner = new Spawner();
+    AnimationSystem animation = new AnimationSystem();
+
 
     CombatSystem combat = new CombatSystem();
     MovementConst move = new MovementConst(bus);
@@ -59,7 +61,7 @@ public class Game extends Application {
         spawner.start(world);
 
         //add context on start
-        GameContext context = new GameContext(camera, spawner, bus, controls, scene);
+        GameContext context = new GameContext(camera, spawner, bus, controls, scene, animation);
 
         //load in the first room
         RoomMapManager mapManager = new RoomMapManager(stage, backgroundLayer, context);
@@ -97,6 +99,7 @@ public class Game extends Application {
 
             for (Entity entity : ActiveEntities.getActiveEntities()) {
                 entity.render(deltatime); //render entities
+
             }
 
             lifeSystem.update(deltatime);

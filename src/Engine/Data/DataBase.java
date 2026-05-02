@@ -40,9 +40,9 @@ public class DataBase {
                 JsonObject jsonObject = jsonArray.get(0).getAsJsonObject();
 
                 /*
-                =================
+                ================= ========================= ========================= =========================
                    Get Images
-                =================
+                ================= ========================= ========================= =========================
                  */
 
                 //get the sprite image
@@ -52,12 +52,32 @@ public class DataBase {
 
                     String imagePath = jsonObject.get("image").getAsString();
                     image = ResourceManager.getImage(imagePath);
-                } else System.out.println("\nWarning: image is null in " + jsonObject);
+                }
+                else System.out.println("\nWarning: image is null in " + jsonObject);
+
+
+                List<Image> keyFrames = new ArrayList<>();
+
+                //get animation images
+                if (jsonObject.has("keyFrameArray") && !jsonObject.get("keyFrameArray").isJsonNull()) {
+                    JsonArray keyFrameArray = jsonObject.getAsJsonArray("keyFrames");
+
+                    if (!keyFrameArray.isEmpty()) {
+                        for (JsonElement frames : keyFrameArray) {
+                            String frame = frames.getAsString();
+                            image = ResourceManager.getImage(frame);
+
+                            keyFrames.add(image);
+                        }
+                    }
+                }
+                else System.out.println("\nWarning: keyFrame is null in " + jsonObject);
+
 
                 /*
-                =========================
+                ========================= ========================= ========================= =========================
                       Buffered Tiles
-                =========================
+                ========================= ========================= ========================= =========================
                  */
 
                 //make a map for tiles
@@ -84,9 +104,9 @@ public class DataBase {
                 Image[] finalBuffImages = entityTiles.toArray(new Image[0]);
 
                 /*
-                =============================
+                ============================= ========================= ========================= =========================
                     Stats from templates
-                =============================
+                ============================= ========================= ========================= =========================
                  */
 
                 //the width and height
@@ -107,9 +127,9 @@ public class DataBase {
 
 
                  /*
-                =============================
+                ============================= ========================= ========================= =========================
                        Collision Stats
-                =============================
+                ============================= ========================= ========================= =========================
                  */
 
                 String type = jsonObject.has("type") && !jsonObject.get("type").isJsonNull()
@@ -137,9 +157,9 @@ public class DataBase {
 
 
                   /*
-                =========================
+                ========================= ========================= ========================= =========================
                     Entity Room Data
-                =========================
+                ========================= ========================= ========================= =========================
                  */
 
                 HashMap<Integer, String> entityRoomData = new HashMap<>();
@@ -166,9 +186,9 @@ public class DataBase {
                 } else System.out.println("\nWarning: entity is null in " + jsonObject);
 
                 /*
-                =========================
+                ========================= ========================= ========================= =========================
                       Room Data
-                =========================
+                ========================= ========================= ========================= =========================
                  */
 
                 //the width and height of room
@@ -245,7 +265,9 @@ public class DataBase {
 
                         /* Room Data */ finalBuffImages, dataArray, roomWidth, roomHeight, tileSize,
 
-                        /* Entity Room Data */ entityRoomData, entityDataArray
+                        /* Entity Room Data */ entityRoomData, entityDataArray,
+
+                        /* Animations */ keyFrames
                 );
 
                 template.put(entityList.toUpperCase(), finalData);

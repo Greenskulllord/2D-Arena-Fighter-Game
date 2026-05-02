@@ -4,6 +4,7 @@ import javafx.scene.image.Image;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 //class to hold a bunch of data during the game loop
 public class EntityData {
@@ -31,6 +32,9 @@ public class EntityData {
     public HashMap<Integer, String> entityRoomData;
     public int[] mapEntityData;
 
+    //animations
+    public List<Image> keyFrames = new ArrayList<>();
+
 
     //a record class is a simple data carrier
     public record EntityList(String entityTemplateFile, String entityList) {};
@@ -44,7 +48,9 @@ public class EntityData {
 
             /* Room Data */ Image[] bufferedImage, int[] mapData, int roomWidth, int roomHeight, int tileSize,
 
-            /* Entity Room Data */ HashMap<Integer, String> entityRoomData, int[] mapEntityData
+            /* Entity Room Data */ HashMap<Integer, String> entityRoomData, int[] mapEntityData,
+
+            /* Animations */  List<Image> keyFrames
     ) {
 
         //entity data
@@ -70,6 +76,10 @@ public class EntityData {
         //entity room data
         this.entityRoomData = entityRoomData;
         this.mapEntityData = mapEntityData;
+
+        //animations
+        this.keyFrames = keyFrames;
+
     }
 
     //helper method to add entities to the master template lists

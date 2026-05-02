@@ -12,7 +12,6 @@ import javafx.scene.image.ImageView;
     input component
  */
 public class Player extends Entity  {
-    GameContext context;
 
     //make the constructor
     public Player(GameContext context, int spawnX, int spawnY, Scene scene) {

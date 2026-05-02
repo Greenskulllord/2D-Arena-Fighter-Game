@@ -30,6 +30,9 @@ public class AttackHitBox extends Entity {
         DamageComponent damage = new DamageComponent(damageAmount, critMultiplier, 1);
         OwnerComponent own = new OwnerComponent(owner);
 
+
+
+
         //add components
         this.addComponent(trans);
         this.addComponent(coll);
