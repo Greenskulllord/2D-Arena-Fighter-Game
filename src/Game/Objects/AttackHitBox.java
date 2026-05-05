@@ -5,6 +5,7 @@ import Engine.Core.ActiveEntities;
 import Engine.Core.Entity;
 import Engine.Data.DataBase;
 import Engine.Data.EntityData;
+import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
@@ -21,21 +22,20 @@ public class AttackHitBox extends Entity {
         double critMultiplier = ownerDamage.critMultiplier;
 
         //make everything
-        Circle circle = new Circle(25, 25, 25, Color.BLUE);
+
         TransformComponent trans = new TransformComponent(spawnX, spawnY);
         CollisionComponent coll = new CollisionComponent(width, height, 0, 0, trans, data.category, data.type);
-        RenderComponent render = new RenderComponent(circle, trans);
+        AnimationComponent ani = new AnimationComponent("animation_slash", 30, 100, 100);
+        RenderComponent render = new RenderComponent(ani.frame, trans);
         LifetimeComponent life = new LifetimeComponent(0.25);
         DeathComponent death = new DeathComponent(null, life);
         DamageComponent damage = new DamageComponent(damageAmount, critMultiplier, 1);
         OwnerComponent own = new OwnerComponent(owner);
 
-
-
-
         //add components
         this.addComponent(trans);
         this.addComponent(coll);
+        this.addComponent(ani);
         this.addComponent(render);
         this.addComponent(life);
         this.addComponent(death);

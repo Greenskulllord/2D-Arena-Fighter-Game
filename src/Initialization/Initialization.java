@@ -31,7 +31,7 @@ public class Initialization {
         EntityData.addToEntityList("Rooms/room_1.json", "room0");
 
         //animation sets
-        EntityData.addToEntityList("Animations/Slash/slash_keyframes.json", "slash");
+        EntityData.addToEntityList("Animation/slash_keyframes.json", "animation_slash");
 
         //load database
         DataBase.loadDatabase();

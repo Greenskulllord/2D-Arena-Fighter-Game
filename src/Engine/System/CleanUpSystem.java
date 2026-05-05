@@ -1,4 +1,5 @@
 package Engine.System;
+import Engine.Components.AnimationComponent;
 import Engine.Components.CollisionComponent;
 import Engine.Components.DeathComponent;
 import Engine.Components.RenderComponent;
@@ -37,6 +38,13 @@ public class CleanUpSystem {
                 //remove the node
                 if (render != null && render.getNode() != null) {
                     parentPane.getChildren().remove(render.getNode());
+                }
+
+                //kill timelines/animations
+                AnimationComponent ani = owner.getComponent(AnimationComponent.class);
+
+                if (ani != null) {
+                    ani.destroy();
                 }
 
                 //remove components

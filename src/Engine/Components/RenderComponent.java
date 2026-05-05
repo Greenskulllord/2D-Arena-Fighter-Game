@@ -12,6 +12,7 @@ public class RenderComponent implements Component {
         //shapes are just nodes pretty much, hoping shapes can be images too
         this.node = currentNode;
         this.transformComponent = transform;
+
     }
 
     @Override

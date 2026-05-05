@@ -2,6 +2,7 @@ package Engine.Components;
 import Engine.Core.Component;
 import Engine.Core.Entity;
 import Engine.Core.GameContext;
+import Engine.Data.DataBase;
 import Engine.Math.Utils;
 import Game.Objects.AttackHitBox;
 import Game.Objects.Enemy;
@@ -109,7 +110,7 @@ public class InputComponent implements Component {
         double[] unit = utils.unit((ownerX - worldX) * -1, (ownerY - worldY) * -1);
 
         //attack 1
-        if (input.onLeftHold() && !playerState.equals(state.ATTACKING)) {
+        if (input.onLeftHold() && playerState.equals(state.MOVING)) {
             attackDirX = unit[0];
             attackDirY = unit[1];
 

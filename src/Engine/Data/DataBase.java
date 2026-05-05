@@ -23,12 +23,12 @@ public class DataBase {
 
             try {
                 //get main json templates
-                JsonObject root = ResourceManager.getTemplate("resources/" + entityTemplateFile); // read file
+                JsonObject root = ResourceManager.getTemplate(entityTemplateFile); // read file
 
                 //check if root is null or not
                 if (!root.has(entityList) || root.get(entityList).isJsonNull()) {
 
-                    System.out.println("\nSystem Error: Entity List " + entityList + " is missing");
+                    System.out.println("System Error: Entity List " + entityList + " is missing");
                     continue;
                 }
 
@@ -53,13 +53,14 @@ public class DataBase {
                     String imagePath = jsonObject.get("image").getAsString();
                     image = ResourceManager.getImage(imagePath);
                 }
-                else System.out.println("\nWarning: image is null in " + jsonObject);
+
+
 
 
                 List<Image> keyFrames = new ArrayList<>();
 
                 //get animation images
-                if (jsonObject.has("keyFrameArray") && !jsonObject.get("keyFrameArray").isJsonNull()) {
+                if (jsonObject.has("keyFrames") && !jsonObject.get("keyFrames").isJsonNull()) {
                     JsonArray keyFrameArray = jsonObject.getAsJsonArray("keyFrames");
 
                     if (!keyFrameArray.isEmpty()) {
@@ -71,7 +72,7 @@ public class DataBase {
                         }
                     }
                 }
-                else System.out.println("\nWarning: keyFrame is null in " + jsonObject);
+
 
 
                 /*
@@ -96,9 +97,9 @@ public class DataBase {
                                 Image buffImage = ResourceManager.getTile(bImagePath);
                                 entityTiles.add(buffImage);
 
-                            } else System.out.println("\nWarning" + bImagePath + " is null");
+                            }
                         }
-                } else System.out.println("\nWarning: tile is null in " + jsonObject);
+                }
 
                 //put images into their own array
                 Image[] finalBuffImages = entityTiles.toArray(new Image[0]);
@@ -152,7 +153,7 @@ public class DataBase {
 
                         collideList[k] = array.get(k).getAsString();
                     }
-                } else System.out.println("\nWarning: Field canCollideWith is null in " + jsonObject);
+                }
 
 
 
@@ -183,7 +184,7 @@ public class DataBase {
                                 throw new RuntimeException(e);
                             }
                         }
-                } else System.out.println("\nWarning: entity is null in " + jsonObject);
+                }
 
                 /*
                 ========================= ========================= ========================= =========================
@@ -255,9 +256,9 @@ public class DataBase {
 
                                 }
 
-                            } else System.out.println("\nWarning: " + roomData + " is null");
-                        } else System.out.println("\nWarning: " + layer + " is empty");
-                    } else System.out.println("\nWarning: layer is null in " + jsonObject);
+                            }
+                        }
+                    }
                 }
 
                 EntityData finalData = new EntityData(

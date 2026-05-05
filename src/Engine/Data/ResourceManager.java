@@ -1,10 +1,11 @@
 package Engine.Data;
-import JsonComponents.JsonReader;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import javafx.scene.image.Image;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.Objects;
 
@@ -105,6 +106,10 @@ public class ResourceManager {
         }
     }
 
+
+
+
+
       /*
     =========================
          Cache Templates
@@ -112,29 +117,40 @@ public class ResourceManager {
    */
 
     public static JsonObject getTemplate(String filePath) {
+        filePath.replace("\\", "/");
+
+        String path = filePath.startsWith("/") ? filePath : "/" + filePath;
+
         //if memory has it, return it
-        if (templateCache.containsKey(filePath)) {
-            return templateCache.get(filePath);
+        if (templateCache.containsKey(path)) {
+            return templateCache.get(path);
         }
 
         //if it doesn't, find it from hard drive
         JsonObject file;
-        try {
+        try (InputStream inputStream = ResourceManager.class.getResourceAsStream(path)) {
+            if (inputStream == null || filePath.trim().isEmpty()) { throw new IOException("tile resources not found at: " + path); }
+
             //read the file
-            JsonReader reader = JsonReader.read(filePath);
-            file = reader.raw().getAsJsonObject();
+            InputStreamReader reader = new InputStreamReader(inputStream);
+
+            file = JsonParser.parseReader(reader).getAsJsonObject();
 
             //put the template into the cache
-            templateCache.put(filePath, file);
+            templateCache.put(path, file);
 
         } catch (FileNotFoundException e) {
             System.out.print("file could not be found:" + e);
+
             //if an enemy does not exist, return an invisible square
             JsonObject dummyData = new JsonObject();
             dummyData.addProperty("width", 32);
             dummyData.addProperty("height", 32);
 
             return dummyData;
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
 
         return file;

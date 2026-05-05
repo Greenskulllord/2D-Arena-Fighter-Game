@@ -1,0 +1,16 @@
+{
+  "animation_slash": [
+    {
+      "keyFrames": [
+        "Animation/Slash/Slash1.png",
+        "Animation/Slash/Slash2.png",
+        "Animation/Slash/Slash3.png",
+        "Animation/Slash/Slash4.png",
+        "Animation/Slash/Slash5.png",
+        "Animation/Slash/Slash6.png",
+        "Animation/Slash/Slash7.png",
+        "Animation/Slash/Slash8.png"
+      ]
+    }
+  ]
+}
