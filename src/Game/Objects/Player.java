@@ -36,11 +36,4 @@ public class Player extends Entity  {
         this.addComponent(move);
         this.addComponent(new InputComponent(this, context, scene, data));
     }
-
-     /*
-    =========================
-        helper methods
-    =========================
-     */
-
 }

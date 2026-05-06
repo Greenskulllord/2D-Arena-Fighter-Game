@@ -131,16 +131,16 @@ public class DataBase {
                         ? jsonObject.get("max_health").getAsInt() : 0;
 
                 double speed = jsonObject.has("speed") && !jsonObject.get("speed").isJsonNull()
-                        ? jsonObject.get("speed").getAsInt() : 0;
+                        ? jsonObject.get("speed").getAsDouble() : 0;
 
                 double attackSpeed = jsonObject.has("attackSpeed") && !jsonObject.get("attackSpeed").isJsonNull()
-                        ? jsonObject.get("attackSpeed").getAsInt() : 0;
+                        ? jsonObject.get("attackSpeed").getAsDouble() : 0;
 
                 int attackForce = jsonObject.has("attackForce") && !jsonObject.get("attackForce").isJsonNull()
                         ? jsonObject.get("attackForce").getAsInt() : 0;
 
                 double dashSpeed = jsonObject.has("dashSpeed") && !jsonObject.get("dashSpeed").isJsonNull()
-                        ? jsonObject.get("dashSpeed").getAsInt() : 0;
+                        ? jsonObject.get("dashSpeed").getAsDouble() : 0;
 
                 int dashDuration = jsonObject.has("dashDuration") && !jsonObject.get("dashDuration").isJsonNull()
                         ? jsonObject.get("dashDuration").getAsInt() : 0;

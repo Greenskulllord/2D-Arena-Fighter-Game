@@ -136,6 +136,7 @@ public class InputComponent implements Component {
 
             if (dirX != 0 || dirY != 0) playerState = state.MOVING;
             else playerState = state.IDLE;
+
         }
 
 
@@ -154,7 +155,7 @@ public class InputComponent implements Component {
             attack(attackDirX, attackDirY, player);
 
             hitbox = new AttackHitBox(50, 50,
-                    (ownerX + (attackDirX * radius)) - 8, (ownerY + (attackDirY * radius)) - 8, owner);
+                    (ownerX + ( attackDirX * radius)) - 8, (ownerY + (attackDirY * radius)) - 8, owner);
 
             context.spawner.spawn(hitbox);
 
