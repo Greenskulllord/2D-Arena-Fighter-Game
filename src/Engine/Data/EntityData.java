@@ -14,6 +14,13 @@ public class EntityData {
     public int health;
     public int maxHealth;
     public int damage;
+    public double speed;
+    public double attackSpeed;
+    public int attackForce;
+    public double dashSpeed;
+    public int dashDuration;
+
+
     public String[] collideList;
     public Image image;
 
@@ -42,7 +49,9 @@ public class EntityData {
     public static ArrayList<EntityList> entityLists = new ArrayList<>();
 
     public EntityData(
-            /* Entity Data */ int width, int height, String[] collideList, Image image, int health, int damage, int maxHealth,
+            /* Entity Data */ int width, int height, String[] collideList, Image image, int health, int damage,
+                              int maxHealth, double speed, double attackSpeed, int attackForce,
+                              double dashSpeed, int dashDuration,
 
             /* Collision Stats */ String category, String type,
 
@@ -61,10 +70,17 @@ public class EntityData {
         this.health = health;
         this.maxHealth = maxHealth;
         this.damage = damage;
+        this.speed = speed;
+        this.attackSpeed = attackSpeed;
+        this.attackForce = attackForce;
+        this.dashSpeed = dashSpeed;
+        this.dashDuration = dashDuration;
+
 
         //collision stats
         this.category = category;
         this.type = type;
+
 
         //room data
         this.bImage = bufferedImage;
@@ -73,9 +89,11 @@ public class EntityData {
         this.roomWidth = roomWidth;
         this.tileSize = tileSize;
 
+
         //entity room data
         this.entityRoomData = entityRoomData;
         this.mapEntityData = mapEntityData;
+
 
         //animations
         this.keyFrames = keyFrames;

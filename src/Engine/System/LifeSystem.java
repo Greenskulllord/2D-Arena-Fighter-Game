@@ -36,6 +36,7 @@ public class LifeSystem {
                 if (HP.damageCooldown > 0) {
                     HP.damageCooldown -= DeltaTime;
                     HP.pendingDamage = 0;
+
                 }
                 else if (HP.pendingDamage > 0) {
                     //code to run "take damage" logic

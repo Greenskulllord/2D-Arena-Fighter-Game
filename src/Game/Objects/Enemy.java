@@ -16,8 +16,8 @@ public class Enemy extends Entity {
         TransformComponent position = new TransformComponent(spawnX, spawnY);
         RenderComponent render = new RenderComponent(new ImageView(data.image), position);
         CollisionComponent collisionComponent = new CollisionComponent(data.width, data.height, 0, 0, position, data.category, data.type);
-        HealthComponent health = new HealthComponent(data.health, data.maxHealth, 1.0, 1.0, 1.0);
-        DamageComponent damage = new DamageComponent(data.damage, 1.0, 1);
+        HealthComponent health = new HealthComponent(data.health, data.maxHealth, 1, 1, 1);
+        DamageComponent damage = new DamageComponent(data.damage, 1);
         DeathComponent death = new DeathComponent(health, null);
 
         //add components

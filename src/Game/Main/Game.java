@@ -36,7 +36,7 @@ public class Game extends Application {
     CameraSystem camera;
     LifeSystem lifeSystem = new LifeSystem();
     Spawner spawner = new Spawner();
-    AnimationSystem animation = new AnimationSystem();
+
 
 
     CombatSystem combat = new CombatSystem();
@@ -61,7 +61,7 @@ public class Game extends Application {
         spawner.start(world);
 
         //add context on start
-        GameContext context = new GameContext(camera, spawner, bus, controls, scene, animation);
+        GameContext context = new GameContext(camera, spawner, bus, controls, scene);
 
         //load in the first room
         RoomMapManager mapManager = new RoomMapManager(stage, backgroundLayer, context);
@@ -83,6 +83,8 @@ public class Game extends Application {
     AnimationTimer gameLoop = new AnimationTimer() {
         @Override
         public void handle(long l) {
+
+
 
             //get deltaTime via helper method
             double deltatime = deltaTime.getDeltaTime(l);

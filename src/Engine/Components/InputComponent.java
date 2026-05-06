@@ -2,7 +2,7 @@ package Engine.Components;
 import Engine.Core.Component;
 import Engine.Core.Entity;
 import Engine.Core.GameContext;
-import Engine.Data.DataBase;
+import Engine.Data.EntityData;
 import Engine.Math.Utils;
 import Game.Objects.AttackHitBox;
 import Game.Objects.Enemy;
@@ -10,8 +10,6 @@ import Input.InputControls;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
-
-import java.util.Arrays;
 
 //this is a component that handles player input
 public class InputComponent implements Component {
@@ -25,20 +23,36 @@ public class InputComponent implements Component {
     Utils utils = new Utils();
     AttackHitBox hitbox;
 
-    //declare the base variables
-    private final double dashSpeed;
-    private final double attackForce;
+
+    //dashing variables
     private double dashDirX;
     private double dashDirY;
+    private final double dashSpeed;
+    private double dashDuration;
+    private final double maxDashDuration;
+    private final double Friction;
+    private double currentDashSpeed;
+
+
+    //attacking variables
     private double attackDirX;
     private double attackDirY;
+    private final int  attackForce;
+    private double attackSpeed;
+    private final double maxAttackSpeed;
+
 
     //player state
     enum state {
         ATTACKING,
+        GUARDING,
+        PARRYING,
         DASHING,
         MOVING,
+        IDLE
     }
+
+    state playerState = state.IDLE; //set idle state
 
     //for later
     enum attacks {
@@ -46,24 +60,35 @@ public class InputComponent implements Component {
         ATTACK_2
     }
 
-    //timers for abilities cooldowns
-    private int dashTimer = 100;
-    private int attackSpeed = 50;
-    private int maxAttackSpeed = 60;
-    state playerState = state.MOVING;
+
 
     //an attempt at making a component to just add controls to anything
-    public InputComponent(Entity Owner, GameContext context, Scene currentScene) {
+    public InputComponent(Entity Owner, GameContext context, Scene currentScene, EntityData data) {
+
         //get the owner and input controls, also set speed
         this.owner = Owner;
         this.context = context;
         this.input = context.controls;
-        this.dashSpeed = 500;
-        this.attackForce = 100;
+
+        //dashing
+        this.dashSpeed = data.dashSpeed;
+        this.maxDashDuration = data.dashDuration;
+        this.dashDuration = maxDashDuration;
+        this.currentDashSpeed = dashSpeed;
+        this.Friction = 0.97;
+
+
+        //attacking
+        this.attackForce = data.attackForce;
+        this.maxAttackSpeed = data.attackSpeed;
+        this.attackSpeed = maxAttackSpeed;
+
 
         addListeners(currentScene);
         addMouseListeners(currentScene);
     }
+
+
 
     public void attack (double attackDirX, double attackDirY, TransformComponent transform) {
         if (playerState == state.ATTACKING) {
@@ -77,19 +102,20 @@ public class InputComponent implements Component {
         transform.velocityY = attackDirY * attackForce;
     }
 
+
+
+
     @Override
     public void update(double DeltaTime) {
+        System.out.print("\n" + playerState);
 
         //get the components
-        TransformComponent transform = owner.getComponent(TransformComponent.class);
+        TransformComponent player = owner.getComponent(TransformComponent.class);
         MovementComponent move = owner.getComponent(MovementComponent.class);
         double speed = move.speed;
-        double ownerX = transform.x;
-        double ownerY = transform.y;
+        double ownerX = player.x;
+        double ownerY = player.y;
 
-        //if there is no transform component, do nothing
-        //makes it not crash
-        if (transform == null) return;
 
         //refresh every time
         double dirY = 0.0;
@@ -99,10 +125,20 @@ public class InputComponent implements Component {
         double worldX = input.getMouseX() - context.camera.getCameraX();
         double worldY = input.getMouseY() - context.camera.getCameraY();
 
+
         if (input.isMoveUp()) dirY -= 1;
         if (input.isMoveDown()) dirY += 1;
         if (input.isMoveRight()) dirX += 1;
         if (input.isMoveLeft()) dirX -= 1;
+
+
+        if (playerState == state.IDLE || playerState == state.MOVING) {
+
+            if (dirX != 0 || dirY != 0) playerState = state.MOVING;
+            else playerState = state.IDLE;
+        }
+
+
 
         //attack block
         //----------------------------------------------------------------------------------------------------
@@ -110,99 +146,113 @@ public class InputComponent implements Component {
         double[] unit = utils.unit((ownerX - worldX) * -1, (ownerY - worldY) * -1);
 
         //attack 1
-        if (input.onLeftHold() && playerState.equals(state.MOVING)) {
+        if (input.onLeftHold() && playerState.equals(state.MOVING) || input.onLeftHold() && playerState.equals(state.IDLE)) {
             attackDirX = unit[0];
             attackDirY = unit[1];
 
             //run attack class
-            attack(attackDirX, attackDirY, transform);
+            attack(attackDirX, attackDirY, player);
 
             hitbox = new AttackHitBox(50, 50,
-                    (ownerX + (unit[0] * radius)) - 8, (ownerY + (unit[1] * radius)) - 8, owner);
+                    (ownerX + (attackDirX * radius)) - 8, (ownerY + (attackDirY * radius)) - 8, owner);
 
             context.spawner.spawn(hitbox);
-        }
 
-        //move active hitbox with the player
-        if (hitbox != null) {
-            TransformComponent hitboxTrans = hitbox.getComponent(TransformComponent.class);
+            //move active hitbox with the player
+            if (hitbox != null) {
+                TransformComponent hitboxTrans = hitbox.getComponent(TransformComponent.class);
 
-            if (hitboxTrans != null) {
-                hitboxTrans.x = (ownerX + (unit[0] * radius)) - 8;
-                hitboxTrans.y = (ownerY + (unit[1] * radius)) - 8;
+                if (hitboxTrans != null) {
+                    hitboxTrans.x = (ownerX + (unit[0] * radius)) - 8;
+                    hitboxTrans.y = (ownerY + (unit[1] * radius)) - 8;
+                }
             }
         }
+
+        //just spawns a dummy enemy
+        if (input.onRightClick()) context.spawner.spawn(new Enemy((int) worldX, (int) worldY));
+
         //---------------------------------------------------------------------------------------------------------
 
-        if (input.onRightClick()) {
-            context.spawner.spawn(new Enemy((int) worldX, (int) worldY));
-
+        //for dashing
+        if (input.isDashing() && dashDuration >= maxDashDuration && (dirX != 0 || dirY != 0)) {
+            dashDirX = dirX;
+            dashDirY = dirY;
+            currentDashSpeed = dashSpeed;
+            playerState = state.DASHING;
         }
 
-        //for movement
-        if (playerState == state.MOVING) {
 
-            //movement block
-            //---------------------------------------------------------------------------------------------------------
-
-            //this is for fixing and normalizing the velocity for diagonals
-            double length = Math.sqrt(dirX * dirX + dirY * dirY);
-
-            //divide direction by length
-            if (length > 0) {
-                dirX /= length;
-                dirY /= length;
-            }
-
-            //for dashing
-            if (input.isDashing() && dashTimer == 100) {
-                dashDirX = dirX;
-                dashDirY = dirY;
-
-                playerState = state.DASHING;
-                dashTimer = 99;
-            }
-
-            //calculate if player speed is player sprints
-            //the ? is another way to do if, then in java.
-            // ':' = then, '?' = if
-            double currentSpeed = input.isSprinting() ? speed * 2.0 : speed;
-
-            //using the transform component, add the speed modifiers here to it
-            transform.velocityY = dirY * currentSpeed;
-            transform.velocityX = dirX * currentSpeed;
-            //---------------------------------------------------------------------------------------------------------
-        }
 
 
         //block to handle what each player state does
         //---------------------------------------------------------------------------------------------------------
         switch (playerState) {
+
+            case IDLE -> {
+                player.velocityX = 0;
+                player.velocityY = 0;
+            }
+
+            case MOVING -> {
+
+                //this is for fixing and normalizing the velocity for diagonals
+                double length = Math.sqrt(dirX * dirX + dirY * dirY);
+
+                //divide direction by length
+                if (length > 0) {
+                    dirX /= length;
+                    dirY /= length;
+                }
+
+                //calculate if player speed is player sprints
+                //the ? is another way to do if, then in java.
+                // ':' = then, '?' = if
+                double currentSpeed = input.isSprinting() ? speed * 2.0 : speed;
+
+                //using the transform component, add the speed modifiers here to it
+                player.velocityY = dirY * currentSpeed;
+                player.velocityX = dirX * currentSpeed;
+
+            }
+
             case DASHING -> {
-                dashTimer -= 1;
+                dashDuration -= DeltaTime;
+                double easeOut = utils.EaseOutSine(dashDuration);
+                double length = Math.sqrt(dashDirX * dashDirX + dashDirY * dashDirY);
 
-                transform.velocityY = dashDirY * dashSpeed;
-                transform.velocityX = dashDirX * dashSpeed;
+                //divide direction by length
+                if (length > 0) {
+                    dashDirX /= length;
+                    dashDirY /= length;
+                }
 
-                if (dashTimer <= 0) {
+                player.velocityX = (dashDirX * easeOut) * currentDashSpeed;
+                player.velocityY = (dashDirY * easeOut) * currentDashSpeed;
 
-                    playerState = state.MOVING;
-                    dashTimer = 100;
+                if (dashDuration <= 0) {
+
+                    playerState = state.IDLE;
+                    dashDuration = maxDashDuration;
                 }
             }
 
             case ATTACKING -> {
-                attackSpeed -= 1;
+                attackSpeed -= DeltaTime;
 
                 if (attackSpeed <= maxAttackSpeed / 2) {
-                    transform.velocityX = 0;
-                    transform.velocityY = 0;
+                    player.velocityX *= Friction;
+                    player.velocityY *= Friction;
+                }
+
+                if (attackSpeed <= maxAttackSpeed / 3) {
+                    player.velocityX *= 0;
+                    player.velocityY *= 0;
                 }
 
                 if (attackSpeed <= 0) {
 
-
-                    playerState = state.MOVING;
+                    playerState = state.IDLE;
                     attackSpeed = maxAttackSpeed;
                 }
 
@@ -214,6 +264,15 @@ public class InputComponent implements Component {
 
         }
     }
+
+
+
+
+
+
+
+
+
 
     //add listeners so program knows when a key is being press
     public void addListeners(Scene currentScene) {
@@ -240,13 +299,5 @@ public class InputComponent implements Component {
         currentScene.removeEventFilter(MouseEvent.MOUSE_RELEASED, input.getMouseReleasedHandler());
         currentScene.removeEventFilter(MouseEvent.MOUSE_MOVED, input.getMouseMovedHandler());
         currentScene.removeEventFilter(MouseEvent.MOUSE_DRAGGED, input.getMouseMovedHandler());
-    }
-
-    public int getDashTimer() {
-        return dashTimer;
-    }
-
-    public void setDashTimer(int dashTimer) {
-        this.dashTimer = dashTimer;
     }
 }

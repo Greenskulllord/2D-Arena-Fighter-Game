@@ -104,6 +104,10 @@ public class DataBase {
                 //put images into their own array
                 Image[] finalBuffImages = entityTiles.toArray(new Image[0]);
 
+
+
+
+
                 /*
                 ============================= ========================= ========================= =========================
                     Stats from templates
@@ -125,6 +129,23 @@ public class DataBase {
 
                 int maxHealth = jsonObject.has("max_health") && !jsonObject.get("max_health").isJsonNull()
                         ? jsonObject.get("max_health").getAsInt() : 0;
+
+                double speed = jsonObject.has("speed") && !jsonObject.get("speed").isJsonNull()
+                        ? jsonObject.get("speed").getAsInt() : 0;
+
+                double attackSpeed = jsonObject.has("attackSpeed") && !jsonObject.get("attackSpeed").isJsonNull()
+                        ? jsonObject.get("attackSpeed").getAsInt() : 0;
+
+                int attackForce = jsonObject.has("attackForce") && !jsonObject.get("attackForce").isJsonNull()
+                        ? jsonObject.get("attackForce").getAsInt() : 0;
+
+                double dashSpeed = jsonObject.has("dashSpeed") && !jsonObject.get("dashSpeed").isJsonNull()
+                        ? jsonObject.get("dashSpeed").getAsInt() : 0;
+
+                int dashDuration = jsonObject.has("dashDuration") && !jsonObject.get("dashDuration").isJsonNull()
+                        ? jsonObject.get("dashDuration").getAsInt() : 0;
+
+
 
 
                  /*
@@ -262,7 +283,10 @@ public class DataBase {
                 }
 
                 EntityData finalData = new EntityData(
-                        /* Entity Data */ width, height, collideList, image, health, damage, maxHealth, category, type,
+                        /* Entity Data */ width, height, collideList, image, health, damage, maxHealth, speed,
+                                          attackSpeed, attackForce, dashSpeed, dashDuration,
+
+                        /* Collision Stats */  category, type,
 
                         /* Room Data */ finalBuffImages, dataArray, roomWidth, roomHeight, tileSize,
 

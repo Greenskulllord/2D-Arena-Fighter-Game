@@ -22,9 +22,9 @@ public class Player extends Entity  {
         RenderComponent render = new RenderComponent(new ImageView(data.image), position);
         CollisionComponent collisionComponent = new CollisionComponent(data.width, data.height, 0, 0, position, data.category, data.type);
         HealthComponent health = new HealthComponent(data.health, data.maxHealth, 1.0, 1.0, 1.0);
-        DamageComponent damage = new DamageComponent(data.damage, 1.1, 1);
+        DamageComponent damage = new DamageComponent(data.damage, 1);
         DeathComponent death = new DeathComponent(health, null);
-        MovementComponent move = new MovementComponent(200.0);
+        MovementComponent move = new MovementComponent(data.speed);
 
         //building it like in factories now!! WHOO
         this.addComponent(position);
@@ -34,7 +34,7 @@ public class Player extends Entity  {
         this.addComponent(damage);
         this.addComponent(death);
         this.addComponent(move);
-        this.addComponent(new InputComponent(this, context, scene));
+        this.addComponent(new InputComponent(this, context, scene, data));
     }
 
      /*

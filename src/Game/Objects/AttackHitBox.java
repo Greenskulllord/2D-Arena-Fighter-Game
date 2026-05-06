@@ -29,8 +29,7 @@ public class AttackHitBox extends Entity {
         RenderComponent render = new RenderComponent(ani.frame, trans);
         LifetimeComponent life = new LifetimeComponent(0.25);
         DeathComponent death = new DeathComponent(null, life);
-        DamageComponent damage = new DamageComponent(damageAmount, critMultiplier, 1);
-        OwnerComponent own = new OwnerComponent(owner);
+        DamageComponent damage = new DamageComponent(damageAmount, critMultiplier);
 
         //add components
         this.addComponent(trans);
@@ -40,6 +39,6 @@ public class AttackHitBox extends Entity {
         this.addComponent(life);
         this.addComponent(death);
         this.addComponent(damage);
-        this.addComponent(own);
+
     }
 }
