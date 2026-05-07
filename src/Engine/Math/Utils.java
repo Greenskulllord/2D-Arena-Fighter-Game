@@ -3,6 +3,7 @@ package Engine.Math;
 /**
  * Utility class providing common mathematical operations for engine calculations
  */
+
 public class Utils {
 
     public Utils() {
@@ -48,4 +49,48 @@ public class Utils {
         return Math.sin((time * Math.PI) / 2);
     }
 
+    /** @function easeInCubic (t, b, c, d)
+     * @description Calculates a value on an easing curve that starts slowly and then accelerates.
+     *              Represents the beginning of an acceleration curve.
+     * @param time The current time or progress of the animation, typically a counter that goes from 0 to d. (e.g., a timer variable).
+     * @param beginningValue The beginning value of the property you are animating (e.g., the initial x-coordinate or alpha value).
+     * @param change The total change in the value over the entire animation. This is calculated as: (end_value - beginning_value).
+     * @param duration The total duration of the animation, measured in the same units as 't' (usually game frames/steps).
+     */
+    public double easeInCubic(double time, double beginningValue, double change, double duration) {
+        if (duration == 0) {
+            return beginningValue + change;
+        }
+
+        time /= duration;
+        return change * time * time * time +  beginningValue;
+    }
+
+    /** @function easeInCubic (t, b, c, d)
+     * @description Calculates a value on an easing curve that starts fast and then deccelerates towards the end.
+     *              Represents the beginning of an acceleration curve.
+     * @param time The current time or progress of the animation, typically a counter that goes from 0 to d. (e.g., a timer variable).
+     * @param beginningValue The beginning value of the property you are animating (e.g., the initial x-coordinate or alpha value).
+     * @param change The total change in the value over the entire animation. This is calculated as: (end_value - beginning_value).
+     * @param duration The total duration of the animation, measured in the same units as 't' (usually game frames/steps).
+     */
+    public double easeOutCubic(double time, double beginningValue, double change, double duration) {
+        time /= duration;
+        time --;
+
+        return change * (time * time * time + 1) + beginningValue;
+    }
+
+    public Vector2D normalize(double directionX, double directionY) {
+        double length = Math.sqrt(directionX * directionX + directionY * directionY);
+        double dirX = directionX;
+        double dirY = directionY;
+
+        if (length > 0) {
+            dirX /= length;
+            dirY /= length;
+        }
+
+        return new Vector2D(dirX, dirY);
+    }
 }

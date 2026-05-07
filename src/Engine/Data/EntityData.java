@@ -16,9 +16,9 @@ public class EntityData {
     public int damage;
     public double speed;
     public double attackSpeed;
-    public int attackForce;
+    public double attackForce;
     public double dashSpeed;
-    public int dashDuration;
+    public double dashDuration;
 
 
     public String[] collideList;
@@ -50,8 +50,8 @@ public class EntityData {
 
     public EntityData(
             /* Entity Data */ int width, int height, String[] collideList, Image image, int health, int damage,
-                              int maxHealth, double speed, double attackSpeed, int attackForce,
-                              double dashSpeed, int dashDuration,
+                              int maxHealth, double speed, double attackSpeed, double attackForce,
+                              double dashSpeed, double dashDuration,
 
             /* Collision Stats */ String category, String type,
 

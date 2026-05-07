@@ -3,7 +3,6 @@ import Engine.Core.*;
 import Engine.Components.*;
 import Engine.Data.DataBase;
 import Engine.Data.EntityData;
-import Engine.System.MovementSystem;
 import javafx.scene.Scene;
 import javafx.scene.image.ImageView;
 
@@ -34,6 +33,6 @@ public class Player extends Entity  {
         this.addComponent(damage);
         this.addComponent(death);
         this.addComponent(move);
-        this.addComponent(new InputComponent(this, context, scene, data));
+        this.addComponent(new PlayerControllerComponent(this, context, scene, data));
     }
 }

@@ -3,15 +3,19 @@
     {
       "width": 32,
       "height": 32,
+
       "health": 100,
       "max_health": 150,
       "damage": 10,
       "speed": 150.0,
+
       "attackSpeed": 0.5,
-      "attackForce": 50,
-      "dashSpeed": 250.0,
-      "dashDuration": 1,
+      "attackForce": 75,
+      "dashSpeed": 750.0,
+      "dashDuration": 0.5,
+
       "image": "EntityTextures/player_test.png",
+
       "category": "DYNAMIC",
       "type": "PLAYER",
       "canCollideWith": [
