@@ -1,4 +1,5 @@
 package Game.Objects;
+import Engine.Components.Controllers.PlayerControllerComponent;
 import Engine.Core.*;
 import Engine.Components.*;
 import Engine.Data.DataBase;
@@ -24,6 +25,9 @@ public class Player extends Entity  {
         DamageComponent damage = new DamageComponent(data.damage, 1);
         DeathComponent death = new DeathComponent(health, null);
         MovementComponent move = new MovementComponent(data.speed);
+        InputComponent input = new InputComponent();
+        StateComponent state = new StateComponent(5.0);
+
 
         //building it like in factories now!! WHOO
         this.addComponent(position);
@@ -33,6 +37,8 @@ public class Player extends Entity  {
         this.addComponent(damage);
         this.addComponent(death);
         this.addComponent(move);
+        this.addComponent(input);
+        this.addComponent(state);
         this.addComponent(new PlayerControllerComponent(this, context, scene, data));
     }
 }

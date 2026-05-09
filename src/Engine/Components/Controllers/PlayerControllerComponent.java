@@ -1,10 +1,18 @@
-package Engine.Components;
+package Engine.Components.Controllers;
+import Engine.Components.MovementComponent;
+import Engine.Components.StateComponent;
+import Engine.Components.TransformComponent;
 import Engine.Core.Component;
 import Engine.Core.Entity;
 import Engine.Core.GameContext;
 import Engine.Data.EntityData;
+import Engine.Events.InputEvent;
+import Engine.Math.DeltaTime;
 import Engine.Math.Utils;
 import Engine.Math.Vector2D;
+import Engine.Profiles.AttackProfile;
+import Engine.Profiles.BaseProfile;
+import Engine.Profiles.DashProfile;
 import Game.Objects.AttackHitBox;
 import Game.Objects.Enemy;
 import Input.InputControls;
@@ -41,26 +49,12 @@ public class PlayerControllerComponent implements Component {
     private final double attackForce;
     private double attackSpeed;
     private final double maxAttackSpeed;
-    private double attackTimer = 0;
 
+    BaseProfile baseAttackProfile;
+    AttackProfile baseAttack;
 
-    enum state {
-        ATTACKING,
-        GUARDING,
-        PARRYING,
-        DASHING,
-        MOVING,
-        IDLE
-    }
-    state playerState = state.IDLE; //set idle state
-
-    enum attacks {
-        IDLE,
-        ATTACK_1,
-        ATTACK_2
-    }
-    attacks attackState = attacks.IDLE; //set current attack state to idle
-
+    BaseProfile baseDashProfile;
+    DashProfile baseDash;
 
     //an attempt at making a component to just add controls to anything
     public PlayerControllerComponent(Entity Owner, GameContext context, Scene currentScene, EntityData data) {
@@ -84,33 +78,30 @@ public class PlayerControllerComponent implements Component {
         this.maxAttackSpeed = data.attackSpeed;
         this.attackSpeed = maxAttackSpeed;
 
+        //declare profiles
+        baseAttackProfile = new BaseProfile(0.1, 0.2, 0.05);
+        baseAttack = new AttackProfile(baseAttackProfile, data.attackForce, 50, 50, 60);
+
+        baseDashProfile = new BaseProfile(0.1, 0.2, 0.05);
+        baseDash = new DashProfile(baseDashProfile, data.dashSpeed, 1);
+
 
         addListeners(currentScene);
         addMouseListeners(currentScene);
     }
 
-    public void attack (double attackDirX, double attackDirY, TransformComponent transform) {
-        if (playerState == state.ATTACKING) {
-            return;
-        }
-
-        playerState = state.ATTACKING;
-        attackSpeed = maxAttackSpeed;
-
-        transform.velocityX = attackDirX * attackForce;
-        transform.velocityY = attackDirY * attackForce;
-    }
 
     @Override
     public void update(double DeltaTime) {
 
-
         //get the components
         TransformComponent player = owner.getComponent(TransformComponent.class);
         MovementComponent move = owner.getComponent(MovementComponent.class);
+        StateComponent state = owner.getComponent(StateComponent.class);
         double speed = move.speed;
         double ownerX = player.x;
         double ownerY = player.y;
+
 
         //refresh every time
         double dirY = 0.0;
@@ -133,79 +124,43 @@ public class PlayerControllerComponent implements Component {
         x = v.x; //normalized value
         y = v.y; //normalized value
 
-        if (playerState == state.IDLE || playerState == state.MOVING) {
+        if (state.getCurrentState() == StateComponent.state.IDLE || state.getCurrentState() == StateComponent.state.MOVING) {
 
-            if (dirX != 0 || dirY != 0) playerState = state.MOVING;
-            else playerState = state.IDLE;
+            if (dirX != 0 || dirY != 0)  state.changeState(StateComponent.state.MOVING);
+            else   state.changeState(StateComponent.state.IDLE);
 
         }
 
-
         //attack variables that handle attack stuff
-        double radius = 60;
+        double radius = baseAttack.hitBoxRadius;
         double[] unit = utils.unit((ownerX - worldX) * -1, (ownerY - worldY) * -1);
-
-        //attacking variables
         double attackDirX = unit[0];
         double attackDirY = unit[1];
 
-        //-------- Input block --------------
-        if (input.onLeftHold() && playerState.equals(state.MOVING) || input.onLeftHold() && playerState.equals(state.IDLE)) {
-
-            //run attack class
-            attack(attackDirX, attackDirY, player);
-
-            attackState = attacks.ATTACK_1;
-            hitbox = new AttackHitBox(50, 50,
-                    (ownerX + (attackDirX * radius)) - 8, (ownerY + (attackDirY * radius)) - 8, owner);
-
-            context.spawner.spawn(hitbox);
-
-            //move active hitbox with the player
-            if (hitbox != null) {
-                TransformComponent hitboxTrans = hitbox.getComponent(TransformComponent.class);
-
-                if (hitboxTrans != null) {
-                    hitboxTrans.x = (ownerX + (attackDirX * radius)) - 8;
-                    hitboxTrans.y = (ownerY + (attackDirY * radius)) - 8;
-                }
-            }
-        }
-        if (input.onRightClick()) {
-            attackDirX = unit[0];
-            attackDirY = unit[1];
-
-            //run attack class
-            attack(attackDirX, attackDirY, player);
-
-            attackState = attacks.ATTACK_2;
-            hitbox = new AttackHitBox(25, 25,
-                    (ownerX + (attackDirX * radius)) - 8, (ownerY + (attackDirY * radius)) - 8, owner);
-
-            context.spawner.spawn(hitbox);
 
 
-            //move active hitbox with the player
-            if (hitbox != null) {
-                TransformComponent hitboxTrans = hitbox.getComponent(TransformComponent.class);
 
-                if (hitboxTrans != null) {
-                    hitboxTrans.x = (ownerX + (unit[0] * radius)) - 8;
-                    hitboxTrans.y = (ownerY + (unit[1] * radius)) - 8;
-                }
-            }
-        }
+        //-------- Input block ------------------------------------------------------------------------------------
+        if (input.onLeftClick()) context.bus.publishEvent(new InputEvent(owner, DeltaTime, StateComponent.state.ATTACK_STARTUP, baseAttackProfile));
+
         if (input.onMiddleClick()) context.spawner.spawn(new Enemy((int) worldX, (int) worldY));
+
+
         if (input.isKeyAlt() && dashDuration >= maxDashDuration && (dirX != 0 || dirY != 0) && dashCooldown <= 0) {
+            context.bus.publishEvent(new InputEvent(owner, DeltaTime, StateComponent.state.DASH_STARTUP, baseDashProfile));
+
             currentDashSpeed = dashSpeed;
             dashCooldown = maxDashCooldown;
-            playerState = state.DASHING;
         }
+        //-------- Input block ------------------------------------------------------------------------------------
+
+
+
 
 
 
         //block to handle what each player state does
-        switch (playerState) {
+        switch (state.getCurrentState()) {
             case IDLE -> {
                 player.velocityX = 0;
                 player.velocityY = 0;
@@ -216,48 +171,89 @@ public class PlayerControllerComponent implements Component {
                 player.velocityY = y * currentSpeed;
                 player.velocityX = x * currentSpeed;
             }
-            case DASHING -> {
-                dashTimer += DeltaTime;
-                currentDashSpeed = utils.easeOutCubic(dashTimer, dashSpeed, -dashSpeed, dashDuration);
+            case DASH_STARTUP -> {
+
+                if (state.stateTimer >= baseDashProfile.startUpDuration) {
+
+                    state.changeState(StateComponent.state.DASH_ACTIVE);
+                }
+            }
+            case DASH_ACTIVE -> {
+
+                currentDashSpeed = utils.easeOutCubic(state.stateTimer, dashSpeed, -dashSpeed, dashDuration);
 
                 player.velocityX = currentDashSpeed * x;
                 player.velocityY = currentDashSpeed * y;
 
-                if (dashTimer >= dashDuration) {
-                    dashTimer = 0;
-
+                if (state.stateTimer >= dashDuration) {
+                    state.stateTimer = 0;
                     player.velocityX = 0;
                     player.velocityY = 0;
 
-                    playerState = state.IDLE;
+                    state.changeState(StateComponent.state.DASH_RECOVERY);
                     dashDuration = maxDashDuration;
                 }
             }
-            case ATTACKING -> {
-                switch (attackState) {
-                    case ATTACK_1, ATTACK_2 -> {
-                        attackTimer += DeltaTime;
-                        double currentAttackforce = utils.easeOutCubic(attackTimer, attackForce, -attackForce, attackSpeed);
+            case DASH_RECOVERY -> {
 
-                        player.velocityX = attackDirX * currentAttackforce;
-                        player.velocityY = attackDirY * currentAttackforce;
-
-                        if (attackTimer >= attackSpeed) {
-                            attackTimer = 0;
-
-                            player.velocityX = 0;
-                            player.velocityY = 0;
-
-                            playerState = state.IDLE;
-                            attackState = attacks.IDLE;
-                            attackSpeed = maxAttackSpeed;
-                        }
-                    }
-
+                if (state.stateTimer >= baseDashProfile.recoveryDuration) {
+                    state.changeState(StateComponent.state.IDLE);
                 }
             }
+            case ATTACK_STARTUP -> {
+                player.velocityX = 0;
+                player.velocityY = 0;
+
+                if (state.stateTimer >= baseAttackProfile.startUpDuration) {
+                    state.changeState(StateComponent.state.ATTACK_ACTIVE);
+                }
+            }
+            case ATTACK_ACTIVE -> {
+
+                if (state.stateTimer == 0)  {
+                    hitbox = new AttackHitBox(baseAttack.hitBoxWidth, baseAttack.hitBoxHeight,
+                            (ownerX + (attackDirX * radius)) - 8, (ownerY + (attackDirY * radius)) - 8, owner);
+
+                    context.spawner.spawn(hitbox);
+                }
+
+                //move active hitbox with the player
+                if (hitbox != null) {
+                    TransformComponent hitboxTrans = hitbox.getComponent(TransformComponent.class);
+
+                    if (hitboxTrans != null) {
+                                hitboxTrans.x = (ownerX + (attackDirX * radius)) - 8;
+                                hitboxTrans.y = (ownerY + (attackDirY * radius)) - 8;
+                    }
+                }
+
+                                                            //change state.stateTimer
+                double currentAttackForce = utils.easeOutCubic(state.stateTimer, attackForce, -attackForce, attackSpeed);
+
+                player.velocityX = attackDirX * currentAttackForce;
+                player.velocityY = attackDirY * currentAttackForce;
+
+                if (state.stateTimer >= attackSpeed) {
+                    state.stateTimer = 0;
+                    player.velocityX = 0;
+                    player.velocityY = 0;
+
+                    state.changeState(StateComponent.state.ATTACK_RECOVERY);
+                    attackSpeed = maxAttackSpeed;
+                }
+            }
+            case ATTACK_RECOVERY -> {
+                player.velocityX = 0;
+                player.velocityY = 0;
+
+                if (state.stateTimer >= baseAttackProfile.recoveryDuration) {
+                    state.changeState(StateComponent.state.IDLE);
+                }
+            }
+
         }
     }
+
 
     public void addListeners(Scene currentScene) {
         currentScene.addEventFilter(KeyEvent.KEY_PRESSED, input.getKeyPressedHandler());
@@ -268,10 +264,10 @@ public class PlayerControllerComponent implements Component {
         currentScene.removeEventFilter(KeyEvent.KEY_RELEASED, input.getKeyReleasedHandler());
     }
     public void addMouseListeners(Scene currentScene) {
-       currentScene.addEventFilter(MouseEvent.MOUSE_PRESSED, input.getMousePressedHandler());
-       currentScene.addEventFilter(MouseEvent.MOUSE_RELEASED, input.getMouseReleasedHandler());
-       currentScene.addEventFilter(MouseEvent.MOUSE_MOVED, input.getMouseMovedHandler());
-       currentScene.addEventFilter(MouseEvent.MOUSE_DRAGGED, input.getMouseMovedHandler());
+        currentScene.addEventFilter(MouseEvent.MOUSE_PRESSED, input.getMousePressedHandler());
+        currentScene.addEventFilter(MouseEvent.MOUSE_RELEASED, input.getMouseReleasedHandler());
+        currentScene.addEventFilter(MouseEvent.MOUSE_MOVED, input.getMouseMovedHandler());
+        currentScene.addEventFilter(MouseEvent.MOUSE_DRAGGED, input.getMouseMovedHandler());
     }
     public void removeMouseListeners(Scene currentScene) {
         currentScene.removeEventFilter(MouseEvent.MOUSE_PRESSED, input.getMousePressedHandler());

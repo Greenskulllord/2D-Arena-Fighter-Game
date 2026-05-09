@@ -6,7 +6,7 @@ import Engine.Core.Component;
  * The {@code MovementComponent} defines the speed and mobility capabilities of an entity.
  */
 public class MovementComponent implements Component {
-    double speed;
+    public double speed;
 
     /**
      * Constructs a {@code MovementComponent} with a specific movement speed.

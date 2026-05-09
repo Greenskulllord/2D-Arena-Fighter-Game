@@ -1,4 +1,4 @@
-package Engine.Core;
+package Engine.Math;
 
 import javafx.scene.layout.Pane;
 

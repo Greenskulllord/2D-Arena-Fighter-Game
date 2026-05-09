@@ -5,6 +5,7 @@ import Engine.Data.DataBase;
 import Engine.Data.EntityData;
 import Engine.Events.CollisionEvent;
 import Engine.Events.EventBus;
+import Engine.Events.InputEvent;
 import Engine.Managers.RoomMapManager;
 import Engine.System.*;
 import Engine.Core.Entity;
@@ -42,6 +43,7 @@ public class Game extends Application {
     CombatSystem combat = new CombatSystem();
     MovementConst move = new MovementConst(bus);
     MovementSystem moveSystem = new MovementSystem();
+    InputBufferingSystem inputBufferingSystem = new InputBufferingSystem(bus);
 
     //block of code to run engine
     @Override
@@ -61,7 +63,7 @@ public class Game extends Application {
         spawner.start(world);
 
         //add context on start
-        GameContext context = new GameContext(camera, spawner, bus, controls, scene);
+        GameContext context = new GameContext(camera, spawner, bus, controls, scene, inputBufferingSystem);
 
         //load in the first room
         RoomMapManager mapManager = new RoomMapManager(stage, backgroundLayer, context);
@@ -73,6 +75,7 @@ public class Game extends Application {
 
         //load in events
         bus.subscribeEvent(CollisionEvent.class, combat::onCollision);
+        bus.subscribeEvent(InputEvent.class, inputBufferingSystem::OnInput);
 
         //code arguments at end of statement
         gameLoop.start(); //start loop
@@ -84,8 +87,6 @@ public class Game extends Application {
         @Override
         public void handle(long l) {
 
-
-
             //get deltaTime via helper method
             double deltatime = deltaTime.getDeltaTime(l);
             ActiveEntities.updateLists(); //update what's in list
@@ -93,10 +94,12 @@ public class Game extends Application {
             //get entities from master list
             for (Entity entity : ActiveEntities.getActiveEntities()) {
                 entity.update(deltatime);//update entities
+
             }
 
             collisionSystem.update(deltatime);//update collisions
             bus.dispatchEvents();
+            inputBufferingSystem.update(deltatime);
             moveSystem.update(deltatime);
 
             for (Entity entity : ActiveEntities.getActiveEntities()) {
