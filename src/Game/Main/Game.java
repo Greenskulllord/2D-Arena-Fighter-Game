@@ -31,6 +31,7 @@ public class Game extends Application {
     Pane world = new Pane();
     Pane backgroundLayer = new Pane();
 
+
     //call the systems
     CollisionSystem collisionSystem = new CollisionSystem(bus);
     CleanUpSystem clean = new CleanUpSystem(world);
@@ -39,11 +40,11 @@ public class Game extends Application {
     Spawner spawner = new Spawner();
 
 
-
     CombatSystem combat = new CombatSystem();
     MovementConst move = new MovementConst(bus);
     MovementSystem moveSystem = new MovementSystem();
     InputBufferingSystem inputBufferingSystem = new InputBufferingSystem(bus);
+
 
     //block of code to run engine
     @Override

@@ -7,7 +7,6 @@ import Engine.Core.Entity;
 import Engine.Core.GameContext;
 import Engine.Data.EntityData;
 import Engine.Events.InputEvent;
-import Engine.Math.DeltaTime;
 import Engine.Math.Utils;
 import Engine.Math.Vector2D;
 import Engine.Profiles.AttackProfile;
@@ -23,38 +22,37 @@ import javafx.scene.input.MouseEvent;
 //this is a component that handles player input
 public class PlayerControllerComponent implements Component {
 
-    //declare what class to use
+    //classes to use
     private final InputControls input;
     private final Entity owner;
-
 
     //tools
     GameContext context;
     Utils utils = new Utils();
     AttackHitBox hitbox;
     Vector2D v;
-    private double x;
-    private double y;
 
 
-    //dashing variables
-    private final double dashSpeed;
-    private double dashDuration;
-    private final double maxDashDuration;
-    private double currentDashSpeed;
-    private double dashTimer = 0;
-    private double dashCooldown;
-    private double maxDashCooldown;
+    //--------------------
+    //  Game variables
+    //--------------------
 
-    private final double attackForce;
-    private double attackSpeed;
+    private final double maxDashCooldown;
     private final double maxAttackSpeed;
+    private final double maxDashDuration;
+    private double lockedAttackDirX;
+    private double lockedAttackDirY;
+    private double lockedDashDirX;
+    private double lockedDashDirY;
+    double timer = 0;
 
+    //profiles
     BaseProfile baseAttackProfile;
     AttackProfile baseAttack;
 
     BaseProfile baseDashProfile;
     DashProfile baseDash;
+
 
     //an attempt at making a component to just add controls to anything
     public PlayerControllerComponent(Entity Owner, GameContext context, Scene currentScene, EntityData data) {
@@ -64,28 +62,19 @@ public class PlayerControllerComponent implements Component {
         this.context = context;
         this.input = context.controls;
 
-        //dashing
-        this.dashSpeed = data.dashSpeed;
-        this.maxDashDuration = data.dashDuration;
-        this.dashDuration = maxDashDuration;
-        this.currentDashSpeed = dashSpeed;
-        this.dashCooldown = maxDashCooldown;
-        this.maxDashCooldown = 1;
-
-
-        //attacking
-        this.attackForce = data.attackForce;
-        this.maxAttackSpeed = data.attackSpeed;
-        this.attackSpeed = maxAttackSpeed;
-
         //declare profiles
-        baseAttackProfile = new BaseProfile(0.1, 0.2, 0.05);
-        baseAttack = new AttackProfile(baseAttackProfile, data.attackForce, 50, 50, 60);
+        baseAttackProfile = new BaseProfile(0.1, 0.15, 0.2);
+        baseAttack = new AttackProfile(baseAttackProfile, data.attackForce, 50, 50, 60, data.attackSpeed);
 
-        baseDashProfile = new BaseProfile(0.1, 0.2, 0.05);
-        baseDash = new DashProfile(baseDashProfile, data.dashSpeed, 1);
+        baseDashProfile = new BaseProfile(0.05, 0.1, 0.05);
+        baseDash = new DashProfile(baseDashProfile, data.dashSpeed, 50, 0.5, data.dashDuration);
+
+        maxDashCooldown = baseDash.dashCooldown;
+        maxDashDuration = baseDash.dashDuration;
+        maxAttackSpeed = baseAttack.attackSpeed;
 
 
+        //listeners
         addListeners(currentScene);
         addMouseListeners(currentScene);
     }
@@ -106,7 +95,7 @@ public class PlayerControllerComponent implements Component {
         //refresh every time
         double dirY = 0.0;
         double dirX = 0.0;
-        dashCooldown -= DeltaTime;
+        baseDash.dashCooldown -= DeltaTime;
 
 
         //constantly update position of mouse
@@ -121,10 +110,12 @@ public class PlayerControllerComponent implements Component {
         if (input.isKeyA()) dirX -= 1;
 
         v = utils.normalize(dirX, dirY);
-        x = v.x; //normalized value
-        y = v.y; //normalized value
+        double x = v.x; //normalized value
+        double y = v.y; //normalized value
 
-        if (state.getCurrentState() == StateComponent.state.IDLE || state.getCurrentState() == StateComponent.state.MOVING) {
+        StateComponent.state currentState = state.getCurrentState();
+
+        if (currentState == StateComponent.state.IDLE || currentState == StateComponent.state.MOVING) {
 
             if (dirX != 0 || dirY != 0)  state.changeState(StateComponent.state.MOVING);
             else   state.changeState(StateComponent.state.IDLE);
@@ -141,26 +132,34 @@ public class PlayerControllerComponent implements Component {
 
 
         //-------- Input block ------------------------------------------------------------------------------------
-        if (input.onLeftClick()) context.bus.publishEvent(new InputEvent(owner, DeltaTime, StateComponent.state.ATTACK_STARTUP, baseAttackProfile));
+        if (input.onLeftClick() && hitbox == null &&
+                (currentState == StateComponent.state.IDLE || currentState == StateComponent.state.MOVING)) {
 
-        if (input.onMiddleClick()) context.spawner.spawn(new Enemy((int) worldX, (int) worldY));
+            context.bus.publishEvent(new InputEvent(owner, DeltaTime, StateComponent.state.ATTACK_STARTUP, baseAttackProfile));
+        }
 
 
-        if (input.isKeyAlt() && dashDuration >= maxDashDuration && (dirX != 0 || dirY != 0) && dashCooldown <= 0) {
+        timer += DeltaTime;
+        if (input.onMiddleClick() && timer >= 2.0) {
+            context.spawner.spawn(new Enemy(context, (int) worldX, (int) worldY));
+            timer = 0.0;
+
+        }
+
+
+        if (input.isKeyAlt() && (dirX != 0 || dirY != 0) && baseDash.dashCooldown <= 0
+                && (currentState == StateComponent.state.IDLE || currentState == StateComponent.state.MOVING)) {
+
             context.bus.publishEvent(new InputEvent(owner, DeltaTime, StateComponent.state.DASH_STARTUP, baseDashProfile));
-
-            currentDashSpeed = dashSpeed;
-            dashCooldown = maxDashCooldown;
+            baseDash.dashCooldown = maxDashCooldown;
         }
         //-------- Input block ------------------------------------------------------------------------------------
 
 
 
 
-
-
         //block to handle what each player state does
-        switch (state.getCurrentState()) {
+        switch (currentState) {
             case IDLE -> {
                 player.velocityX = 0;
                 player.velocityY = 0;
@@ -174,24 +173,25 @@ public class PlayerControllerComponent implements Component {
             case DASH_STARTUP -> {
 
                 if (state.stateTimer >= baseDashProfile.startUpDuration) {
-
+                    lockedDashDirX = x;
+                    lockedDashDirY = y;
                     state.changeState(StateComponent.state.DASH_ACTIVE);
                 }
             }
             case DASH_ACTIVE -> {
 
-                currentDashSpeed = utils.easeOutCubic(state.stateTimer, dashSpeed, -dashSpeed, dashDuration);
+                double dashProgress = Math.min(state.stateTimer / baseDash.dashDuration, 1.0);
+                double currentDashSpeed = utils.easeOutCubic(dashProgress, baseDash.dashSpeed, -baseDash.dashSpeed, 1.0);
 
-                player.velocityX = currentDashSpeed * x;
-                player.velocityY = currentDashSpeed * y;
+                player.velocityX = currentDashSpeed * lockedDashDirX;
+                player.velocityY = currentDashSpeed * lockedDashDirY;
 
-                if (state.stateTimer >= dashDuration) {
-                    state.stateTimer = 0;
+                if (dashProgress >= 1.0) {
                     player.velocityX = 0;
                     player.velocityY = 0;
 
                     state.changeState(StateComponent.state.DASH_RECOVERY);
-                    dashDuration = maxDashDuration;
+                    baseDash.dashDuration = maxDashDuration;
                 }
             }
             case DASH_RECOVERY -> {
@@ -205,42 +205,46 @@ public class PlayerControllerComponent implements Component {
                 player.velocityY = 0;
 
                 if (state.stateTimer >= baseAttackProfile.startUpDuration) {
+                    lockedAttackDirX = attackDirX;
+                    lockedAttackDirY = attackDirY;
                     state.changeState(StateComponent.state.ATTACK_ACTIVE);
                 }
             }
             case ATTACK_ACTIVE -> {
+                double attackProgress = Math.min(state.stateTimer / baseAttack.attackSpeed, 1.0);
 
-                if (state.stateTimer == 0)  {
+
+                if (hitbox == null) {
+
                     hitbox = new AttackHitBox(baseAttack.hitBoxWidth, baseAttack.hitBoxHeight,
-                            (ownerX + (attackDirX * radius)) - 8, (ownerY + (attackDirY * radius)) - 8, owner);
+                            (ownerX + (lockedAttackDirX * radius)) - 8, (ownerY + (lockedAttackDirY * radius)) - 8, owner);
 
                     context.spawner.spawn(hitbox);
                 }
 
-                //move active hitbox with the player
-                if (hitbox != null) {
+                    //move active hitbox with the player
                     TransformComponent hitboxTrans = hitbox.getComponent(TransformComponent.class);
-
                     if (hitboxTrans != null) {
-                                hitboxTrans.x = (ownerX + (attackDirX * radius)) - 8;
-                                hitboxTrans.y = (ownerY + (attackDirY * radius)) - 8;
+                        hitboxTrans.x = (ownerX + (lockedAttackDirX * radius)) - 8;
+                        hitboxTrans.y = (ownerY + (lockedAttackDirY * radius)) - 8;
                     }
-                }
 
-                                                            //change state.stateTimer
-                double currentAttackForce = utils.easeOutCubic(state.stateTimer, attackForce, -attackForce, attackSpeed);
 
-                player.velocityX = attackDirX * currentAttackForce;
-                player.velocityY = attackDirY * currentAttackForce;
+                    //change state.stateTimer
+                    double currentAttackForce = utils.easeOutCubic(attackProgress, baseAttack.attackForce, -baseAttack.attackForce,1.0);
+                    player.velocityX = lockedAttackDirX * currentAttackForce;
+                    player.velocityY = lockedAttackDirY * currentAttackForce;
 
-                if (state.stateTimer >= attackSpeed) {
-                    state.stateTimer = 0;
-                    player.velocityX = 0;
-                    player.velocityY = 0;
+                    if (attackProgress >= 1.0) {
+                        hitbox = null;
+                        player.velocityX = 0;
+                        player.velocityY = 0;
 
-                    state.changeState(StateComponent.state.ATTACK_RECOVERY);
-                    attackSpeed = maxAttackSpeed;
-                }
+                        state.changeState(StateComponent.state.ATTACK_RECOVERY);
+                        baseAttack.attackSpeed = maxAttackSpeed;
+                    }
+
+
             }
             case ATTACK_RECOVERY -> {
                 player.velocityX = 0;

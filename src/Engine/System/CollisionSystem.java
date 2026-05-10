@@ -49,6 +49,7 @@ public class CollisionSystem implements Component {
                 //other, pretty much
                 Entity entityB = entities.get(j);
                 CollisionComponent collB = entityB.getComponent(CollisionComponent.class);
+                TransformComponent transB = entityB.getComponent(TransformComponent.class);
 
                 //check if both are null
                 if (collB == null ) {
@@ -90,7 +91,7 @@ public class CollisionSystem implements Component {
                             eventBus.publishEvent((new CollisionEvent(attacker, target, 0, 0, 0, DeltaTime)));
                         }
                     } else {
-                        SweptCollision result = SweptCollision.boxCollision(transformA, collA, collB, DeltaTime);
+                        SweptCollision result = SweptCollision.boxCollision(transformA, transB, collA, collB, DeltaTime);
 
                         if (result.time_ < 1.0) {
                             eventBus.publishEvent(new CollisionEvent(entityA, entityB, result.normalX_, result.normalY_, result.time_, DeltaTime));

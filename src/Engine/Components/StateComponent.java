@@ -26,12 +26,14 @@ public class StateComponent implements Component {
         DEAD
     }
 
+
     public double stateTimer; //how long Entity has been in the state
     public double Threshold;
     private state currentState;
     public state desiredState;
     public state localCurrentState;
     public BaseProfile currentProfile;
+
 
     public StateComponent (double Threshold) {
         this.currentState = state.IDLE;
@@ -47,6 +49,8 @@ public class StateComponent implements Component {
     @Override
     public void update(double DeltaTime) {
         stateTimer += DeltaTime;
+
+//        System.out.print(currentState + "\n");
     }
 
     public state getCurrentState() {

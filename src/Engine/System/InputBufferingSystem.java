@@ -42,11 +42,19 @@ public class InputBufferingSystem {
             }
 
 
+
+
             //delete events/empty the list
             while(!inputA.queueList.isEmpty()) {
-                if (inputA.peek().inputTime >= 1) {
+                
+                //math to handle the buffer expiration number
+                double startD = inputA.peek().requestedProfile.startUpDuration;
+                double ActiveD = inputA.peek().requestedProfile.activeDuration;
+                double RecoveryD = inputA.peek().requestedProfile.recoveryDuration;
+                double bufferExpiration = startD + ActiveD + RecoveryD;
+
+                if (inputA.peek().inputTime >= bufferExpiration) {
                     inputA.consume();
-                    System.out.print(inputA.queueList.peek() + " has been deleted\n");
                 }
 
                 else break;
@@ -62,19 +70,10 @@ public class InputBufferingSystem {
            stateA.localCurrentState = stateA.getCurrentState();
 
 
-           System.out.print("---------------------------------------\n");
-           System.out.print("can execute: " + canExecute + "\n");
-           System.out.print("desired state: " + stateA.desiredState + "\n");
-           System.out.print("current state: " + stateA.localCurrentState + "\n");
-           System.out.print("time passed: " + timePassed + "\n");
-
-
-
-           //go through all the checks to see if execute can be true
+            //go through all the checks to see if execute can be true
            if (stateA.localCurrentState == StateComponent.state.IDLE || stateA.localCurrentState == StateComponent.state.MOVING) {
                canExecute = true;
-               System.out.print("can execute: " + canExecute + "\n");
-               System.out.print("---------------------------------------\n");
+
            }
 
 
@@ -84,16 +83,28 @@ public class InputBufferingSystem {
 
                if (timePassed > stateA.Threshold) {
                    canExecute = true;
-                   System.out.print("can execute: " + canExecute + "\n");
-                   System.out.print("---------------------------------------\n");
+
                }
            }
 
-            System.out.print("---------------------------------------\n");
+           else if (stateA.localCurrentState == StateComponent.state.ATTACK_STARTUP
+                   || stateA.localCurrentState == StateComponent.state.ATTACK_ACTIVE) {
+
+               if (timePassed > stateA.Threshold) {
+                   canExecute = true;
+               }
+           }
 
             if (canExecute) {
-                stateA.currentProfile = inputA.peek().requestedProfile; //equip attack
+
+//                System.out.print("desired state: " + stateA.desiredState + "\n");
+//                System.out.print("current state: " + stateA.localCurrentState + "\n");
+//                System.out.print("can execute: " + canExecute + "\n");
+//                System.out.print("---------------------------------------\n");
+
+
                 stateA.changeState(stateA.desiredState); //change enum state
+                stateA.currentProfile = inputA.peek().requestedProfile; //equip attack
                 inputA.consume(); //delete the used up stat
 
             }

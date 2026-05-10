@@ -20,7 +20,7 @@ public class SweptCollision {
     }
 
     //create a method for handling swept AABB collision
-    public static SweptCollision boxCollision(TransformComponent transformComponent,
+    public static SweptCollision boxCollision(TransformComponent transformA, TransformComponent transformB,
                                          CollisionComponent owner, CollisionComponent other, double DeltaTime) {
         //this is so fucking big that imma just break it down
         //so it's easier to read
@@ -36,8 +36,8 @@ public class SweptCollision {
         double ownerMaxY = owner.getMaxY();
 
         //get owner frame velocity X and Y
-        double frameVelocityX = transformComponent.velocityX * DeltaTime;
-        double frameVelocityY = transformComponent.velocityY * DeltaTime;
+        double frameVelocityX = (transformA.velocityX - transformB.velocityX) * DeltaTime;
+        double frameVelocityY = (transformA.velocityY - transformB.velocityY) * DeltaTime;
 
         //get 'other' sides
         double otherMinX = other.getMinX();

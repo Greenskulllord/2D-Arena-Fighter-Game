@@ -115,7 +115,7 @@ public class RoomMapManager {
                         context.spawner.spawn(w);
                     }
                     case 3 -> {
-                        Enemy e = new Enemy(spawnX, spawnY);
+                        Enemy e = new Enemy(context, spawnX, spawnY);
                         entities[i] = e;
                         context.spawner.spawn(e);
                     }

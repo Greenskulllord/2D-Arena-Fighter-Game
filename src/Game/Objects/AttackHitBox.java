@@ -22,11 +22,12 @@ public class AttackHitBox extends Entity {
         double critMultiplier = ownerDamage.critMultiplier;
 
         //make everything
+        Rectangle rect = new Rectangle(width, height, Color.rgb(247, 59, 13, 0.25));
 
         TransformComponent trans = new TransformComponent(spawnX, spawnY);
         CollisionComponent coll = new CollisionComponent(width, height, 0, 0, trans, data.category, data.type);
         AnimationComponent ani = new AnimationComponent("animation_slash", 30, 100, 100);
-        RenderComponent render = new RenderComponent(ani.frame, trans);
+        RenderComponent render = new RenderComponent(rect, trans);
         LifetimeComponent life = new LifetimeComponent(0.25);
         DeathComponent death = new DeathComponent(null, life);
         DamageComponent damage = new DamageComponent(damageAmount, critMultiplier);

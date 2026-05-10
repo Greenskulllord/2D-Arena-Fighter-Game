@@ -26,7 +26,7 @@ public class Player extends Entity  {
         DeathComponent death = new DeathComponent(health, null);
         MovementComponent move = new MovementComponent(data.speed);
         InputComponent input = new InputComponent();
-        StateComponent state = new StateComponent(5.0);
+        StateComponent state = new StateComponent(0.15);
 
 
         //building it like in factories now!! WHOO
