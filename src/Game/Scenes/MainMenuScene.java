@@ -1,27 +1,20 @@
 package Game.Scenes;
+import Engine.Managers.SceneManager;
+import javafx.application.Platform;
 import javafx.geometry.Pos;
-import javafx.scene.Group;
-
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
-
-import java.awt.*;
+import java.util.Objects;
 
 
 public class MainMenuScene {
     Scene MainMenu;
 
-
-    private Group root;
-
-    private Pane basePane;
-
     public MainMenuScene() {
         //values
-        int spacing = 20;
+        int spacing = 30;
 
 
         //the layout code
@@ -43,16 +36,45 @@ public class MainMenuScene {
         //in game buttons
         Button startButton = new Button("Start");
         Button exitButton = new Button("Exit Game");
+        Button settingsButton = new Button("Settings");
 
+        //button code
+        startButton.setOnAction(e -> {
+            SceneManager.SwitchScene("GAME");
+        });
+
+
+        exitButton.setOnAction(e -> {
+            Platform.exit();
+        });
+
+        settingsButton.setOnAction(e -> {
+            SceneManager.SwitchScene("SETTINGS");
+        });
 
         //code to add nodes
-        layout.getChildren().addAll(title, startButton, exitButton);
+        layout.getChildren().addAll(
+                title,
+                startButton,
+                settingsButton,
+                exitButton
+        );
+
+
         layout.setAlignment(Pos.CENTER);
 
 
         //add layout to the scene
         MainMenu = new Scene(layout);
 
+        //load style sheet
+        MainMenu.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/ButtonStyles/menu_button.css")).toExternalForm());
+
+        //its odd why I have to do this but
+        //to style buttons I have to do it like this
+        startButton.getStyleClass().add("menu-button");
+        exitButton.getStyleClass().add("menu-button");
+        settingsButton.getStyleClass().add("menu-button");
     }
 
     public Scene GetMainMenuScene() {

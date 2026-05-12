@@ -12,6 +12,7 @@ import Engine.Core.Entity;
 import Engine.Managers.SceneManager;
 import Engine.Math.DeltaTime;
 import Game.Scenes.MainMenuScene;
+import Game.Scenes.SettingsScene;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.scene.Group;
@@ -35,7 +36,7 @@ public class Game extends Application {
 
     //call scenes
     MainMenuScene menuScene = new MainMenuScene();
-
+    SettingsScene settingsScene = new SettingsScene();
 
 
     //call the systems
@@ -59,6 +60,8 @@ public class Game extends Application {
         new SceneManager(stage);
         SceneManager.addScene("GAME", scene);//scene in stage
         SceneManager.addScene("MAIN_MENU", menuScene.GetMainMenuScene());
+        SceneManager.addScene("SETTINGS", settingsScene.GetSettingsScene());
+
 
         SceneManager.SwitchScene("MAIN_MENU"); //start game at main menu
 
@@ -96,6 +99,7 @@ public class Game extends Application {
     AnimationTimer gameLoop = new AnimationTimer() {
         @Override
         public void handle(long l) {
+
 
             //get deltaTime via helper method
             double deltatime = deltaTime.getDeltaTime(l);
