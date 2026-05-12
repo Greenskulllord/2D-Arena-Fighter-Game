@@ -81,6 +81,19 @@ public class Utils {
         return change * (time * time * time + 1) + beginningValue;
     }
 
+    public double easeOutCubicUntil(double time, double duration, double stopAtPercent) {
+        // Normalize t to [0, 1]
+        double normalizedT = Math.min(1.0, time / duration);
+
+        // Clamp the progress to the stop percentage
+        double clampedT = Math.min(normalizedT, stopAtPercent);
+
+        // Apply ease-out cubic: 1 - (1 - t)^3
+        return 1.0 - Math.pow(1.0 - clampedT, 3);
+
+    }
+
+
     public Vector2D normalize(double directionX, double directionY) {
         double length = Math.sqrt(directionX * directionX + directionY * directionY);
         double dirX = directionX;

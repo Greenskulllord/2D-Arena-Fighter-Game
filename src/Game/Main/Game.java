@@ -11,6 +11,7 @@ import Engine.System.*;
 import Engine.Core.Entity;
 import Engine.Managers.SceneManager;
 import Engine.Math.DeltaTime;
+import Game.Scenes.MainMenuScene;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.scene.Group;
@@ -18,7 +19,7 @@ import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
-import Input.InputControls;
+import Engine.Input.InputControls;
 
 
 public class Game extends Application {
@@ -30,6 +31,11 @@ public class Game extends Application {
     EventBus bus = new EventBus();
     Pane world = new Pane();
     Pane backgroundLayer = new Pane();
+
+
+    //call scenes
+    MainMenuScene menuScene = new MainMenuScene();
+
 
 
     //call the systems
@@ -52,7 +58,10 @@ public class Game extends Application {
         //make scene and set it
         new SceneManager(stage);
         SceneManager.addScene("GAME", scene);//scene in stage
-        SceneManager.SwitchScene("GAME");
+        SceneManager.addScene("MAIN_MENU", menuScene.GetMainMenuScene());
+
+        SceneManager.SwitchScene("MAIN_MENU"); //start game at main menu
+
 
         //add the children
         root.getChildren().addFirst(world);
@@ -83,7 +92,7 @@ public class Game extends Application {
     }
 
     DeltaTime deltaTime = new DeltaTime();
-    //block of code to engine update frames
+
     AnimationTimer gameLoop = new AnimationTimer() {
         @Override
         public void handle(long l) {

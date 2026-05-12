@@ -3,7 +3,7 @@
     {
       "width": 32,
       "height": 32,
-      "health": 20,
+      "health": 50,
       "max_health": 150,
       "damage": 10,
       "speed": 200,

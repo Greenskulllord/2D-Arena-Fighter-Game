@@ -1,13 +1,14 @@
 package Engine.System;
-import Engine.Components.CollisionComponent;
-import Engine.Components.DamageComponent;
-import Engine.Components.HealthComponent;
+import Engine.Components.*;
 import Engine.Core.Entity;
 import Engine.Events.CollisionEvent;
+import Engine.Math.Utils;
+import Engine.Math.Vector2D;
 
 public class CombatSystem {
 
-    // I do not know if this works or not
+    Utils utils = new Utils();
+    Vector2D v;
 
     public void onCollision(CollisionEvent event) {
         handleCombat(event.A, event.B);
@@ -26,6 +27,28 @@ public class CombatSystem {
 
             if (damageA != null && healthB != null) {
                 healthB.pendingDamage += damageA.damage * damageA.critMultiplier;
+
+                TransformComponent targetTrans = target.getComponent(TransformComponent.class);
+                TransformComponent attackTrans = attacker.getComponent(TransformComponent.class);
+                StateComponent targetState = target.getComponent(StateComponent.class);
+
+                //apply knockback
+                if (targetTrans != null && attackTrans != null) {
+
+                    double dx = targetTrans.x - attackTrans.x;
+                    double dy = targetTrans.y - attackTrans.y;
+
+                    v = utils.normalize(dx, dy);
+
+                    targetTrans.velocityX = v.x;
+                    targetTrans.velocityY = v.y;
+                }
+
+                //apply hit stun
+                if (targetState != null) {
+                    targetState.changeState(StateComponent.state.HIT_STUN);
+
+                }
 
             }
         }

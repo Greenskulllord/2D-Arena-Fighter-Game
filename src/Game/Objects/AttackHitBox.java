@@ -28,7 +28,7 @@ public class AttackHitBox extends Entity {
         CollisionComponent coll = new CollisionComponent(width, height, 0, 0, trans, data.category, data.type);
         AnimationComponent ani = new AnimationComponent("animation_slash", 30, 100, 100);
         RenderComponent render = new RenderComponent(rect, trans);
-        LifetimeComponent life = new LifetimeComponent(0.25);
+        LifetimeComponent life = new LifetimeComponent(0.2);
         DeathComponent death = new DeathComponent(null, life);
         DamageComponent damage = new DamageComponent(damageAmount, critMultiplier);
 

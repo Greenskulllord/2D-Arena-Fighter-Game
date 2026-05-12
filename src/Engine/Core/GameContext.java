@@ -4,7 +4,7 @@ import Engine.Events.EventBus;
 import Engine.System.CameraSystem;
 import Engine.System.InputBufferingSystem;
 import Engine.System.Spawner;
-import Input.InputControls;
+import Engine.Input.InputControls;
 import javafx.scene.Scene;
 
 public class GameContext {

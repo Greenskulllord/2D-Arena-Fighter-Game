@@ -15,14 +15,16 @@ public class BlackDudeControllerComponent implements Component {
     GameContext context;
     Vector2D v;
     Utils utils = new Utils();
-
+    double stunTimer;
 
 
     public BlackDudeControllerComponent(Entity owner, GameContext context, EntityData data) {
         this.owner = owner;
         this.context = context;
 
+
     }
+
 
 
     @Override
@@ -30,12 +32,15 @@ public class BlackDudeControllerComponent implements Component {
         TransformComponent enemy = owner.getComponent(TransformComponent.class);
         MovementComponent move = owner.getComponent(MovementComponent.class);
         StateComponent state = owner.getComponent(StateComponent.class);
+        stunTimer = 1;
+
         double speed = move.speed;
         double ownerX = enemy.x;
         double ownerY = enemy.y;
 
         double dirY = 0.0;
         double dirX = 0.0;
+
 
         for (Entity A : ActiveEntities.getActiveEntities()) {
             PlayerControllerComponent player = A.getComponent(PlayerControllerComponent.class);
@@ -46,16 +51,39 @@ public class BlackDudeControllerComponent implements Component {
             double playerX = playerTrans.x;
             double playerY = playerTrans.y;
 
-            //move to player using trans cords with direction
-            dirX += playerX - ownerX;
-            dirY += playerY - ownerY;
 
-            if (dirX == 0 && dirY == 0) return;
+            if (state.getCurrentState() == StateComponent.state.IDLE || state.getCurrentState() == StateComponent.state.MOVING ||
+                    state.getCurrentState() == StateComponent.state.HIT_STUN) {
 
-            v = utils.normalize(dirX, dirY);
-            enemy.velocityX = v.x * speed;
-            enemy.velocityY = v.y * speed;
+                if (dirX == 0 || dirY == 0)  state.changeState(StateComponent.state.MOVING);
 
+            }
+
+
+            switch (state.getCurrentState()) {
+                case HIT_STUN -> {
+                    stunTimer -= DeltaTime;
+                    enemy.velocityX = 0.0;
+                    enemy.velocityY = 0.0;
+
+                    if (stunTimer <= 0) {
+                        state.changeState(StateComponent.state.MOVING);
+                        stunTimer = 1;
+                    }
+                }
+
+                case MOVING -> {
+                    //move to player using trans cords with direction
+                    dirX += playerX - ownerX;
+                    dirY += playerY - ownerY;
+
+                    if (dirX == 0 && dirY == 0) return;
+
+                    v = utils.normalize(dirX, dirY);
+                    enemy.velocityX = v.x * speed;
+                    enemy.velocityY = v.y * speed;
+                }
+            }
         }
     }
 }

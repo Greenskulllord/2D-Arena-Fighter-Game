@@ -1,10 +1,9 @@
-package JsonComponents;
+package Engine.JsonComponents;
 import com.google.gson.*;
 
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.Arrays;
 
 public class JsonGenerator {
 

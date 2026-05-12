@@ -1,4 +1,4 @@
-package Initialization;
+package Game.Initialization;
 import Engine.Data.DataBase;
 import Engine.Data.EntityData;
 import Game.Main.Game;
@@ -13,6 +13,8 @@ public class Initialization {
            Load everything in game
         ==============================
         */
+
+
 
         //add entity templates
         EntityData.addToEntityList("EntitiesTemplates/player_template.json", "player");

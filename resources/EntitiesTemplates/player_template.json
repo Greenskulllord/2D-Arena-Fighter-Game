@@ -11,7 +11,7 @@
 
       "attackSpeed": 0.5,
       "attackForce": 75,
-      "dashSpeed": 750.0,
+      "dashSpeed": 1000.0,
       "dashDuration": 0.5,
 
       "image": "EntityTextures/player_test.png",
