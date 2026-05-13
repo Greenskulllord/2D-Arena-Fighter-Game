@@ -36,14 +36,13 @@ public class LifeSystem {
                 if (HP.damageCooldown > 0) {
                     HP.damageCooldown -= DeltaTime;
                     HP.pendingDamage = 0;
-
                 }
                 else if (HP.pendingDamage > 0) {
                     //code to run "take damage" logic
                     HP.health -= HP.pendingDamage;
                     HP.pendingDamage = 0;
                     HP.damageCooldown = HP.IframesDuration;
-
+//                    System.out.println("HP: " + HP.health);
                 }
 
                 //check if entity got healed

@@ -30,13 +30,15 @@ public class MainMenuScene {
 
         title.setStyle(
                 Style.FONT_SIZE.of(Style.FONT_SIZE, Value.LARGE.getValue())
-                        + Style.TEXT_FILL.of(Style.TEXT_FILL, Value.WHITE.getValue())
+                + Style.TEXT_FILL.of(Style.TEXT_FILL, Value.WHITE.getValue())
         );
 
         //in game buttons
         Button startButton = new Button("Start");
         Button exitButton = new Button("Exit Game");
         Button settingsButton = new Button("Settings");
+        Button shitButton = new Button("A Button");
+
 
         //button code
         startButton.setOnAction(e -> {
@@ -52,12 +54,14 @@ public class MainMenuScene {
             SceneManager.SwitchScene("SETTINGS");
         });
 
+
         //code to add nodes
         layout.getChildren().addAll(
                 title,
                 startButton,
                 settingsButton,
-                exitButton
+                exitButton,
+                shitButton
         );
 
 
@@ -75,6 +79,7 @@ public class MainMenuScene {
         startButton.getStyleClass().add("menu-button");
         exitButton.getStyleClass().add("menu-button");
         settingsButton.getStyleClass().add("menu-button");
+        shitButton.getStyleClass().add("menu-button");
     }
 
     public Scene GetMainMenuScene() {

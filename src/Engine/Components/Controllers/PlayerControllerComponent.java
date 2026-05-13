@@ -46,7 +46,7 @@ public class PlayerControllerComponent implements Component {
     private double lockedDashDirX;
     private double lockedDashDirY;
     double timer = 0;
-    int comboStep;
+
 
 
     //profiles
@@ -76,7 +76,7 @@ public class PlayerControllerComponent implements Component {
         baseAttackProfile = new BaseProfile(0.1, 0.15, 0.05);
         baseAttackProfile2 = new BaseProfile(0.1, 0.15, 0.05);
         baseAttack = new AttackProfile(baseAttackProfile, data.attackForce, 50, 50, 60, data.attackSpeed);
-        baseAttack2 = new AttackProfile(baseAttackProfile2, 50, 50, 75, 45, data.attackSpeed);
+        baseAttack2 = new AttackProfile(baseAttackProfile2, 50, 75, 50, 60, data.attackSpeed);
 
 
         baseDashProfile = new BaseProfile(0.0, 0.2, 0.05);
@@ -127,11 +127,6 @@ public class PlayerControllerComponent implements Component {
         double y = v.y; //normalized value
 
 
-
-
-
-
-
         StateComponent.state currentState = state.getCurrentState();
 
         if (currentState == StateComponent.state.IDLE || currentState == StateComponent.state.MOVING) {
@@ -143,9 +138,6 @@ public class PlayerControllerComponent implements Component {
 
 
 
-
-
-
         //-------- Input block ------------------------------------------------------------------------------------
         boolean leftClick = input.onLeftClick();
 
@@ -153,24 +145,22 @@ public class PlayerControllerComponent implements Component {
                 (currentState == StateComponent.state.IDLE ||
                         currentState == StateComponent.state.MOVING)) {
 
-            if (comboStep == 0) {
+            if (state.comboStep == 0) {
 
                 context.bus.publishEvent(new InputEvent(owner, DeltaTime, StateComponent.state.ATTACK_STARTUP, baseAttackProfile));
-                comboStep = 1;
+                state.comboStep = 1;
             }
         }
 
 
-
-        if (leftClick && comboStep == 1 &&
+        if (leftClick && (state.comboStep == 1 &&
                 (currentState == StateComponent.state.ATTACK_ACTIVE ||
-                        currentState == StateComponent.state.ATTACK_RECOVERY)) {
+                        currentState == StateComponent.state.ATTACK_RECOVERY))) {
 
 
             context.bus.publishEvent(new InputEvent(owner, DeltaTime, StateComponent.state.ATTACK_STARTUP, baseAttackProfile2));
-            comboStep = 0;
+            state.comboStep = 0;
         }
-
 
 
         timer += DeltaTime;
@@ -181,7 +171,6 @@ public class PlayerControllerComponent implements Component {
         }
 
 
-
         if (input.isKeyAlt() && (dirX != 0 || dirY != 0) && baseDash.dashCooldown <= 0
                 && (currentState == StateComponent.state.IDLE || currentState == StateComponent.state.MOVING || currentState == StateComponent.state.ATTACK_RECOVERY)) {
 
@@ -190,24 +179,25 @@ public class PlayerControllerComponent implements Component {
         }
         //-------- Input block ------------------------------------------------------------------------------------
 
+
+
         double[] unit = utils.unit((ownerX - worldX) * -1, (ownerY - worldY) * -1);
         double attackDirX = unit[0];
         double attackDirY = unit[1];
 
-
-
-        //block to handle what each player state does
         switch (currentState) {
             case IDLE -> {
                 player.velocityX = 0;
                 player.velocityY = 0;
             }
+
             case MOVING -> {
                 double currentSpeed = input.isKeyShift() ? speed * 2.0 : speed;
 
                 player.velocityY = y * currentSpeed;
                 player.velocityX = x * currentSpeed;
             }
+
             case DASH_STARTUP -> {
 
                 if (hitbox != null) {
@@ -220,10 +210,10 @@ public class PlayerControllerComponent implements Component {
                     state.changeState(StateComponent.state.DASH_ACTIVE);
                 }
             }
+
             case DASH_ACTIVE -> {
 
                 double dashProgress = Math.min(state.stateTimer / baseDash.dashDuration, 1.0);
-//                double speedMultiplier = dashProgress < 0.8 ? 1.0 : (1.0 - dashProgress) / 0.2;
                 double currentDashSpeed = utils.easeOutCubic(dashProgress, baseDash.dashSpeed, -baseDash.dashSpeed, 1.0);
 
                 player.velocityX = currentDashSpeed * lockedDashDirX;
@@ -236,12 +226,14 @@ public class PlayerControllerComponent implements Component {
                     baseDash.dashDuration = maxDashDuration;
                 }
             }
+
             case DASH_RECOVERY -> {
 
                 if (state.stateTimer >= baseDashProfile.recoveryDuration) {
                     state.changeState(StateComponent.state.IDLE);
                 }
             } //useless currently
+
             case ATTACK_STARTUP -> {
 
                 player.velocityX = 0;
@@ -258,6 +250,7 @@ public class PlayerControllerComponent implements Component {
                     state.changeState(StateComponent.state.ATTACK_ACTIVE);
                 }
             }
+
             case ATTACK_ACTIVE -> {
 
                 AttackProfile profile = getAttackProfile(state.currentProfile);
@@ -325,16 +318,23 @@ public class PlayerControllerComponent implements Component {
                 }
 
             }
+
             case ATTACK_RECOVERY -> {
 
                 if (state.stateTimer >= state.currentProfile.recoveryDuration) {
                     state.changeState(StateComponent.state.IDLE);
-                    comboStep = 0;
+                    state.comboStep = 0;
                 }
             }
 
+            case HIT_STUN -> {
+                state.comboStep = 0;
+            }
         }
     }
+
+
+
 
 
     private AttackProfile getAttackProfile(BaseProfile base) {

@@ -33,6 +33,7 @@ public class StateComponent implements Component {
     public state desiredState;
     public state localCurrentState;
     public BaseProfile currentProfile;
+    public int comboStep = 0;
 
 
     public StateComponent (double Threshold) {

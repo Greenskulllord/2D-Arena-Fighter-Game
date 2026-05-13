@@ -45,7 +45,7 @@ public class CombatSystem {
                 }
 
                 //apply hit stun
-                if (targetState != null) {
+                if (targetState != null && healthB.IframesDuration <= 0) {
                     targetState.changeState(StateComponent.state.HIT_STUN);
 
                 }

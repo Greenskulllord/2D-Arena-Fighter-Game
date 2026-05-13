@@ -61,6 +61,7 @@ public class BlackDudeControllerComponent implements Component {
 
 
             switch (state.getCurrentState()) {
+
                 case HIT_STUN -> {
                     stunTimer -= DeltaTime;
                     enemy.velocityX = 0.0;
