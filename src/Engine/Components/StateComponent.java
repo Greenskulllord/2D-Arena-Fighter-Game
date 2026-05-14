@@ -23,7 +23,8 @@ public class StateComponent implements Component {
         PARRY_RECOVERY,
         PARRY_SUCCESS,
         HIT_STUN,
-        DEAD
+        DEAD,
+        CIRCLING
     }
 
 

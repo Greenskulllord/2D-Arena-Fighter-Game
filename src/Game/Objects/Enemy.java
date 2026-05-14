@@ -19,18 +19,23 @@ public class Enemy extends Entity {
         RenderComponent render = new RenderComponent(new ImageView(data.image), position);
         CollisionComponent collisionComponent = new CollisionComponent(data.width, data.height, 0, 0, position, data.category, data.type);
         HealthComponent health = new HealthComponent(data.health, data.maxHealth, 1, 1, 0.3);
+        DamageComponent damage = new DamageComponent(10, 1.0);
         DeathComponent death = new DeathComponent(health, null);
         StateComponent state = new StateComponent(0.15);
         MovementComponent move = new MovementComponent(100);
+        InputComponent input = new InputComponent();
         BlackDudeControllerComponent controller = new BlackDudeControllerComponent(this, context, data);
+
 
         //add components
         this.addComponent(position);
         this.addComponent(render);
         this.addComponent(collisionComponent);
         this.addComponent(health);
+        this.addComponent(damage);
         this.addComponent(death);
         this.addComponent(state);
+        this.addComponent(input);
         this.addComponent(move);
         this.addComponent(controller);
     }

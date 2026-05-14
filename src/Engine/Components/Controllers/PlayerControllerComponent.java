@@ -295,14 +295,6 @@ public class PlayerControllerComponent implements Component {
                 }
 
 
-                //move active hitbox with the player
-                TransformComponent hitboxTrans = hitbox.getComponent(TransformComponent.class);
-                if (hitboxTrans != null) {
-                    hitboxTrans.x = hitBoxX;
-                    hitboxTrans.y = hitBoxY;
-                }
-
-
                 double currentAttackForce = utils.easeOutCubic(attackProgress, profile.attackForce, -profile.attackForce,1.0);
                 player.velocityX = lockedAttackDirX * currentAttackForce;
                 player.velocityY = lockedAttackDirY * currentAttackForce;

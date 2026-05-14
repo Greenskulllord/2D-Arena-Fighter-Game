@@ -63,7 +63,7 @@ public class Game extends Application {
         SceneManager.addScene("SETTINGS", settingsScene.GetSettingsScene());
 
 
-        SceneManager.SwitchScene("MAIN_MENU"); //start game at main menu
+        SceneManager.SwitchScene("GAME"); //start game at main menu
 
 
         //add the children

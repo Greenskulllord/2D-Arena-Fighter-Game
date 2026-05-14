@@ -97,10 +97,10 @@ public class InputBufferingSystem {
 
             if (canExecute) {
 
-//                System.out.print("desired state: " + stateA.desiredState + "\n");
-//                System.out.print("current state: " + stateA.localCurrentState + "\n");
-//                System.out.print("can execute: " + canExecute + "\n");
-//                System.out.print("---------------------------------------\n");
+                System.out.print("desired state: " + stateA.desiredState + "\n");
+                System.out.print("current state: " + stateA.localCurrentState + "\n");
+                System.out.print("can execute: " + canExecute + "\n");
+                System.out.print("---------------------------------------\n");
 
 
                 stateA.changeState(stateA.desiredState); //change enum state
