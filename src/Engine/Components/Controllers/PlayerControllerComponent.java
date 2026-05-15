@@ -70,9 +70,8 @@ public class PlayerControllerComponent implements Component {
         this.context = context;
         this.input = context.controls;
 
+
         //declare profiles
-
-
         baseAttackProfile = new BaseProfile(0.1, 0.15, 0.05);
         baseAttackProfile2 = new BaseProfile(0.1, 0.15, 0.05);
         baseAttack = new AttackProfile(baseAttackProfile, data.attackForce, 50, 50, 60, data.attackSpeed);

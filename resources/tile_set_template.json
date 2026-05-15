@@ -3,7 +3,8 @@
     {
       "floor_1": "FloorTextures/floor_1.png",
       "floor_2": "FloorTextures/floor_2.png",
-      "floor_3": "FloorTextures/tile_test.png"
+      "floor_3": "FloorTextures/tile_test.png",
+      "floor_4": "FloorTextures/arena_floor.png"
     }
   ]
 }

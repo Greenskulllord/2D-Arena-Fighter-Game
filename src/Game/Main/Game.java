@@ -27,7 +27,7 @@ public class Game extends Application {
 
     //declare variables for scene
     Group root = new Group(); //visual elements
-    Scene scene = new Scene(root, Color.GRAY); //content in stage
+    Scene scene = new Scene(root, Color.BLACK); //content in stage
     InputControls controls = new InputControls();
     EventBus bus = new EventBus();
     Pane world = new Pane();
@@ -61,9 +61,8 @@ public class Game extends Application {
         SceneManager.addScene("GAME", scene);//scene in stage
         SceneManager.addScene("MAIN_MENU", menuScene.GetMainMenuScene());
         SceneManager.addScene("SETTINGS", settingsScene.GetSettingsScene());
+        SceneManager.SwitchScene("MAIN_MENU"); //start game at main menu
 
-
-        SceneManager.SwitchScene("GAME"); //start game at main menu
 
 
         //add the children
