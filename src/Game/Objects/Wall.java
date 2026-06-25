@@ -4,8 +4,7 @@ import Engine.Components.RenderComponent;
 import Engine.Components.TransformComponent;
 import Engine.Data.DataBase;
 import Engine.Core.Entity;
-import Engine.Data.EntityData;
-import Engine.Managers.RoomMapManager;
+import Engine.Data.Types.EntityData;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 

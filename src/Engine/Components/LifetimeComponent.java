@@ -21,6 +21,6 @@ public class LifetimeComponent implements Component {
 
     @Override
     public void update(double DeltaTime) {
-
+        //empty because it's just a data component
     }
 }

@@ -1,21 +1,17 @@
 package Game.Objects;
-import Engine.Components.Controllers.PlayerControllerComponent;
+import Game.Controllers.PlayerControllerComponent;
 import Engine.Core.*;
 import Engine.Components.*;
 import Engine.Data.DataBase;
-import Engine.Data.EntityData;
+import Engine.Data.Types.EntityData;
 import javafx.scene.Scene;
 import javafx.scene.image.ImageView;
 
-/* todo update player class to handle abilities,
-    dashes, attacks, etc. this will be mostly updated in
-    input component
- */
 public class Player extends Entity  {
 
     //make the constructor
     public Player(GameContext context, int spawnX, int spawnY, Scene scene) {
-        EntityData data = DataBase.getTemplate("PLAYER");
+        EntityData data = DataBase.get("PLAYER");
 
         //add components
         TransformComponent position = new TransformComponent(spawnX, spawnY);
@@ -29,7 +25,6 @@ public class Player extends Entity  {
         StateComponent state = new StateComponent(0.15);
 
 
-        //building it like in factories now!! WHOO
         this.addComponent(position);
         this.addComponent(render);
         this.addComponent(collisionComponent);
@@ -40,5 +35,8 @@ public class Player extends Entity  {
         this.addComponent(input);
         this.addComponent(state);
         this.addComponent(new PlayerControllerComponent(this, context, scene, data));
+
+
+
     }
 }

@@ -1,4 +1,4 @@
-package Engine.System;
+package Engine.System.GameplayEffects;
 
 import Engine.Components.DamageComponent;
 import Engine.Components.DeathComponent;

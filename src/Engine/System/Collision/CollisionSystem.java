@@ -1,4 +1,4 @@
-package Engine.System;
+package Engine.System.Collision;
 import Engine.Components.CollisionComponent;
 import Engine.Components.TransformComponent;
 import Engine.Core.Component;
@@ -6,7 +6,7 @@ import Engine.Core.Entity;
 import Engine.Data.DataBase;
 import Engine.Events.CollisionEvent;
 import Engine.Events.EventBus;
-import Engine.Data.EntityData;
+import Engine.Data.Types.EntityData;
 import Engine.Math.SweptCollision;
 import java.util.List;
 
@@ -79,15 +79,15 @@ public class CollisionSystem implements Component {
                 //if canHit is true, run all the collision math
                 if (canHit) {
 
-                    if (collA.category.equals("ATTACK")) {
+                    if (collA.category.equals(CollisionCategory.ATTACK)) {
                         boolean onCollide = collA.getMaxX() > collB.getMinX() &&
                                 collA.getMinX() < collB.getMaxX() &&
                                 collA.getMaxY() > collB.getMinY() &&
                                 collA.getMinY() < collB.getMaxY();
 
                         if (onCollide) {
-                            Entity attacker = collA.category.equals("ATTACK") ? entityA : entityB;
-                            Entity target = collA.category.equals("ATTACK") ? entityB : entityA;
+                            Entity attacker = collA.category.equals(CollisionCategory.ATTACK) ? entityA : entityB;
+                            Entity target = collA.category.equals(CollisionCategory.ATTACK) ? entityB : entityA;
                             eventBus.publishEvent((new CollisionEvent(attacker, target, 0, 0, 0, DeltaTime)));
                         }
                     } else {

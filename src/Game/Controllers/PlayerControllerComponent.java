@@ -1,4 +1,4 @@
-package Engine.Components.Controllers;
+package Game.Controllers;
 import Engine.Components.CollisionComponent;
 import Engine.Components.MovementComponent;
 import Engine.Components.StateComponent;
@@ -6,7 +6,7 @@ import Engine.Components.TransformComponent;
 import Engine.Core.Component;
 import Engine.Core.Entity;
 import Engine.Core.GameContext;
-import Engine.Data.EntityData;
+import Engine.Data.Types.EntityData;
 import Engine.Events.InputEvent;
 import Engine.Math.Utils;
 import Engine.Math.Vector2D;
@@ -29,7 +29,6 @@ public class PlayerControllerComponent implements Component {
 
     //tools
     GameContext context;
-    Utils utils = new Utils();
     AttackHitBox hitbox;
     Vector2D v;
 
@@ -121,7 +120,7 @@ public class PlayerControllerComponent implements Component {
         if (input.isKeyD()) dirX += 1;
         if (input.isKeyA()) dirX -= 1;
 
-        v = utils.normalize(dirX, dirY);
+        v = Utils.normalize(dirX, dirY);
         double x = v.x; //normalized value
         double y = v.y; //normalized value
 
@@ -180,7 +179,7 @@ public class PlayerControllerComponent implements Component {
 
 
 
-        double[] unit = utils.unit((ownerX - worldX) * -1, (ownerY - worldY) * -1);
+        double[] unit = Utils.unit((ownerX - worldX) * -1, (ownerY - worldY) * -1);
         double attackDirX = unit[0];
         double attackDirY = unit[1];
 
@@ -213,7 +212,7 @@ public class PlayerControllerComponent implements Component {
             case DASH_ACTIVE -> {
 
                 double dashProgress = Math.min(state.stateTimer / baseDash.dashDuration, 1.0);
-                double currentDashSpeed = utils.easeOutCubic(dashProgress, baseDash.dashSpeed, -baseDash.dashSpeed, 1.0);
+                double currentDashSpeed = Utils.easeOutCubic(dashProgress, baseDash.dashSpeed, -baseDash.dashSpeed, 1.0);
 
                 player.velocityX = currentDashSpeed * lockedDashDirX;
                 player.velocityY = currentDashSpeed * lockedDashDirY;
@@ -294,7 +293,7 @@ public class PlayerControllerComponent implements Component {
                 }
 
 
-                double currentAttackForce = utils.easeOutCubic(attackProgress, profile.attackForce, -profile.attackForce,1.0);
+                double currentAttackForce = Utils.easeOutCubic(attackProgress, profile.attackForce, -profile.attackForce,1.0);
                 player.velocityX = lockedAttackDirX * currentAttackForce;
                 player.velocityY = lockedAttackDirY * currentAttackForce;
 

@@ -1,0 +1,17 @@
+{
+  "width": 32,
+  "height": 32,
+
+  "health": 100,
+  "max_health": 100,
+  "speed": 100,
+  "category": "solid",
+  "type": "player",
+
+  "collide_white_list     ": [
+    "player",
+    "enemy",
+    "wall",
+    "hitbox"
+  ]
+}

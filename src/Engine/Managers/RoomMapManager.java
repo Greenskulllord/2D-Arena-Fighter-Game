@@ -3,7 +3,7 @@ import Engine.Core.Entity;
 import Engine.Core.GameContext;
 import Engine.Core.Tile;
 import Engine.Data.DataBase;
-import Engine.Data.EntityData;
+import Engine.Data.Types.EntityData;
 import Game.Objects.Enemy;
 import Game.Objects.Player;
 import Game.Objects.Wall;

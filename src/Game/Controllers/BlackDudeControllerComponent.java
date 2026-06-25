@@ -1,4 +1,4 @@
-package Engine.Components.Controllers;
+package Game.Controllers;
 import Engine.Components.CollisionComponent;
 import Engine.Components.MovementComponent;
 import Engine.Components.StateComponent;
@@ -7,7 +7,7 @@ import Engine.Core.ActiveEntities;
 import Engine.Core.Component;
 import Engine.Core.Entity;
 import Engine.Core.GameContext;
-import Engine.Data.EntityData;
+import Engine.Data.Types.EntityData;
 import Engine.Events.InputEvent;
 import Engine.Math.Utils;
 import Engine.Math.Vector2D;
@@ -19,7 +19,7 @@ public class BlackDudeControllerComponent implements Component {
     Entity owner;
     GameContext context;
     Vector2D v;
-    Utils utils = new Utils();
+
 
 
     double stunTimer;
@@ -75,7 +75,7 @@ public class BlackDudeControllerComponent implements Component {
             }
 
 
-            double[] unit = utils.unit(playerX - enemy.x, playerY - enemy.y);
+            double[] unit = Utils.unit(playerX - enemy.x, playerY - enemy.y);
             double attackDirX = unit[0];
             double attackDirY = unit[1];
             getAttackProfile(state.currentProfile).attackSpeed -= DeltaTime;
@@ -105,7 +105,7 @@ public class BlackDudeControllerComponent implements Component {
 
                     if (dirX == 0 && dirY == 0) return;
 
-                    v = utils.normalize(dirX, dirY);
+                    v = Utils.normalize(dirX, dirY);
                     enemy.velocityX = v.x * speed;
                     enemy.velocityY = v.y * speed;
 

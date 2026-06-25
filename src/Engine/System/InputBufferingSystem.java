@@ -42,8 +42,6 @@ public class InputBufferingSystem {
             }
 
 
-
-
             //delete events/empty the list
             while(!inputA.queueList.isEmpty()) {
                 

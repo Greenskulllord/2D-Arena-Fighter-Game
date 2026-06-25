@@ -1,13 +1,11 @@
 package Game.Objects;
 import Engine.Components.*;
-import Engine.Components.Controllers.BlackDudeControllerComponent;
+import Game.Controllers.BlackDudeControllerComponent;
 import Engine.Core.Entity;
 import Engine.Core.GameContext;
 import Engine.Data.DataBase;
-import Engine.Data.EntityData;
+import Engine.Data.Types.EntityData;
 import javafx.scene.image.ImageView;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
 
 public class Enemy extends Entity {
 

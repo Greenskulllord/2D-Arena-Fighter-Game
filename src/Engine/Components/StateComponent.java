@@ -50,9 +50,8 @@ public class StateComponent implements Component {
 
     @Override
     public void update(double DeltaTime) {
+        //passes time based on how long its been in the state
         stateTimer += DeltaTime;
-
-//        System.out.print(currentState + "\n");
     }
 
     public state getCurrentState() {

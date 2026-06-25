@@ -112,11 +112,11 @@ public class ResourceManager {
 
       /*
     =========================
-         Cache Templates
+         Cache Data
     =========================
    */
 
-    public static JsonObject getTemplate(String filePath) {
+    public static JsonObject getData(String filePath) {
         filePath.replace("\\", "/");
 
         String path = filePath.startsWith("/") ? filePath : "/" + filePath;

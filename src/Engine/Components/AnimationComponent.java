@@ -2,14 +2,13 @@ package Engine.Components;
 
 import Engine.Core.Component;
 import Engine.Data.DataBase;
-import Engine.Data.EntityData;
+import Engine.Data.Types.EntityData;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.util.Duration;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -110,7 +109,6 @@ public class AnimationComponent implements Component {
      */
     @Override
     public void update(double DeltaTime) {
-
-
+        //empty because timeline does the work
     }
 }

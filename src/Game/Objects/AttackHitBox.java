@@ -1,13 +1,10 @@
 package Game.Objects;
 
 import Engine.Components.*;
-import Engine.Core.ActiveEntities;
 import Engine.Core.Entity;
 import Engine.Data.DataBase;
-import Engine.Data.EntityData;
-import javafx.scene.image.ImageView;
+import Engine.Data.Types.EntityData;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 
 public class AttackHitBox extends Entity {

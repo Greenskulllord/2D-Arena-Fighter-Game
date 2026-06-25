@@ -19,7 +19,7 @@ public class Utils {
      * @param Y The vertical component of the vector.
      * @return A double array of size 2 where index 0 is the normalized X and index 1 is the normalized Y.
      */
-    public double[] unit(double X, double Y) {
+    public static double[] unit(double X, double Y) {
 
         double[] array = new double[2];
         double magnitude = Math.sqrt(X * X + Y * Y);
@@ -45,7 +45,7 @@ public class Utils {
      * @param time The current progress value (typically between 0.0 and 1.0).
      * @return The interpolated value representing the eased position or speed.
      */
-    public double EaseOutSine (double time) {
+    public static double EaseOutSine (double time) {
         return Math.sin((time * Math.PI) / 2);
     }
 
@@ -74,14 +74,14 @@ public class Utils {
      * @param change The total change in the value over the entire animation. This is calculated as: (end_value - beginning_value).
      * @param duration The total duration of the animation, measured in the same units as 't' (usually game frames/steps).
      */
-    public double easeOutCubic(double time, double beginningValue, double change, double duration) {
+    public static double easeOutCubic(double time, double beginningValue, double change, double duration) {
         time /= duration;
         time --;
 
         return change * (time * time * time + 1) + beginningValue;
     }
 
-    public double easeOutCubicUntil(double time, double duration, double stopAtPercent) {
+    public static double easeOutCubicUntil(double time, double duration, double stopAtPercent) {
         // Normalize t to [0, 1]
         double normalizedT = Math.min(1.0, time / duration);
 
@@ -94,7 +94,7 @@ public class Utils {
     }
 
 
-    public Vector2D normalize(double directionX, double directionY) {
+    public static Vector2D normalize(double directionX, double directionY) {
         double length = Math.sqrt(directionX * directionX + directionY * directionY);
         double dirX = directionX;
         double dirY = directionY;

@@ -24,9 +24,9 @@ public class RenderComponent implements Component {
 
     @Override
     public void update(double DeltaTime) {
+        //pushed the image onto the node
         node.setTranslateX(transformComponent.x);
         node.setTranslateY(transformComponent.y);
-
     }
 
     /**

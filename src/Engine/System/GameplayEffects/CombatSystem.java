@@ -1,4 +1,4 @@
-package Engine.System;
+package Engine.System.GameplayEffects;
 import Engine.Components.*;
 import Engine.Core.Entity;
 import Engine.Events.CollisionEvent;

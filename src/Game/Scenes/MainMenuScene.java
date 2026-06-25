@@ -19,10 +19,6 @@ public class MainMenuScene {
 
         //the layout code
         VBox layout = new VBox(spacing);
-        layout.setStyle(
-                Style.BACKGROUND_COLOR.of(Style.BACKGROUND_COLOR, "black")
-
-        );
 
 
         //nodes
@@ -73,9 +69,11 @@ public class MainMenuScene {
 
         //load style sheet
         MainMenu.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/ButtonStyles/menu_button.css")).toExternalForm());
+        MainMenu.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/ButtonStyles/background.css")).toExternalForm());
 
         //its odd why I have to do this but
         //to style buttons I have to do it like this
+        layout.getStyleClass().add("background");
         startButton.getStyleClass().add("menu-button");
         exitButton.getStyleClass().add("menu-button");
         settingsButton.getStyleClass().add("menu-button");
